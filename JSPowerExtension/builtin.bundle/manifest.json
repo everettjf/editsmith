@@ -34,6 +34,18 @@
             "name":"Convert to ASCII text (style 3)"
         },
         {
+          "id": "block-comment",
+          "name": "Block Comment"
+        },
+        {
+          "id": "jump.up-20-lines",
+          "name": "Jump Up 20 Lines"
+        },
+        {
+          "id": "jump.down-20-lines",
+          "name": "Jump Down 20 Lines"
+        },
+        {
             "id":"about",
             "name":"About JSPower"
         }
