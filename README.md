@@ -1,21 +1,19 @@
 # JSPower
 
-JSPower is an Xcode Extension, it provides JavaScript interface for XcodeKit. Users can develop Xcode Extensions rapidly.
+JSPower is a Swift and SwiftUI text-automation workbench for Xcode. Create local JavaScript recipes, test them against sample input, and run enabled recipes from Xcode's Editor menu. Built-in recipes cover line sorting, trailing-whitespace cleanup, JSON formatting, and case conversion.
 
-https://qvcodefriend.github.io/
+The 2.0 app and Source Editor Extension are implemented entirely in Swift. CocoaPods, AFNetworking, YYModel, remote package downloads, and the Objective-C runtime implementation are no longer part of the build.
 
-## Install
+Recipes execute locally in JavaScriptCore and receive only the text supplied by XcodeKit. The app has no network entitlement.
 
-[Mac App Store](https://itunes.apple.com/cn/app/code-friend/id1441249580)
+## Develop and verify
 
-## Intro.
+The checked-in Xcode project is generated from `project.yml`:
 
-- English https://medium.com/@everettjf/develop-xcode-extensions-with-javascript-8a58a6b5279b
-- 中文 https://everettjf.github.io/2018/11/13/codefriend-tutorial/
+```sh
+xcodegen generate --spec project.yml
+cd Core && swift test && cd ..
+xcodebuild -project JSPower.xcodeproj -scheme JSPower -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build
+```
 
-![](https://everettjf.github.io/media/15421232259243.jpg)
-
-
----
-
-*Enjoy :)*
+Enable the extension in System Settings → Privacy & Security → Extensions → Xcode Source Editor.

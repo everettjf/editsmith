@@ -3,527 +3,297 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		29E1FC2C66BE4FB1F1C0C326 /* libPods-JSPowerExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0B7CA9752DCAFEA2F7D8BC6 /* libPods-JSPowerExtension.a */; };
-		5AD579652DBF520700D51C51 /* builtin.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5AD579642DBF520700D51C51 /* builtin.bundle */; };
-		D14E33E926252D4700F6E67A /* XcodeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D1ADD3DB26252CAB0051064B /* XcodeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		D14E33EC26252D9900F6E67A /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1ADD3DB26252CAB0051064B /* XcodeKit.framework */; };
-		D1BD0A482191DE1A00D30282 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0A472191DE1A00D30282 /* AppDelegate.m */; };
-		D1BD0A4A2191DE1B00D30282 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1BD0A492191DE1B00D30282 /* Assets.xcassets */; };
-		D1BD0A4D2191DE1B00D30282 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1BD0A4B2191DE1B00D30282 /* MainMenu.xib */; };
-		D1BD0A502191DE1B00D30282 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0A4F2191DE1B00D30282 /* main.m */; };
-		D1BD0A5E2191DE2D00D30282 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D1BD0A5D2191DE2D00D30282 /* Cocoa.framework */; };
-		D1BD0A6A2191DE2D00D30282 /* JSPower.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D1BD0A5B2191DE2D00D30282 /* JSPower.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		D1BD0A952191DFA500D30282 /* QVCommandAction.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0A7E2191DFA400D30282 /* QVCommandAction.m */; };
-		D1BD0A982191DFA500D30282 /* QVCommandInvocationJSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0A872191DFA400D30282 /* QVCommandInvocationJSObject.m */; };
-		D1BD0A992191DFA500D30282 /* QVSystemJSObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0A882191DFA400D30282 /* QVSystemJSObject.m */; };
-		D1BD0A9A2191DFA500D30282 /* QVSharedSandbox.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0A892191DFA400D30282 /* QVSharedSandbox.m */; };
-		D1BD0A9B2191DFA500D30282 /* QVPackageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0A8B2191DFA400D30282 /* QVPackageManager.m */; };
-		D1BD0A9C2191DFA500D30282 /* QVPackage.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0A8C2191DFA400D30282 /* QVPackage.m */; };
-		D1BD0A9D2191DFA500D30282 /* SourceEditorExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0A8E2191DFA400D30282 /* SourceEditorExtension.m */; };
-		D1BD0A9E2191DFA500D30282 /* SourceEditorCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0A912191DFA400D30282 /* SourceEditorCommand.m */; };
-		D1BD0AA52191FFDD00D30282 /* QVSharedFile.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0AA42191FFDD00D30282 /* QVSharedFile.m */; };
-		D1BD0AA62191FFDD00D30282 /* QVSharedFile.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0AA42191FFDD00D30282 /* QVSharedFile.m */; };
-		D1BD0AA921920AE300D30282 /* QVSharedKV.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0AA821920AE300D30282 /* QVSharedKV.m */; };
-		D1BD0AAA21920AE300D30282 /* QVSharedKV.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0AA821920AE300D30282 /* QVSharedKV.m */; };
-		D1D16ACA21933DCB008F58FA /* PackageListController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D16AC921933DCB008F58FA /* PackageListController.m */; };
-		D1D16ADD219355B8008F58FA /* AddPackageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D16ADB219355B8008F58FA /* AddPackageViewController.m */; };
-		D1D16ADE219355B8008F58FA /* AddPackageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D1D16ADC219355B8008F58FA /* AddPackageViewController.xib */; };
-		D1D16B082193CD65008F58FA /* QVPackageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D16B072193CD65008F58FA /* QVPackageDownloader.m */; };
-		D1D16B0B2193CDBF008F58FA /* QVSharedPackageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D16B0A2193CDBF008F58FA /* QVSharedPackageManager.m */; };
-		D1D16B0C2193CDD7008F58FA /* QVSharedPackageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D16B0A2193CDBF008F58FA /* QVSharedPackageManager.m */; };
-		D1D16B0F21949DBD008F58FA /* QVSharedUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D16B0E21949DBD008F58FA /* QVSharedUtil.m */; };
-		D1D16B1021949DBD008F58FA /* QVSharedUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D16B0E21949DBD008F58FA /* QVSharedUtil.m */; };
-		D1D16B112195F4A4008F58FA /* QVSharedSandbox.m in Sources */ = {isa = PBXBuildFile; fileRef = D1BD0A892191DFA400D30282 /* QVSharedSandbox.m */; };
-		D1D16B1621971221008F58FA /* AddPackageLogic.m in Sources */ = {isa = PBXBuildFile; fileRef = D1D16B1521971221008F58FA /* AddPackageLogic.m */; };
-		E6673433644E931C6AAB3EB3 /* libPods-JSPower.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE5E624CA85B522B93F68902 /* libPods-JSPower.a */; };
+		36DF2986116EF357ADF0BFB2 /* SourceEditorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B77F15412D086BF70077E0 /* SourceEditorExtension.swift */; };
+		3DB175657B974824E2DB3403 /* JSPowerCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3A1B6D9087BD00C46F262C8B /* JSPowerCore */; };
+		4900F7D68B9C4C863211F359 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC851097FA58433B28DA9FC8 /* XcodeKit.framework */; };
+		6784DAC70B64AEEACFCEDDE8 /* RecipeWorkbench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91A54FDE03834ABCAC3E76A2 /* RecipeWorkbench.swift */; };
+		88ECE5134737107CEEA4F351 /* JSPowerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB08D621A705D2BFCCE7DB9A /* JSPowerApp.swift */; };
+		A8574F72BEFC4441814D18AF /* JSPowerCore in Frameworks */ = {isa = PBXBuildFile; productRef = 9B9936A7A26243F59782E5D4 /* JSPowerCore */; };
+		BAB0A8467FFFC011C2DB6FE1 /* SourceEditorCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A498F6360ABD8B5E1261FD /* SourceEditorCommand.swift */; };
+		DBF126206219BC1174CE1732 /* JSPowerExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9F91CEE0595DEC983CA34829 /* JSPowerExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E2764BDFD05D6C5549686DF3 /* JSPowerCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8914ED69AD92A9CD88BDEE4F /* JSPowerCore */; };
+		FE34F890F8CB646B4A4A88F0 /* JSPowerCoreSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CC90758B306BFF133C204F9 /* JSPowerCoreSmokeTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		D1BD0A682191DE2D00D30282 /* PBXContainerItemProxy */ = {
+		3A240B8745CD342B32C493DF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = D1BD0A3B2191DE1A00D30282 /* Project object */;
+			containerPortal = CF895771B249CF7755888670 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = D1BD0A5A2191DE2D00D30282;
+			remoteGlobalIDString = E02DD7338AC32245AE39FCF9;
 			remoteInfo = JSPowerExtension;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		D14E33EA26252D4700F6E67A /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				D14E33E926252D4700F6E67A /* XcodeKit.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D1BD0A6E2191DE2D00D30282 /* Embed App Extensions */ = {
+		B02F83B66FD27BCDD721DFD5 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				D1BD0A6A2191DE2D00D30282 /* JSPower.appex in Embed App Extensions */,
+				DBF126206219BC1174CE1732 /* JSPowerExtension.appex in Embed Foundation Extensions */,
 			);
-			name = "Embed App Extensions";
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5AD579642DBF520700D51C51 /* builtin.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = builtin.bundle; sourceTree = "<group>"; };
-		A4456C3056D412A8FFE91227 /* Pods-JSPowerExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSPowerExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-JSPowerExtension/Pods-JSPowerExtension.release.xcconfig"; sourceTree = "<group>"; };
-		B9CACE96B5B153F25CDF6FE9 /* Pods-JSPower.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSPower.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JSPower/Pods-JSPower.debug.xcconfig"; sourceTree = "<group>"; };
-		D1ADD3DB26252CAB0051064B /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = Library/Frameworks/XcodeKit.framework; sourceTree = DEVELOPER_DIR; };
-		D1BD0A432191DE1A00D30282 /* JSPower.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JSPower.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D1BD0A462191DE1A00D30282 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		D1BD0A472191DE1A00D30282 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		D1BD0A492191DE1B00D30282 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D1BD0A4C2191DE1B00D30282 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		D1BD0A4E2191DE1B00D30282 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D1BD0A4F2191DE1B00D30282 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		D1BD0A512191DE1B00D30282 /* JSPower.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JSPower.entitlements; sourceTree = "<group>"; };
-		D1BD0A5B2191DE2D00D30282 /* JSPower.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = JSPower.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		D1BD0A5D2191DE2D00D30282 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
-		D1BD0A662191DE2D00D30282 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D1BD0A7E2191DFA400D30282 /* QVCommandAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QVCommandAction.m; sourceTree = "<group>"; };
-		D1BD0A7F2191DFA400D30282 /* QVSharedSandbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QVSharedSandbox.h; sourceTree = "<group>"; };
-		D1BD0A802191DFA400D30282 /* QVPackageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QVPackageManager.h; sourceTree = "<group>"; };
-		D1BD0A812191DFA400D30282 /* QVPackage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QVPackage.h; sourceTree = "<group>"; };
-		D1BD0A852191DFA400D30282 /* QVCommandInvocationJSObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QVCommandInvocationJSObject.h; sourceTree = "<group>"; };
-		D1BD0A862191DFA400D30282 /* QVSystemJSObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QVSystemJSObject.h; sourceTree = "<group>"; };
-		D1BD0A872191DFA400D30282 /* QVCommandInvocationJSObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QVCommandInvocationJSObject.m; sourceTree = "<group>"; };
-		D1BD0A882191DFA400D30282 /* QVSystemJSObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QVSystemJSObject.m; sourceTree = "<group>"; };
-		D1BD0A892191DFA400D30282 /* QVSharedSandbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QVSharedSandbox.m; sourceTree = "<group>"; };
-		D1BD0A8A2191DFA400D30282 /* QVCommandAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QVCommandAction.h; sourceTree = "<group>"; };
-		D1BD0A8B2191DFA400D30282 /* QVPackageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QVPackageManager.m; sourceTree = "<group>"; };
-		D1BD0A8C2191DFA400D30282 /* QVPackage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QVPackage.m; sourceTree = "<group>"; };
-		D1BD0A8E2191DFA400D30282 /* SourceEditorExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceEditorExtension.m; sourceTree = "<group>"; };
-		D1BD0A8F2191DFA400D30282 /* SourceEditorCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceEditorCommand.h; sourceTree = "<group>"; };
-		D1BD0A902191DFA400D30282 /* SourceEditorExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SourceEditorExtension.h; sourceTree = "<group>"; };
-		D1BD0A912191DFA400D30282 /* SourceEditorCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SourceEditorCommand.m; sourceTree = "<group>"; };
-		D1BD0AA32191FFDD00D30282 /* QVSharedFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QVSharedFile.h; sourceTree = "<group>"; };
-		D1BD0AA42191FFDD00D30282 /* QVSharedFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QVSharedFile.m; sourceTree = "<group>"; };
-		D1BD0AA721920AE300D30282 /* QVSharedKV.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QVSharedKV.h; sourceTree = "<group>"; };
-		D1BD0AA821920AE300D30282 /* QVSharedKV.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QVSharedKV.m; sourceTree = "<group>"; };
-		D1BD0AAB21920BCF00D30282 /* QVSharedHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QVSharedHeader.h; sourceTree = "<group>"; };
-		D1D16AC821933DCB008F58FA /* PackageListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PackageListController.h; sourceTree = "<group>"; };
-		D1D16AC921933DCB008F58FA /* PackageListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PackageListController.m; sourceTree = "<group>"; };
-		D1D16ADA219355B8008F58FA /* AddPackageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddPackageViewController.h; sourceTree = "<group>"; };
-		D1D16ADB219355B8008F58FA /* AddPackageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddPackageViewController.m; sourceTree = "<group>"; };
-		D1D16ADC219355B8008F58FA /* AddPackageViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AddPackageViewController.xib; sourceTree = "<group>"; };
-		D1D16B062193CD65008F58FA /* QVPackageDownloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QVPackageDownloader.h; sourceTree = "<group>"; };
-		D1D16B072193CD65008F58FA /* QVPackageDownloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QVPackageDownloader.m; sourceTree = "<group>"; };
-		D1D16B092193CDBF008F58FA /* QVSharedPackageManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QVSharedPackageManager.h; sourceTree = "<group>"; };
-		D1D16B0A2193CDBF008F58FA /* QVSharedPackageManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QVSharedPackageManager.m; sourceTree = "<group>"; };
-		D1D16B0D21949DBD008F58FA /* QVSharedUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QVSharedUtil.h; sourceTree = "<group>"; };
-		D1D16B0E21949DBD008F58FA /* QVSharedUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QVSharedUtil.m; sourceTree = "<group>"; };
-		D1D16B1421971221008F58FA /* AddPackageLogic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddPackageLogic.h; sourceTree = "<group>"; };
-		D1D16B1521971221008F58FA /* AddPackageLogic.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddPackageLogic.m; sourceTree = "<group>"; };
-		D5681E5BE6E11CEF6D8A58F0 /* Pods-JSPower.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSPower.release.xcconfig"; path = "Pods/Target Support Files/Pods-JSPower/Pods-JSPower.release.xcconfig"; sourceTree = "<group>"; };
-		DFCCC2341402271515D3D458 /* Pods-JSPowerExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JSPowerExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JSPowerExtension/Pods-JSPowerExtension.debug.xcconfig"; sourceTree = "<group>"; };
-		E0B7CA9752DCAFEA2F7D8BC6 /* libPods-JSPowerExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JSPowerExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		EE5E624CA85B522B93F68902 /* libPods-JSPower.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JSPower.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F216297727AD686E002CD4FA /* JSPowerExtension.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = JSPowerExtension.entitlements; sourceTree = "<group>"; };
+		43B77F15412D086BF70077E0 /* SourceEditorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceEditorExtension.swift; sourceTree = "<group>"; };
+		73490A084FC7C02AFC6A2B24 /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Core; path = Core; sourceTree = SOURCE_ROOT; };
+		91A54FDE03834ABCAC3E76A2 /* RecipeWorkbench.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeWorkbench.swift; sourceTree = "<group>"; };
+		9CC90758B306BFF133C204F9 /* JSPowerCoreSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSPowerCoreSmokeTests.swift; sourceTree = "<group>"; };
+		9F91CEE0595DEC983CA34829 /* JSPowerExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = JSPowerExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A95D21E88F503B7D6A35E79B /* JSPowerCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSPowerCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB08D621A705D2BFCCE7DB9A /* JSPowerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSPowerApp.swift; sourceTree = "<group>"; };
+		E0F152DC240F825736AC981A /* JSPower.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JSPower.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC851097FA58433B28DA9FC8 /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = "$(DEVELOPER_DIR)/Library/Frameworks/XcodeKit.framework"; sourceTree = "<group>"; };
+		F0A498F6360ABD8B5E1261FD /* SourceEditorCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceEditorCommand.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		D1BD0A402191DE1A00D30282 /* Frameworks */ = {
+		4C8DA69FEB5147A32511363D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6673433644E931C6AAB3EB3 /* libPods-JSPower.a in Frameworks */,
+				E2764BDFD05D6C5549686DF3 /* JSPowerCore in Frameworks */,
+				4900F7D68B9C4C863211F359 /* XcodeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D1BD0A582191DE2D00D30282 /* Frameworks */ = {
+		9ED2345BACF5647B49ACC07E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D14E33EC26252D9900F6E67A /* XcodeKit.framework in Frameworks */,
-				D1BD0A5E2191DE2D00D30282 /* Cocoa.framework in Frameworks */,
-				29E1FC2C66BE4FB1F1C0C326 /* libPods-JSPowerExtension.a in Frameworks */,
+				3DB175657B974824E2DB3403 /* JSPowerCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C8DBD2EE0F820A534E29201A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A8574F72BEFC4441814D18AF /* JSPowerCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B39BC8F464F4D9DE9ACF0E30 /* Pods */ = {
+		279C3A37A0665242A32BAA8F = {
 			isa = PBXGroup;
 			children = (
-				B9CACE96B5B153F25CDF6FE9 /* Pods-JSPower.debug.xcconfig */,
-				D5681E5BE6E11CEF6D8A58F0 /* Pods-JSPower.release.xcconfig */,
-				DFCCC2341402271515D3D458 /* Pods-JSPowerExtension.debug.xcconfig */,
-				A4456C3056D412A8FFE91227 /* Pods-JSPowerExtension.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		D1BD0A3A2191DE1A00D30282 = {
-			isa = PBXGroup;
-			children = (
-				D1BD0AA22191FCA800D30282 /* Shared */,
-				D1BD0A452191DE1A00D30282 /* JSPower */,
-				D1BD0A5F2191DE2D00D30282 /* JSPowerExtension */,
-				D1BD0A5C2191DE2D00D30282 /* Frameworks */,
-				D1BD0A442191DE1A00D30282 /* Products */,
-				B39BC8F464F4D9DE9ACF0E30 /* Pods */,
+				9AED54C53DA86FA5817C569A /* JSPowerCoreTests */,
+				D928A0AF5A951183838BF66D /* JSPowerExtensionSwift */,
+				C1FE2715D270DE7F90D3CAA9 /* JSPowerSwift */,
+				9588CEAE5B9B0104FF469382 /* Packages */,
+				90701F0ED38C364CA34B307F /* Frameworks */,
+				73DD92E9E788AF7ABF5F3710 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		D1BD0A442191DE1A00D30282 /* Products */ = {
+		73DD92E9E788AF7ABF5F3710 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D1BD0A432191DE1A00D30282 /* JSPower.app */,
-				D1BD0A5B2191DE2D00D30282 /* JSPower.appex */,
+				E0F152DC240F825736AC981A /* JSPower.app */,
+				A95D21E88F503B7D6A35E79B /* JSPowerCoreTests.xctest */,
+				9F91CEE0595DEC983CA34829 /* JSPowerExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D1BD0A452191DE1A00D30282 /* JSPower */ = {
+		90701F0ED38C364CA34B307F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D1D16B0221935DBC008F58FA /* Dialogs */,
-				D1D16B052193CD3A008F58FA /* Logic */,
-				D1D16B0421935DF1008F58FA /* Main */,
-				D1BD0A492191DE1B00D30282 /* Assets.xcassets */,
-				D1BD0A4E2191DE1B00D30282 /* Info.plist */,
-				D1BD0A512191DE1B00D30282 /* JSPower.entitlements */,
-			);
-			path = JSPower;
-			sourceTree = "<group>";
-		};
-		D1BD0A5C2191DE2D00D30282 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				D1ADD3DB26252CAB0051064B /* XcodeKit.framework */,
-				D1BD0A5D2191DE2D00D30282 /* Cocoa.framework */,
-				EE5E624CA85B522B93F68902 /* libPods-JSPower.a */,
-				E0B7CA9752DCAFEA2F7D8BC6 /* libPods-JSPowerExtension.a */,
+				EC851097FA58433B28DA9FC8 /* XcodeKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		D1BD0A5F2191DE2D00D30282 /* JSPowerExtension */ = {
+		9588CEAE5B9B0104FF469382 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				5AD579642DBF520700D51C51 /* builtin.bundle */,
-				F216297727AD686E002CD4FA /* JSPowerExtension.entitlements */,
-				D1BD0A7B2191DFA400D30282 /* Package */,
-				D1BD0A8D2191DFA400D30282 /* System */,
-				D1BD0A662191DE2D00D30282 /* Info.plist */,
+				73490A084FC7C02AFC6A2B24 /* Core */,
 			);
-			path = JSPowerExtension;
+			name = Packages;
 			sourceTree = "<group>";
 		};
-		D1BD0A7B2191DFA400D30282 /* Package */ = {
+		9AED54C53DA86FA5817C569A /* JSPowerCoreTests */ = {
 			isa = PBXGroup;
 			children = (
-				D1BD0A842191DFA400D30282 /* JSObject */,
-				D1BD0A812191DFA400D30282 /* QVPackage.h */,
-				D1BD0A8C2191DFA400D30282 /* QVPackage.m */,
-				D1BD0A802191DFA400D30282 /* QVPackageManager.h */,
-				D1BD0A8B2191DFA400D30282 /* QVPackageManager.m */,
-				D1BD0A8A2191DFA400D30282 /* QVCommandAction.h */,
-				D1BD0A7E2191DFA400D30282 /* QVCommandAction.m */,
+				9CC90758B306BFF133C204F9 /* JSPowerCoreSmokeTests.swift */,
 			);
-			path = Package;
+			path = JSPowerCoreTests;
 			sourceTree = "<group>";
 		};
-		D1BD0A842191DFA400D30282 /* JSObject */ = {
+		C1FE2715D270DE7F90D3CAA9 /* JSPowerSwift */ = {
 			isa = PBXGroup;
 			children = (
-				D1BD0A852191DFA400D30282 /* QVCommandInvocationJSObject.h */,
-				D1BD0A872191DFA400D30282 /* QVCommandInvocationJSObject.m */,
-				D1BD0A862191DFA400D30282 /* QVSystemJSObject.h */,
-				D1BD0A882191DFA400D30282 /* QVSystemJSObject.m */,
+				AB08D621A705D2BFCCE7DB9A /* JSPowerApp.swift */,
+				91A54FDE03834ABCAC3E76A2 /* RecipeWorkbench.swift */,
 			);
-			path = JSObject;
+			path = JSPowerSwift;
 			sourceTree = "<group>";
 		};
-		D1BD0A8D2191DFA400D30282 /* System */ = {
+		D928A0AF5A951183838BF66D /* JSPowerExtensionSwift */ = {
 			isa = PBXGroup;
 			children = (
-				D1BD0A8E2191DFA400D30282 /* SourceEditorExtension.m */,
-				D1BD0A8F2191DFA400D30282 /* SourceEditorCommand.h */,
-				D1BD0A902191DFA400D30282 /* SourceEditorExtension.h */,
-				D1BD0A912191DFA400D30282 /* SourceEditorCommand.m */,
+				F0A498F6360ABD8B5E1261FD /* SourceEditorCommand.swift */,
+				43B77F15412D086BF70077E0 /* SourceEditorExtension.swift */,
 			);
-			path = System;
-			sourceTree = "<group>";
-		};
-		D1BD0AA22191FCA800D30282 /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				D1BD0AAB21920BCF00D30282 /* QVSharedHeader.h */,
-				D1BD0AA32191FFDD00D30282 /* QVSharedFile.h */,
-				D1BD0AA42191FFDD00D30282 /* QVSharedFile.m */,
-				D1BD0AA721920AE300D30282 /* QVSharedKV.h */,
-				D1BD0AA821920AE300D30282 /* QVSharedKV.m */,
-				D1D16B092193CDBF008F58FA /* QVSharedPackageManager.h */,
-				D1D16B0A2193CDBF008F58FA /* QVSharedPackageManager.m */,
-				D1D16B0D21949DBD008F58FA /* QVSharedUtil.h */,
-				D1D16B0E21949DBD008F58FA /* QVSharedUtil.m */,
-				D1BD0A7F2191DFA400D30282 /* QVSharedSandbox.h */,
-				D1BD0A892191DFA400D30282 /* QVSharedSandbox.m */,
-			);
-			path = Shared;
-			sourceTree = "<group>";
-		};
-		D1D16B0221935DBC008F58FA /* Dialogs */ = {
-			isa = PBXGroup;
-			children = (
-				D1D16ADA219355B8008F58FA /* AddPackageViewController.h */,
-				D1D16ADB219355B8008F58FA /* AddPackageViewController.m */,
-				D1D16ADC219355B8008F58FA /* AddPackageViewController.xib */,
-			);
-			path = Dialogs;
-			sourceTree = "<group>";
-		};
-		D1D16B0421935DF1008F58FA /* Main */ = {
-			isa = PBXGroup;
-			children = (
-				D1D16AC821933DCB008F58FA /* PackageListController.h */,
-				D1D16AC921933DCB008F58FA /* PackageListController.m */,
-				D1BD0A462191DE1A00D30282 /* AppDelegate.h */,
-				D1BD0A472191DE1A00D30282 /* AppDelegate.m */,
-				D1BD0A4B2191DE1B00D30282 /* MainMenu.xib */,
-				D1BD0A4F2191DE1B00D30282 /* main.m */,
-			);
-			path = Main;
-			sourceTree = "<group>";
-		};
-		D1D16B052193CD3A008F58FA /* Logic */ = {
-			isa = PBXGroup;
-			children = (
-				D1D16B062193CD65008F58FA /* QVPackageDownloader.h */,
-				D1D16B072193CD65008F58FA /* QVPackageDownloader.m */,
-				D1D16B1421971221008F58FA /* AddPackageLogic.h */,
-				D1D16B1521971221008F58FA /* AddPackageLogic.m */,
-			);
-			path = Logic;
+			path = JSPowerExtensionSwift;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D1BD0A422191DE1A00D30282 /* JSPower */ = {
+		8E369C9EDF16E64C21ECDDBC /* JSPower */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D1BD0A542191DE1B00D30282 /* Build configuration list for PBXNativeTarget "JSPower" */;
+			buildConfigurationList = CF047095FC39777009F367E1 /* Build configuration list for PBXNativeTarget "JSPower" */;
 			buildPhases = (
-				41BB172FA95B65A3B5DD779A /* [CP] Check Pods Manifest.lock */,
-				D1BD0A3F2191DE1A00D30282 /* Sources */,
-				D1BD0A402191DE1A00D30282 /* Frameworks */,
-				D1BD0A412191DE1A00D30282 /* Resources */,
-				D1BD0A6E2191DE2D00D30282 /* Embed App Extensions */,
+				2C9B40A0744E71183D03EF28 /* Sources */,
+				9ED2345BACF5647B49ACC07E /* Frameworks */,
+				B02F83B66FD27BCDD721DFD5 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				D1BD0A692191DE2D00D30282 /* PBXTargetDependency */,
+				C12828DE7F1E0987CB38FE0A /* PBXTargetDependency */,
 			);
 			name = JSPower;
+			packageProductDependencies = (
+				3A1B6D9087BD00C46F262C8B /* JSPowerCore */,
+			);
 			productName = JSPower;
-			productReference = D1BD0A432191DE1A00D30282 /* JSPower.app */;
+			productReference = E0F152DC240F825736AC981A /* JSPower.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D1BD0A5A2191DE2D00D30282 /* JSPowerExtension */ = {
+		B619C0710B7AECACEE453E2D /* JSPowerCoreTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D1BD0A6B2191DE2D00D30282 /* Build configuration list for PBXNativeTarget "JSPowerExtension" */;
+			buildConfigurationList = 3F67D768F472D39919D152CA /* Build configuration list for PBXNativeTarget "JSPowerCoreTests" */;
 			buildPhases = (
-				EF93312FE7C526B6FC1692B2 /* [CP] Check Pods Manifest.lock */,
-				D1BD0A572191DE2D00D30282 /* Sources */,
-				D1BD0A582191DE2D00D30282 /* Frameworks */,
-				D1BD0A592191DE2D00D30282 /* Resources */,
-				D14E33EA26252D4700F6E67A /* Embed Frameworks */,
+				F645F368FF6C72CB337021A0 /* Sources */,
+				C8DBD2EE0F820A534E29201A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JSPowerCoreTests;
+			packageProductDependencies = (
+				9B9936A7A26243F59782E5D4 /* JSPowerCore */,
+			);
+			productName = JSPowerCoreTests;
+			productReference = A95D21E88F503B7D6A35E79B /* JSPowerCoreTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		E02DD7338AC32245AE39FCF9 /* JSPowerExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F423A17A36B7F8B5CF1D6B21 /* Build configuration list for PBXNativeTarget "JSPowerExtension" */;
+			buildPhases = (
+				6B7D7055B75D8129436D321A /* Sources */,
+				4C8DA69FEB5147A32511363D /* Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = JSPowerExtension;
+			packageProductDependencies = (
+				8914ED69AD92A9CD88BDEE4F /* JSPowerCore */,
+			);
 			productName = JSPowerExtension;
-			productReference = D1BD0A5B2191DE2D00D30282 /* JSPower.appex */;
-			productType = "com.apple.product-type.xcode-extension";
+			productReference = 9F91CEE0595DEC983CA34829 /* JSPowerExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		D1BD0A3B2191DE1A00D30282 /* Project object */ = {
+		CF895771B249CF7755888670 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1240;
-				ORGANIZATIONNAME = everettjf;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
-					D1BD0A422191DE1A00D30282 = {
-						CreatedOnToolsVersion = 10.1;
-						SystemCapabilities = {
-							com.apple.ApplicationGroups.Mac = {
-								enabled = 1;
-							};
-							com.apple.Sandbox = {
-								enabled = 1;
-							};
-						};
+					8E369C9EDF16E64C21ECDDBC = {
+						DevelopmentTeam = YPV49M8592;
 					};
-					D1BD0A5A2191DE2D00D30282 = {
-						CreatedOnToolsVersion = 10.1;
-						SystemCapabilities = {
-							com.apple.ApplicationGroups.Mac = {
-								enabled = 1;
-							};
-						};
+					B619C0710B7AECACEE453E2D = {
+						DevelopmentTeam = YPV49M8592;
+					};
+					E02DD7338AC32245AE39FCF9 = {
+						DevelopmentTeam = YPV49M8592;
 					};
 				};
 			};
-			buildConfigurationList = D1BD0A3E2191DE1A00D30282 /* Build configuration list for PBXProject "JSPower" */;
-			compatibilityVersion = "Xcode 9.3";
+			buildConfigurationList = 2AEC62E7FB8394D2FCD3E625 /* Build configuration list for PBXProject "JSPower" */;
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
+				en,
 			);
-			mainGroup = D1BD0A3A2191DE1A00D30282;
-			productRefGroup = D1BD0A442191DE1A00D30282 /* Products */;
+			mainGroup = 279C3A37A0665242A32BAA8F;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				65AFA97FB6B930D883A19258 /* XCLocalSwiftPackageReference "Core" */,
+			);
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D1BD0A422191DE1A00D30282 /* JSPower */,
-				D1BD0A5A2191DE2D00D30282 /* JSPowerExtension */,
+				8E369C9EDF16E64C21ECDDBC /* JSPower */,
+				B619C0710B7AECACEE453E2D /* JSPowerCoreTests */,
+				E02DD7338AC32245AE39FCF9 /* JSPowerExtension */,
 			);
 		};
 /* End PBXProject section */
 
-/* Begin PBXResourcesBuildPhase section */
-		D1BD0A412191DE1A00D30282 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D1BD0A4A2191DE1B00D30282 /* Assets.xcassets in Resources */,
-				D1BD0A4D2191DE1B00D30282 /* MainMenu.xib in Resources */,
-				D1D16ADE219355B8008F58FA /* AddPackageViewController.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		D1BD0A592191DE2D00D30282 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5AD579652DBF520700D51C51 /* builtin.bundle in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		41BB172FA95B65A3B5DD779A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-JSPower-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EF93312FE7C526B6FC1692B2 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-JSPowerExtension-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
-		D1BD0A3F2191DE1A00D30282 /* Sources */ = {
+		2C9B40A0744E71183D03EF28 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D1D16B0B2193CDBF008F58FA /* QVSharedPackageManager.m in Sources */,
-				D1D16B082193CD65008F58FA /* QVPackageDownloader.m in Sources */,
-				D1D16B0F21949DBD008F58FA /* QVSharedUtil.m in Sources */,
-				D1D16ACA21933DCB008F58FA /* PackageListController.m in Sources */,
-				D1BD0A502191DE1B00D30282 /* main.m in Sources */,
-				D1D16B112195F4A4008F58FA /* QVSharedSandbox.m in Sources */,
-				D1D16B1621971221008F58FA /* AddPackageLogic.m in Sources */,
-				D1BD0A482191DE1A00D30282 /* AppDelegate.m in Sources */,
-				D1D16ADD219355B8008F58FA /* AddPackageViewController.m in Sources */,
-				D1BD0AA921920AE300D30282 /* QVSharedKV.m in Sources */,
-				D1BD0AA52191FFDD00D30282 /* QVSharedFile.m in Sources */,
+				88ECE5134737107CEEA4F351 /* JSPowerApp.swift in Sources */,
+				6784DAC70B64AEEACFCEDDE8 /* RecipeWorkbench.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D1BD0A572191DE2D00D30282 /* Sources */ = {
+		6B7D7055B75D8129436D321A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D1BD0A9C2191DFA500D30282 /* QVPackage.m in Sources */,
-				D1BD0A9D2191DFA500D30282 /* SourceEditorExtension.m in Sources */,
-				D1BD0A952191DFA500D30282 /* QVCommandAction.m in Sources */,
-				D1BD0A9E2191DFA500D30282 /* SourceEditorCommand.m in Sources */,
-				D1BD0A9A2191DFA500D30282 /* QVSharedSandbox.m in Sources */,
-				D1D16B0C2193CDD7008F58FA /* QVSharedPackageManager.m in Sources */,
-				D1BD0A992191DFA500D30282 /* QVSystemJSObject.m in Sources */,
-				D1D16B1021949DBD008F58FA /* QVSharedUtil.m in Sources */,
-				D1BD0A9B2191DFA500D30282 /* QVPackageManager.m in Sources */,
-				D1BD0AAA21920AE300D30282 /* QVSharedKV.m in Sources */,
-				D1BD0A982191DFA500D30282 /* QVCommandInvocationJSObject.m in Sources */,
-				D1BD0AA62191FFDD00D30282 /* QVSharedFile.m in Sources */,
+				BAB0A8467FFFC011C2DB6FE1 /* SourceEditorCommand.swift in Sources */,
+				36DF2986116EF357ADF0BFB2 /* SourceEditorExtension.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F645F368FF6C72CB337021A0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FE34F890F8CB646B4A4A88F0 /* JSPowerCoreSmokeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		D1BD0A692191DE2D00D30282 /* PBXTargetDependency */ = {
+		C12828DE7F1E0987CB38FE0A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D1BD0A5A2191DE2D00D30282 /* JSPowerExtension */;
-			targetProxy = D1BD0A682191DE2D00D30282 /* PBXContainerItemProxy */;
+			target = E02DD7338AC32245AE39FCF9 /* JSPowerExtension */;
+			targetProxy = 3A240B8745CD342B32C493DF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXVariantGroup section */
-		D1BD0A4B2191DE1B00D30282 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D1BD0A4C2191DE1B00D30282 /* Base */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
-		D1BD0A522191DE1B00D30282 /* Debug */ = {
+		100884142C8E5C673C932B2B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -556,9 +326,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = YPV49M8592;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -566,8 +337,8 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -575,16 +346,75 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 2.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		11F94A2E55B9061BF4A378FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.JSPowerCoreTests;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		375E0CEFA869D5E8721847BE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = JSPowerExtension/JSPowerExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/Library/Frameworks\"",
+				);
+				INFOPLIST_FILE = JSPowerExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.qvcodefriend.extension;
+				PRODUCT_MODULE_NAME = JSPowerExtension;
 				PRODUCT_NAME = JSPower;
 				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
-		D1BD0A532191DE1B00D30282 /* Release */ = {
+		71A0674A08A158FAB366E17F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = JSPower/JSPower.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = JSPower/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.qvcodefriend;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		7F66C2001587BF6BC86F71EA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -617,9 +447,10 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 2;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = YPV49M8592;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -630,137 +461,135 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 2.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		874AE0C7BD148E581C9B268C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.JSPowerCoreTests;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		960DC53E7AEF1D263F43624C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = JSPowerExtension/JSPowerExtension.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_DIR)/Library/Frameworks\"",
+				);
+				INFOPLIST_FILE = JSPowerExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.qvcodefriend.extension;
+				PRODUCT_MODULE_NAME = JSPowerExtension;
 				PRODUCT_NAME = JSPower;
 				SDKROOT = macosx;
 			};
 			name = Release;
 		};
-		D1BD0A552191DE1B00D30282 /* Debug */ = {
+		F509F09DEDD2FE3361CF565D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B9CACE96B5B153F25CDF6FE9 /* Pods-JSPower.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = JSPower/JSPower.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 50;
-				DEVELOPMENT_TEAM = YPV49M8592;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = JSPower/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.qvcodefriend;
-			};
-			name = Debug;
-		};
-		D1BD0A562191DE1B00D30282 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = D5681E5BE6E11CEF6D8A58F0 /* Pods-JSPower.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = JSPower/JSPower.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 50;
-				DEVELOPMENT_TEAM = YPV49M8592;
-				INFOPLIST_FILE = JSPower/Info.plist;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 5.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.qvcodefriend;
-			};
-			name = Release;
-		};
-		D1BD0A6C2191DE2D00D30282 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = DFCCC2341402271515D3D458 /* Pods-JSPowerExtension.debug.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = JSPowerExtension/JSPowerExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 50;
-				DEVELOPMENT_TEAM = YPV49M8592;
-				INFOPLIST_FILE = JSPowerExtension/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@executable_path/../../../../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 5.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.qvcodefriend.extension;
-				SKIP_INSTALL = YES;
-			};
-			name = Debug;
-		};
-		D1BD0A6D2191DE2D00D30282 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = A4456C3056D412A8FFE91227 /* Pods-JSPowerExtension.release.xcconfig */;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = JSPowerExtension/JSPowerExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 50;
-				DEVELOPMENT_TEAM = YPV49M8592;
-				INFOPLIST_FILE = JSPowerExtension/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@executable_path/../../../../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MARKETING_VERSION = 5.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.qvcodefriend.extension;
-				SKIP_INSTALL = YES;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D1BD0A3E2191DE1A00D30282 /* Build configuration list for PBXProject "JSPower" */ = {
+		2AEC62E7FB8394D2FCD3E625 /* Build configuration list for PBXProject "JSPower" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D1BD0A522191DE1B00D30282 /* Debug */,
-				D1BD0A532191DE1B00D30282 /* Release */,
+				100884142C8E5C673C932B2B /* Debug */,
+				7F66C2001587BF6BC86F71EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		D1BD0A542191DE1B00D30282 /* Build configuration list for PBXNativeTarget "JSPower" */ = {
+		3F67D768F472D39919D152CA /* Build configuration list for PBXNativeTarget "JSPowerCoreTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D1BD0A552191DE1B00D30282 /* Debug */,
-				D1BD0A562191DE1B00D30282 /* Release */,
+				874AE0C7BD148E581C9B268C /* Debug */,
+				11F94A2E55B9061BF4A378FA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		D1BD0A6B2191DE2D00D30282 /* Build configuration list for PBXNativeTarget "JSPowerExtension" */ = {
+		CF047095FC39777009F367E1 /* Build configuration list for PBXNativeTarget "JSPower" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D1BD0A6C2191DE2D00D30282 /* Debug */,
-				D1BD0A6D2191DE2D00D30282 /* Release */,
+				71A0674A08A158FAB366E17F /* Debug */,
+				F509F09DEDD2FE3361CF565D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
+		};
+		F423A17A36B7F8B5CF1D6B21 /* Build configuration list for PBXNativeTarget "JSPowerExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				375E0CEFA869D5E8721847BE /* Debug */,
+				960DC53E7AEF1D263F43624C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		65AFA97FB6B930D883A19258 /* XCLocalSwiftPackageReference "Core" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Core;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3A1B6D9087BD00C46F262C8B /* JSPowerCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JSPowerCore;
+		};
+		8914ED69AD92A9CD88BDEE4F /* JSPowerCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JSPowerCore;
+		};
+		9B9936A7A26243F59782E5D4 /* JSPowerCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = JSPowerCore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = D1BD0A3B2191DE1A00D30282 /* Project object */;
+	rootObject = CF895771B249CF7755888670 /* Project object */;
 }

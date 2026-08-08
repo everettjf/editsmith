@@ -1,0 +1,63 @@
+name: JSPower
+options:
+  bundleIdPrefix: com.everettjf
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+packages:
+  JSPowerCore:
+    path: Core
+settings:
+  base:
+    SWIFT_VERSION: 5.0
+    CURRENT_PROJECT_VERSION: 2
+    MARKETING_VERSION: 2.0
+    DEVELOPMENT_TEAM: YPV49M8592
+targets:
+  JSPower:
+    type: application
+    platform: macOS
+    sources: [JSPowerSwift]
+    resources:
+      - JSPower/Assets.xcassets
+    dependencies:
+      - package: JSPowerCore
+      - target: JSPowerExtension
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.everettjf.qvcodefriend
+        INFOPLIST_FILE: JSPower/Info.plist
+        CODE_SIGN_ENTITLEMENTS: JSPower/JSPower.entitlements
+        ENABLE_HARDENED_RUNTIME: true
+  JSPowerExtension:
+    type: app-extension
+    platform: macOS
+    sources: [JSPowerExtensionSwift]
+    resources:
+      - JSPowerExtension/builtin.bundle
+    dependencies:
+      - package: JSPowerCore
+      - framework: "$(DEVELOPER_DIR)/Library/Frameworks/XcodeKit.framework"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.everettjf.qvcodefriend.extension
+        PRODUCT_NAME: JSPower
+        PRODUCT_MODULE_NAME: JSPowerExtension
+        INFOPLIST_FILE: JSPowerExtension/Info.plist
+        CODE_SIGN_ENTITLEMENTS: JSPowerExtension/JSPowerExtension.entitlements
+        APPLICATION_EXTENSION_API_ONLY: true
+  JSPowerCoreTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [JSPowerCoreTests]
+    dependencies:
+      - package: JSPowerCore
+schemes:
+  JSPower:
+    build:
+      targets:
+        JSPower: all
+        JSPowerCoreTests: [test]
+    test:
+      targets: [JSPowerCoreTests]

@@ -27,7 +27,7 @@
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>XCSourceEditorExtensionPrincipalClass</key>
-			<string>SourceEditorExtension</string>
+			<string>$(PRODUCT_MODULE_NAME).SourceEditorExtension</string>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.dt.Xcode.extension.source-editor</string>

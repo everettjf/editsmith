@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1240"
-   version = "1.3">
+   LastUpgradeVersion = "1430"
+   version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+      buildImplicitDependencies = "YES"
+      runPostActionsOnFailure = "NO">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -14,9 +15,23 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D1BD0A422191DE1A00D30282"
+               BlueprintIdentifier = "8E369C9EDF16E64C21ECDDBC"
                BuildableName = "JSPower.app"
                BlueprintName = "JSPower"
+               ReferencedContainer = "container:JSPower.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B619C0710B7AECACEE453E2D"
+               BuildableName = "JSPowerCoreTests.xctest"
+               BlueprintName = "JSPowerCoreTests"
                ReferencedContainer = "container:JSPower.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -26,9 +41,32 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      onlyGenerateCoverageForSpecifiedTargets = "NO">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "8E369C9EDF16E64C21ECDDBC"
+            BuildableName = "JSPower.app"
+            BlueprintName = "JSPower"
+            ReferencedContainer = "container:JSPower.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B619C0710B7AECACEE453E2D"
+               BuildableName = "JSPowerCoreTests.xctest"
+               BlueprintName = "JSPowerCoreTests"
+               ReferencedContainer = "container:JSPower.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -44,7 +82,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D1BD0A422191DE1A00D30282"
+            BlueprintIdentifier = "8E369C9EDF16E64C21ECDDBC"
             BuildableName = "JSPower.app"
             BlueprintName = "JSPower"
             ReferencedContainer = "container:JSPower.xcodeproj">
@@ -61,7 +99,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D1BD0A422191DE1A00D30282"
+            BlueprintIdentifier = "8E369C9EDF16E64C21ECDDBC"
             BuildableName = "JSPower.app"
             BlueprintName = "JSPower"
             ReferencedContainer = "container:JSPower.xcodeproj">
