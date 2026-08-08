@@ -18,6 +18,13 @@ final class RecipeLibrary {
 
     var selectedIndex: Int? { selection.flatMap { id in recipes.firstIndex { $0.id == id } } }
 
+    var isShowingError: Bool {
+        get { errorMessage != nil }
+        set {
+            if !newValue { errorMessage = nil }
+        }
+    }
+
     func addRecipe() {
         let recipe = Recipe(name: "New Recipe", summary: "Local JavaScript transformation", kind: .javascript, source: "function transform(input) {\n  return input;\n}")
         recipes.append(recipe)
@@ -72,7 +79,7 @@ struct RecipeWorkbench: View {
                 ContentUnavailableView("Select a recipe", systemImage: "curlybraces")
             }
         }
-        .alert("Recipe Error", isPresented: Binding(get: { library.errorMessage != nil }, set: { if !$0 { library.errorMessage = nil } })) {
+        .alert("Recipe Error", isPresented: $library.isShowingError) {
             Button("OK", role: .cancel) {}
         } message: { Text(library.errorMessage ?? "") }
     }
