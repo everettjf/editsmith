@@ -4,6 +4,14 @@ import Testing
 
 @Suite("Recipe engine")
 struct RecipeEngineTests {
+    @Test func extensionSafetyPreferencesRoundTripPreview() {
+        let suite = "JSPowerSafetyTests.\(UUID().uuidString)"; let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        var preferences = ExtensionPreferences(defaults: defaults); preferences.dryRun = true
+        preferences.lastSnapshot = .init(recipeName: "Uppercase", before: "a", after: "A")
+        #expect(preferences.dryRun)
+        #expect(preferences.lastSnapshot?.after == "A")
+    }
     @Test @MainActor func builtinsTransformText() throws {
         let engine = RecipeEngine()
         #expect(try engine.run(BuiltinRecipes.all[0], input: "z\na") == "a\nz")

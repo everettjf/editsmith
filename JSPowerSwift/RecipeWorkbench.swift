@@ -62,6 +62,11 @@ final class RecipeLibrary {
         save()
     }
 
+    func addTemplate(_ template: Recipe) {
+        let recipe = Recipe(name: template.name, summary: template.summary, kind: template.kind, source: template.source, isEnabled: false, testCases: template.testCases)
+        recipes.append(recipe); selection = recipe.id; testSelection = recipe.testCases.first?.id; save()
+    }
+
     func deleteSelection() {
         guard let selectedIndex, recipes[selectedIndex].kind == .javascript else { return }
         recipes.remove(at: selectedIndex)
@@ -155,7 +160,10 @@ struct RecipeWorkbench: View {
             .navigationTitle("Recipes")
             .navigationSplitViewColumnWidth(min: 230, ideal: 280)
             .toolbar {
-                Button("Add Recipe", systemImage: "plus", action: library.addRecipe)
+                Menu("Add Recipe", systemImage: "plus") {
+                    Button("Blank JavaScript Recipe", action: library.addRecipe)
+                    Section("Templates") { ForEach(RecipeTemplates.javascript) { template in Button(template.name) { library.addTemplate(template) } } }
+                }
                 Button("Delete Recipe", systemImage: "trash", role: .destructive, action: library.deleteSelection)
                     .disabled(library.selectedIndex.map { library.recipes[$0].kind == .builtin } ?? true)
             }
@@ -502,6 +510,8 @@ private struct ConsoleView: View {
 }
 
 struct ExtensionHelpView: View {
+    @State private var dryRun = ExtensionPreferences().dryRun
+    @State private var snapshot = ExtensionPreferences().lastSnapshot
     var body: some View {
         Form {
             Section("Enable JSPower") {
@@ -510,11 +520,22 @@ struct ExtensionHelpView: View {
                     NSWorkspace.shared.open(URL(string: "x-apple.systempreferences:com.apple.ExtensionsPreferences")!)
                 }
             }
+            Section("Safe Changes") {
+                Toggle("Dry Run in Xcode", isOn: $dryRun).onChange(of: dryRun) { _, value in var preferences = ExtensionPreferences(); preferences.dryRun = value }
+                Text("Dry Run executes the recipe and saves a before/after preview without modifying the Xcode buffer.")
+                if let snapshot {
+                    LabeledContent("Last Preview", value: snapshot.recipeName)
+                    Text(snapshot.date.formatted(date: .abbreviated, time: .standard)).foregroundStyle(.secondary)
+                    DiffView(before: snapshot.before, after: snapshot.after).frame(height: 180)
+                    Text("Use Editor → JSPower → Undo Last JSPower Change to restore the saved buffer snapshot.").font(.caption)
+                }
+            }
             Section("Privacy") {
                 Text("Recipes, fixtures, logs, and sample text stay on this Mac. JavaScript recipes receive only the text Xcode passes to the extension.")
             }
         }
         .formStyle(.grouped)
-        .frame(width: 560, height: 320)
+        .frame(width: 720, height: 600)
+        .onAppear { snapshot = ExtensionPreferences().lastSnapshot }
     }
 }

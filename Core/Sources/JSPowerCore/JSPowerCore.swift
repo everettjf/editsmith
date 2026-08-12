@@ -400,6 +400,28 @@ public enum BuiltinRecipes {
     ]
 }
 
+public enum RecipeTemplates {
+    public static let javascript: [Recipe] = [
+        .init(id: "template.wrap-main-actor", name: "Wrap in MainActor Task", summary: "Wrap selected Swift code in a MainActor task.", kind: .javascript, source: "function transform(input) { return 'Task { @MainActor in\\n' + input.split('\\n').map(line => '    ' + line).join('\\n') + '\\n}'; }", isEnabled: false, testCases: [.init(input: "updateUI()", expectedOutput: "Task { @MainActor in\n    updateUI()\n}")]),
+        .init(id: "template.localize-literal", name: "Localize String Literal", summary: "Convert a selected Swift string literal to String(localized:).", kind: .javascript, source: "function transform(input) { return 'String(localized: ' + input.trim() + ')'; }", isEnabled: false, testCases: [.init(input: "\"Save\"", expectedOutput: "String(localized: \"Save\")")]),
+        .init(id: "template.markdown-table", name: "CSV to Markdown Table", summary: "Turn comma-separated lines into a Markdown table.", kind: .javascript, source: "function transform(input) { const rows = input.trim().split(/\\r?\\n/).map(r => r.split(',').map(c => c.trim())); if (!rows.length) return input; return '| ' + rows[0].join(' | ') + ' |\\n| ' + rows[0].map(() => '---').join(' | ') + ' |\\n' + rows.slice(1).map(r => '| ' + r.join(' | ') + ' |').join('\\n'); }", isEnabled: false)
+    ]
+}
+
+public struct ExtensionChangeSnapshot: Codable, Equatable, Sendable {
+    public let date: Date; public let recipeName: String; public let before: String; public let after: String
+    public init(date: Date = .now, recipeName: String, before: String, after: String) { self.date = date; self.recipeName = recipeName; self.before = before; self.after = after }
+}
+
+public struct ExtensionPreferences {
+    private let defaults: UserDefaults
+    private static let dryRunKey = "swift.extension.dryRun"
+    private static let snapshotKey = "swift.extension.lastSnapshot"
+    public init(defaults: UserDefaults? = UserDefaults(suiteName: RecipeStore.suiteName)) { self.defaults = defaults ?? .standard }
+    public var dryRun: Bool { get { defaults.bool(forKey: Self.dryRunKey) } set { defaults.set(newValue, forKey: Self.dryRunKey) } }
+    public var lastSnapshot: ExtensionChangeSnapshot? { get { defaults.data(forKey: Self.snapshotKey).flatMap { try? JSONDecoder().decode(ExtensionChangeSnapshot.self, from: $0) } } set { defaults.set(try? JSONEncoder().encode(newValue), forKey: Self.snapshotKey) } }
+}
+
 public struct RecipeStore {
     public static let suiteName = "YPV49M8592.com.everettjf.qvcodefriend"
     private static let key = "swift.recipes.v2"

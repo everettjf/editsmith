@@ -6,6 +6,11 @@ final class SourceEditorCommand: NSObject, XCSourceEditorCommand {
     func perform(with invocation: XCSourceEditorCommandInvocation, completionHandler: @escaping (Error?) -> Void) {
         Task { @MainActor in
             do {
+                var preferences = ExtensionPreferences()
+                if invocation.commandIdentifier == "com.everettjf.qvcodefriend.rollback" {
+                    guard let snapshot = preferences.lastSnapshot else { throw RecipeError.invalidResult }
+                    invocation.buffer.lines.removeAllObjects(); invocation.buffer.lines.addObjects(from: splitLines(snapshot.before)); completionHandler(nil); return
+                }
                 let prefix = "com.everettjf.qvcodefriend.recipe."
                 let recipeID = invocation.commandIdentifier.replacingOccurrences(of: prefix, with: "")
                 guard let recipe = RecipeStore().load().first(where: { $0.id == recipeID }) else {
@@ -34,6 +39,8 @@ final class SourceEditorCommand: NSObject, XCSourceEditorCommand {
                     if diagnostic.line != nil { message += ")" }
                     throw RecipeError.javaScript(message)
                 }
+                preferences.lastSnapshot = ExtensionChangeSnapshot(recipeName: recipe.name, before: request.text, after: result.outputText)
+                if preferences.dryRun { completionHandler(nil); return }
                 invocation.buffer.lines.removeAllObjects()
                 invocation.buffer.lines.addObjects(from: splitLines(result.outputText))
                 completionHandler(nil)
