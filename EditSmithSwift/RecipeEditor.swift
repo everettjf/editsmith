@@ -28,7 +28,7 @@ struct RecipeEditor: View {
                             text: $recipe.testCases[testIndex].expectedOutput
                         )
                     }
-                    .frame(minHeight: 190, idealHeight: 230)
+                    .frame(minHeight: 150, idealHeight: 190)
 
                     ResultInspector(
                         input: recipe.testCases[testIndex].input,
@@ -37,7 +37,7 @@ struct RecipeEditor: View {
                         results: library.testResults,
                         mode: $library.resultMode
                     )
-                    .frame(minHeight: 170, idealHeight: 220)
+                    .frame(minHeight: 140, idealHeight: 170)
                 }
             } else {
                 ContentUnavailableView {
@@ -94,7 +94,7 @@ struct RecipeEditor: View {
                     .padding(10)
                 ScriptIssuesBar(issues: issues)
             }
-            .frame(minHeight: 260, idealHeight: 340)
+            .frame(minHeight: 210, idealHeight: 280)
         } else {
             BuiltinActionSummary(recipe: recipe)
                 .frame(minHeight: 108, idealHeight: 130, maxHeight: 160)
