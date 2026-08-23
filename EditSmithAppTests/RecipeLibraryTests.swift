@@ -81,7 +81,9 @@ struct RecipeLibraryTests {
         let suite = "EditSmithAppTests.Export.\(UUID().uuidString)"
         let defaults = try #require(UserDefaults(suiteName: suite))
         defer { defaults.removePersistentDomain(forName: suite) }
-        let library = RecipeLibrary(store: RecipeStore(defaults: defaults))
+        let sourceDirectory = temporaryScriptsDirectory()
+        defer { try? FileManager.default.removeItem(at: sourceDirectory) }
+        let library = RecipeLibrary(store: RecipeStore(defaults: defaults, scriptsDirectoryURL: sourceDirectory))
         library.addRecipe()
         let document = try #require(library.exportDocument())
         let archive = try RecipeArchive.decode(document.data)
@@ -90,7 +92,9 @@ struct RecipeLibraryTests {
         let destinationSuite = "EditSmithAppTests.Import.\(UUID().uuidString)"
         let destinationDefaults = try #require(UserDefaults(suiteName: destinationSuite))
         defer { destinationDefaults.removePersistentDomain(forName: destinationSuite) }
-        let destination = RecipeLibrary(store: RecipeStore(defaults: destinationDefaults))
+        let destinationDirectory = temporaryScriptsDirectory()
+        defer { try? FileManager.default.removeItem(at: destinationDirectory) }
+        let destination = RecipeLibrary(store: RecipeStore(defaults: destinationDefaults, scriptsDirectoryURL: destinationDirectory))
         let url = FileManager.default.temporaryDirectory
             .appending(path: "EditSmith-\(UUID().uuidString).json")
         try document.data.write(to: url, options: .atomic)
@@ -106,7 +110,14 @@ struct RecipeLibraryTests {
     private func withLibrary(_ body: (RecipeLibrary) throws -> Void) rethrows {
         let suite = "EditSmithAppTests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!
+        let scriptsDirectory = temporaryScriptsDirectory()
         defer { defaults.removePersistentDomain(forName: suite) }
-        try body(RecipeLibrary(store: RecipeStore(defaults: defaults)))
+        defer { try? FileManager.default.removeItem(at: scriptsDirectory) }
+        try body(RecipeLibrary(store: RecipeStore(defaults: defaults, scriptsDirectoryURL: scriptsDirectory)))
+    }
+
+    private func temporaryScriptsDirectory() -> URL {
+        FileManager.default.temporaryDirectory
+            .appending(path: "EditSmithAppTests-\(UUID().uuidString)")
     }
 }

@@ -501,49 +501,6 @@ public struct ExtensionPreferences {
     public var lastSnapshot: ExtensionChangeSnapshot? { get { defaults.data(forKey: Self.snapshotKey).flatMap { try? JSONDecoder().decode(ExtensionChangeSnapshot.self, from: $0) } } set { defaults.set(try? JSONEncoder().encode(newValue), forKey: Self.snapshotKey) } }
 }
 
-public struct RecipeStore {
-    public static let suiteName = "group.com.xnu.editsmith"
-    private static let key = "swift.recipes.v2"
-    private static let catalogVersionKey = "swift.capabilityCatalogVersion"
-    private static let currentCatalogVersion = 3
-    private let defaults: UserDefaults
-
-    public init(defaults: UserDefaults? = UserDefaults(suiteName: Self.suiteName)) {
-        self.defaults = defaults ?? .standard
-    }
-
-    public func load() -> [Recipe] {
-        guard let data = defaults.data(forKey: Self.key), let saved = try? JSONDecoder().decode([Recipe].self, from: data) else {
-            defaults.set(Self.currentCatalogVersion, forKey: Self.catalogVersionKey)
-            return BuiltinRecipes.all
-        }
-        let catalogIDs = Set(BuiltinRecipes.all.map(\.id))
-        guard saved.contains(where: { catalogIDs.contains($0.id) }) else { return saved }
-        let isUpgradingLegacyCatalog = defaults.integer(forKey: Self.catalogVersionKey) < Self.currentCatalogVersion
-        let savedByID = Dictionary(uniqueKeysWithValues: saved.map { ($0.id, $0) })
-        let mergedBuiltins = BuiltinRecipes.all.map { catalogRecipe -> Recipe in
-            guard let existing = savedByID[catalogRecipe.id] else { return catalogRecipe }
-            var merged = catalogRecipe
-            if !isUpgradingLegacyCatalog { merged.isEnabled = existing.isEnabled }
-            merged.isFavorite = existing.isFavorite
-            merged.keyboardShortcut = existing.keyboardShortcut
-            merged.parameters.merge(existing.parameters) { _, savedValue in savedValue }
-            return merged
-        }
-        let migrated = mergedBuiltins + saved.filter { $0.kind == .javascript && !catalogIDs.contains($0.id) }
-        if isUpgradingLegacyCatalog {
-            defaults.set(try? JSONEncoder().encode(migrated), forKey: Self.key)
-        }
-        defaults.set(Self.currentCatalogVersion, forKey: Self.catalogVersionKey)
-        return migrated
-    }
-
-    public func save(_ recipes: [Recipe]) throws {
-        defaults.set(try JSONEncoder().encode(recipes), forKey: Self.key)
-        defaults.set(Self.currentCatalogVersion, forKey: Self.catalogVersionKey)
-    }
-}
-
 public struct RecipeArchive: Codable, Equatable, Sendable {
     public static let currentFormatVersion = 1
     public var formatVersion: Int

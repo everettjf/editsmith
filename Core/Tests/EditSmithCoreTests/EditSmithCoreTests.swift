@@ -33,10 +33,19 @@ struct RecipeEngineTests {
         let suite = "EditSmithCoreTests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!
         defer { defaults.removePersistentDomain(forName: suite) }
-        let store = RecipeStore(defaults: defaults)
-        let recipes = [Recipe(name: "One", summary: "Test", kind: .builtin, source: "uppercase")]
+        let scriptsDirectory = FileManager.default.temporaryDirectory
+            .appending(path: "EditSmithCoreTests-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: scriptsDirectory) }
+        let store = RecipeStore(defaults: defaults, scriptsDirectoryURL: scriptsDirectory)
+        let custom = Recipe(name: "One", summary: "Test", kind: .javascript, source: "function transform(input) { return input; }")
+        let recipes = BuiltinRecipes.all + [custom]
         try store.save(recipes)
-        #expect(store.load() == recipes)
+        let loaded = store.load()
+        #expect(loaded.last == custom)
+        #expect(loaded.filter { $0.kind != .javascript }.map(\.id) == BuiltinRecipes.all.map(\.id))
+        let storedFiles = try FileManager.default.contentsOfDirectory(atPath: scriptsDirectory.path)
+        #expect(storedFiles.count == 1)
+        #expect(defaults.data(forKey: "swift.recipes.v2") == nil)
     }
 
     @Test func legacyCatalogMigratesWithoutDuplicateBuiltins() throws {
@@ -48,12 +57,40 @@ struct RecipeEngineTests {
             Recipe(id: "builtin.remove-duplicates", name: "Old Duplicate", summary: "", kind: .builtin, source: "remove-duplicate-lines", isEnabled: true),
         ]
         defaults.set(try JSONEncoder().encode(legacy), forKey: "swift.recipes.v2")
-        let store = RecipeStore(defaults: defaults)
+        let scriptsDirectory = FileManager.default.temporaryDirectory
+            .appending(path: "EditSmithCatalogMigration-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: scriptsDirectory) }
+        let store = RecipeStore(defaults: defaults, scriptsDirectoryURL: scriptsDirectory)
         let migrated = store.load()
         #expect(migrated.filter { $0.kind != .javascript }.count == BuiltinRecipes.all.count)
         #expect(migrated.filter(\.isEnabled).count == 10)
         #expect(!migrated.contains { $0.id == "builtin.remove-duplicates" })
         #expect(store.load().filter(\.isEnabled).count == 10)
+    }
+
+    @Test func legacyCustomScriptsMigrateToFilesAndCanBeDeleted() throws {
+        let suite = "EditSmithScriptMigration.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let scriptsDirectory = FileManager.default.temporaryDirectory
+            .appending(path: "EditSmithScriptMigration-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: scriptsDirectory) }
+        let custom = Recipe(
+            name: "Migrated Script",
+            summary: "",
+            kind: .javascript,
+            source: "function transform(input) { return input; }"
+        )
+        defaults.set(try JSONEncoder().encode(BuiltinRecipes.all + [custom]), forKey: "swift.recipes.v2")
+
+        let store = RecipeStore(defaults: defaults, scriptsDirectoryURL: scriptsDirectory)
+        #expect(store.load().contains { $0.id == custom.id })
+        #expect(defaults.data(forKey: "swift.recipes.v2") == nil)
+        #expect(try FileManager.default.contentsOfDirectory(atPath: scriptsDirectory.path).count == 1)
+
+        try store.save(BuiltinRecipes.all)
+        #expect(!store.load().contains { $0.id == custom.id })
+        #expect(try FileManager.default.contentsOfDirectory(atPath: scriptsDirectory.path).isEmpty)
     }
 
     @Test func recipeArchiveRoundTripsAndRejectsInvalidInput() throws {
