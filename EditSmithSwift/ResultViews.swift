@@ -110,8 +110,9 @@ struct DiffView: View {
     let after: String
 
     var body: some View {
-        HSplitView {
+        HStack(spacing: 0) {
             diffColumn(title: "Before", prefix: "−", text: before, color: .red)
+            Divider()
             diffColumn(title: "After", prefix: "+", text: after, color: .green)
         }
     }
@@ -129,7 +130,7 @@ struct DiffView: View {
             }
             .background(color.opacity(0.05))
         }
-        .frame(minWidth: 220)
+        .frame(minWidth: 180)
     }
 }
 

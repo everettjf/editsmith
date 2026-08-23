@@ -20,22 +20,53 @@ private struct WindowSizeGuard: NSViewRepresentable {
     func updateNSView(_ nsView: NSView, context: Context) {}
 
     private final class GuardView: NSView {
-        private var hasCheckedWindow = false
+        private var observedWindow: NSWindow?
+        private var activationObserver: NSObjectProtocol?
+        private var hasAppliedInitialSize = false
 
         override func viewDidMoveToWindow() {
             super.viewDidMoveToWindow()
-            guard window != nil, !hasCheckedWindow else { return }
-            hasCheckedWindow = true
-            DispatchQueue.main.async { [weak self] in self?.clampRestoredWindow() }
+            guard window !== observedWindow else { return }
+            if let activationObserver {
+                NotificationCenter.default.removeObserver(activationObserver)
+            }
+            observedWindow = window
+            guard let window else { return }
+            activationObserver = NotificationCenter.default.addObserver(
+                forName: NSWindow.didBecomeKeyNotification,
+                object: window,
+                queue: .main
+            ) { [weak self] _ in
+                self?.scheduleInitialSizeCheck()
+            }
+            scheduleInitialSizeCheck()
+        }
+
+        deinit {
+            if let activationObserver {
+                NotificationCenter.default.removeObserver(activationObserver)
+            }
+        }
+
+        private func scheduleInitialSizeCheck() {
+            guard !hasAppliedInitialSize else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+                self?.clampRestoredWindow()
+            }
         }
 
         private func clampRestoredWindow() {
             guard let window,
                   let screen = window.screen ?? NSScreen.main else { return }
+            hasAppliedInitialSize = true
             let visibleFrame = screen.visibleFrame
-            window.contentMinSize = NSSize(width: 900, height: 520)
+            window.contentMinSize = NSSize(width: 820, height: 520)
             guard window.frame.width > 1_440
                     || window.frame.height > visibleFrame.height else { return }
+
+            if window.isZoomed {
+                window.zoom(nil)
+            }
 
             let size = NSSize(
                 width: min(1_080, visibleFrame.width * 0.9),

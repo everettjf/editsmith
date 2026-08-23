@@ -11,49 +11,55 @@ struct RecipeEditor: View {
     var body: some View {
         @Bindable var library = library
 
-        VStack(spacing: 0) {
-            RecipeHeader(recipe: recipe)
+        HStack(spacing: 0) {
+            VStack(spacing: 0) {
+                RecipeHeader(recipe: recipe)
 
-            Divider()
+                Divider()
 
-            if let testIndex = library.selectedTestIndex {
-                VSplitView {
-                    primaryWorkspace
+                if let testIndex = library.selectedTestIndex {
+                    VSplitView {
+                        primaryWorkspace
 
-                    HSplitView {
-                        TestFixtureEditor(test: $recipe.testCases[testIndex], library: library)
-                        EditorPane(
-                            title: "Expected Output",
-                            systemImage: "checkmark.rectangle",
-                            text: $recipe.testCases[testIndex].expectedOutput
+                        HStack(spacing: 0) {
+                            TestFixtureEditor(test: $recipe.testCases[testIndex], library: library)
+                            Divider()
+                            EditorPane(
+                                title: "Expected Output",
+                                systemImage: "checkmark.rectangle",
+                                text: $recipe.testCases[testIndex].expectedOutput
+                            )
+                        }
+                        .frame(minHeight: 150, idealHeight: 190)
+
+                        ResultInspector(
+                            input: recipe.testCases[testIndex].input,
+                            source: recipe.source,
+                            execution: library.execution,
+                            results: library.testResults,
+                            mode: $library.resultMode
                         )
+                        .frame(minHeight: 140, idealHeight: 170)
                     }
-                    .frame(minHeight: 150, idealHeight: 190)
+                } else {
+                    ContentUnavailableView {
+                        Label("No test cases", systemImage: "checklist")
+                    } description: {
+                        Text("Add a fixture to test this action before enabling it in Xcode.")
+                    } actions: {
+                        Button("Add Test Case", action: library.addTest)
+                    }
+                }
+            }
+            .frame(minWidth: 360, maxWidth: .infinity)
 
-                    ResultInspector(
-                        input: recipe.testCases[testIndex].input,
-                        source: recipe.source,
-                        execution: library.execution,
-                        results: library.testResults,
-                        mode: $library.resultMode
-                    )
-                    .frame(minHeight: 140, idealHeight: 170)
-                }
-            } else {
-                ContentUnavailableView {
-                    Label("No test cases", systemImage: "checklist")
-                } description: {
-                    Text("Add a fixture to test this action before enabling it in Xcode.")
-                } actions: {
-                    Button("Add Test Case", action: library.addTest)
-                }
+            if isShowingInspector {
+                Divider()
+                RecipeInspector(recipe: $recipe, selection: $inspectorSection, library: library)
+                    .frame(width: 240)
             }
         }
         .navigationTitle(recipe.name)
-        .inspector(isPresented: $isShowingInspector) {
-            RecipeInspector(recipe: $recipe, selection: $inspectorSection, library: library)
-                .inspectorColumnWidth(min: 240, ideal: 280, max: 360)
-        }
         .task(id: recipe.source) {
             guard recipe.kind == .javascript else { issues = []; return }
             do { try await Task.sleep(for: .milliseconds(300)) } catch { return }
@@ -230,7 +236,7 @@ private struct TestFixtureEditor: View {
                 .frame(height: 72)
             }
         }
-        .frame(minWidth: 220)
+        .frame(minWidth: 180)
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Xcode buffer test fixture")
     }
@@ -278,7 +284,7 @@ private struct EditorPane: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(.background)
         }
-        .frame(minWidth: 220)
+        .frame(minWidth: 180)
     }
 }
 
