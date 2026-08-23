@@ -5,7 +5,8 @@ import EditSmithCore
 struct EditSmithApp: App {
     var body: some Scene {
         WindowGroup { RecipeWorkbench() }
-            .defaultSize(width: 1_020, height: 680)
+            .defaultSize(width: 1_180, height: 760)
+            .commands { TextFormattingCommands() }
         Settings { ExtensionHelpView() }
     }
 }

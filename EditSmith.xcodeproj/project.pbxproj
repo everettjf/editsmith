@@ -7,18 +7,26 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F7B66F5A8DB7C44228855F4 /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 66D5C950C842E6CCCCF35F08 /* CodeEditor */; };
 		1A865D95F673B70094F07F71 /* EditSmithCoreSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98AC9916ADB41F3520C77A6 /* EditSmithCoreSmokeTests.swift */; };
+		1C124678B3AED73BAA2128A8 /* ExtensionHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBD32A7BE89BBE98431F05A /* ExtensionHelpView.swift */; };
+		2D6C5C57455E09D30664A1F7 /* ScriptAuthoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5B72E55C7F92DF0462D6D4 /* ScriptAuthoring.swift */; };
 		368C41AA508294A041CDC28E /* EditSmithApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED295DA601F12F90DAD4C392 /* EditSmithApp.swift */; };
 		3EBDFCFDCBA102F4ED6D2026 /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = F433AC195492EE54EB36CA87 /* EditSmithCore */; };
+		5499C91C178E86119A66FBDB /* CodeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783A8F9403FD17609008BCF4 /* CodeEditor.swift */; };
 		5A2C419EBD536B5C3412FF5A /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = 015C2048CA940419273C74C0 /* EditSmithCore */; };
 		6597F982DA272399F11F76F8 /* SourceEditorCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB811A30C96A6EB3B644E802 /* SourceEditorCommand.swift */; };
 		794F4E73D5FBDDB55F7829FB /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = 487CBEDDDFA28F1115FA490A /* EditSmithCore */; };
+		8022EA1A5DD018D0210B79AA /* RecipeLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4DE8B824D7CFE73F086884 /* RecipeLibrary.swift */; };
 		88C4540AF727C599B2ADC94F /* RecipeLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE1142DDE452CF922E640C8 /* RecipeLibraryTests.swift */; };
+		8BAEC21A2DFAF4CFBB472C1F /* RecipeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B00B6896DA6C4DFB341693B /* RecipeEditor.swift */; };
 		939E960D7B033633924A3BF5 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4998059E598CBD141CCE6077 /* XcodeKit.framework */; };
 		9E9AB5BF49E43FF70FBD57E9 /* RecipeWorkbench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FC25212C48AF82655986696 /* RecipeWorkbench.swift */; };
 		A43024A8ECDF1541B1394964 /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = B724C3A0B092FCB8924EBC00 /* EditSmithCore */; };
 		CF8F455B7B1FEF17E402499B /* EditSmithExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		E795A76A437DCBBD58959DA9 /* ResultViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A0F4464F725F6BAB2E51EC /* ResultViews.swift */; };
 		F195B84A463B2BEDE76CD440 /* SourceEditorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FFB520978B6028BF74CC64 /* SourceEditorExtension.swift */; };
+		FD8C5497552D0FFE38A4D04D /* RecipeInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6130AE06235699F0ACEE332C /* RecipeInspector.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,13 +61,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		21A0F4464F725F6BAB2E51EC /* ResultViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViews.swift; sourceTree = "<group>"; };
 		4998059E598CBD141CCE6077 /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = "$(DEVELOPER_DIR)/Library/Frameworks/XcodeKit.framework"; sourceTree = "<group>"; };
+		4B00B6896DA6C4DFB341693B /* RecipeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeEditor.swift; sourceTree = "<group>"; };
 		4F03104E4250326EA6210DC9 /* EditSmithCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EditSmithCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A2B402562043B397F653D9E /* EditSmithAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EditSmithAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		6130AE06235699F0ACEE332C /* RecipeInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeInspector.swift; sourceTree = "<group>"; };
 		6FC25212C48AF82655986696 /* RecipeWorkbench.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeWorkbench.swift; sourceTree = "<group>"; };
 		75112C6E3428FFE1D6CE9A1F /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Core; path = Core; sourceTree = SOURCE_ROOT; };
+		783A8F9403FD17609008BCF4 /* CodeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditor.swift; sourceTree = "<group>"; };
+		7A5B72E55C7F92DF0462D6D4 /* ScriptAuthoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptAuthoring.swift; sourceTree = "<group>"; };
+		7BBD32A7BE89BBE98431F05A /* ExtensionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionHelpView.swift; sourceTree = "<group>"; };
 		94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EditSmithExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C98AC9916ADB41F3520C77A6 /* EditSmithCoreSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSmithCoreSmokeTests.swift; sourceTree = "<group>"; };
+		CC4DE8B824D7CFE73F086884 /* RecipeLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeLibrary.swift; sourceTree = "<group>"; };
 		CDE1142DDE452CF922E640C8 /* RecipeLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeLibraryTests.swift; sourceTree = "<group>"; };
 		CF52A73E9BBBA599E5A1FE32 /* EditSmith.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EditSmith.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB811A30C96A6EB3B644E802 /* SourceEditorCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceEditorCommand.swift; sourceTree = "<group>"; };
@@ -89,6 +104,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A2C419EBD536B5C3412FF5A /* EditSmithCore in Frameworks */,
+				0F7B66F5A8DB7C44228855F4 /* CodeEditor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,8 +136,15 @@
 		471733E9A0C2FFAAB622AE6A /* EditSmithSwift */ = {
 			isa = PBXGroup;
 			children = (
+				783A8F9403FD17609008BCF4 /* CodeEditor.swift */,
 				ED295DA601F12F90DAD4C392 /* EditSmithApp.swift */,
+				7BBD32A7BE89BBE98431F05A /* ExtensionHelpView.swift */,
+				4B00B6896DA6C4DFB341693B /* RecipeEditor.swift */,
+				6130AE06235699F0ACEE332C /* RecipeInspector.swift */,
+				CC4DE8B824D7CFE73F086884 /* RecipeLibrary.swift */,
 				6FC25212C48AF82655986696 /* RecipeWorkbench.swift */,
+				21A0F4464F725F6BAB2E51EC /* ResultViews.swift */,
+				7A5B72E55C7F92DF0462D6D4 /* ScriptAuthoring.swift */,
 			);
 			path = EditSmithSwift;
 			sourceTree = "<group>";
@@ -255,6 +278,7 @@
 			name = EditSmith;
 			packageProductDependencies = (
 				015C2048CA940419273C74C0 /* EditSmithCore */,
+				66D5C950C842E6CCCCF35F08 /* CodeEditor */,
 			);
 			productName = EditSmith;
 			productReference = CF52A73E9BBBA599E5A1FE32 /* EditSmith.app */;
@@ -294,6 +318,7 @@
 			mainGroup = 2EB28A4827F2A51BD694F7A7;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				BEE853BD4E15D00EB29CFB3F /* XCRemoteSwiftPackageReference "CodeEditor" */,
 				AA176C43D52161AA9ED6F6D5 /* XCLocalSwiftPackageReference "Core" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -321,8 +346,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5499C91C178E86119A66FBDB /* CodeEditor.swift in Sources */,
 				368C41AA508294A041CDC28E /* EditSmithApp.swift in Sources */,
+				1C124678B3AED73BAA2128A8 /* ExtensionHelpView.swift in Sources */,
+				8BAEC21A2DFAF4CFBB472C1F /* RecipeEditor.swift in Sources */,
+				FD8C5497552D0FFE38A4D04D /* RecipeInspector.swift in Sources */,
+				8022EA1A5DD018D0210B79AA /* RecipeLibrary.swift in Sources */,
 				9E9AB5BF49E43FF70FBD57E9 /* RecipeWorkbench.swift in Sources */,
+				E795A76A437DCBBD58959DA9 /* ResultViews.swift in Sources */,
+				2D6C5C57455E09D30664A1F7 /* ScriptAuthoring.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -683,6 +715,17 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		BEE853BD4E15D00EB29CFB3F /* XCRemoteSwiftPackageReference "CodeEditor" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ZeeZide/CodeEditor.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		015C2048CA940419273C74C0 /* EditSmithCore */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -691,6 +734,11 @@
 		487CBEDDDFA28F1115FA490A /* EditSmithCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EditSmithCore;
+		};
+		66D5C950C842E6CCCCF35F08 /* CodeEditor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BEE853BD4E15D00EB29CFB3F /* XCRemoteSwiftPackageReference "CodeEditor" */;
+			productName = CodeEditor;
 		};
 		B724C3A0B092FCB8924EBC00 /* EditSmithCore */ = {
 			isa = XCSwiftPackageProductDependency;

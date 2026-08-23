@@ -37,6 +37,25 @@ struct RecipeLibraryTests {
         }
     }
 
+    @Test func testAndEnableRequiresPassingFixtures() {
+        withLibrary { library in
+            library.addRecipe()
+            #expect(library.testAndEnableCurrent())
+            #expect(library.recipes[library.selectedIndex!].isEnabled)
+
+            library.recipes[library.selectedIndex!].testCases[0].expectedOutput = "wrong"
+            library.recipes[library.selectedIndex!].isEnabled = false
+            #expect(!library.testAndEnableCurrent())
+            #expect(!library.recipes[library.selectedIndex!].isEnabled)
+        }
+    }
+
+    @Test func scriptLinterFindsContractAndDelimiterProblems() {
+        #expect(ScriptLinter.inspect("const value = (1;").contains { $0.severity == .error })
+        #expect(ScriptLinter.inspect("function transform(input) { return input; }").isEmpty)
+        #expect(ScriptLinter.inspect("function transform(input) { return fetch(input); }").contains { $0.severity == .warning })
+    }
+
     @Test func exportAndImportRoundTripDisablesImportedActions() throws {
         let suite = "EditSmithAppTests.Export.\(UUID().uuidString)"
         let defaults = try #require(UserDefaults(suiteName: suite))
