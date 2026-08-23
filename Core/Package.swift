@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "JSPowerCore",
+    name: "EditSmithCore",
     platforms: [.macOS(.v14)],
-    products: [.library(name: "JSPowerCore", targets: ["JSPowerCore"])],
+    products: [.library(name: "EditSmithCore", targets: ["EditSmithCore"])],
     targets: [
-        .target(name: "JSPowerCore", linkerSettings: [.linkedFramework("JavaScriptCore")]),
-        .testTarget(name: "JSPowerCoreTests", dependencies: ["JSPowerCore"]),
+        .target(name: "EditSmithCore", linkerSettings: [.linkedFramework("JavaScriptCore")]),
+        .testTarget(name: "EditSmithCoreTests", dependencies: ["EditSmithCore"]),
     ]
 )

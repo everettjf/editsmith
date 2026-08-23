@@ -1,63 +1,61 @@
-name: JSPower
+name: EditSmith
 options:
   bundleIdPrefix: com.everettjf
   deploymentTarget:
     macOS: "14.0"
   createIntermediateGroups: true
 packages:
-  JSPowerCore:
+  EditSmithCore:
     path: Core
 settings:
   base:
     SWIFT_VERSION: 5.0
-    CURRENT_PROJECT_VERSION: 2
-    MARKETING_VERSION: 2.0
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 1.0
     DEVELOPMENT_TEAM: YPV49M8592
 targets:
-  JSPower:
+  EditSmith:
     type: application
     platform: macOS
-    sources: [JSPowerSwift]
+    sources: [EditSmithSwift]
     resources:
-      - JSPower/Assets.xcassets
+      - EditSmith/Assets.xcassets
     dependencies:
-      - package: JSPowerCore
-      - target: JSPowerExtension
+      - package: EditSmithCore
+      - target: EditSmithExtension
         embed: true
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.everettjf.qvcodefriend
-        INFOPLIST_FILE: JSPower/Info.plist
-        CODE_SIGN_ENTITLEMENTS: JSPower/JSPower.entitlements
+        PRODUCT_BUNDLE_IDENTIFIER: com.xnu.editsmith
+        INFOPLIST_FILE: EditSmith/Info.plist
+        CODE_SIGN_ENTITLEMENTS: EditSmith/EditSmith.entitlements
         ENABLE_HARDENED_RUNTIME: true
-  JSPowerExtension:
+  EditSmithExtension:
     type: app-extension
     platform: macOS
-    sources: [JSPowerExtensionSwift]
-    resources:
-      - JSPowerExtension/builtin.bundle
+    sources: [EditSmithExtensionSwift]
     dependencies:
-      - package: JSPowerCore
+      - package: EditSmithCore
       - framework: "$(DEVELOPER_DIR)/Library/Frameworks/XcodeKit.framework"
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.everettjf.qvcodefriend.extension
-        PRODUCT_NAME: JSPower
-        PRODUCT_MODULE_NAME: JSPowerExtension
-        INFOPLIST_FILE: JSPowerExtension/Info.plist
-        CODE_SIGN_ENTITLEMENTS: JSPowerExtension/JSPowerExtension.entitlements
+        PRODUCT_BUNDLE_IDENTIFIER: com.xnu.editsmith.extension
+        PRODUCT_NAME: EditSmith
+        PRODUCT_MODULE_NAME: EditSmithExtension
+        INFOPLIST_FILE: EditSmithExtension/Info.plist
+        CODE_SIGN_ENTITLEMENTS: EditSmithExtension/EditSmithExtension.entitlements
         APPLICATION_EXTENSION_API_ONLY: true
-  JSPowerCoreTests:
+  EditSmithCoreTests:
     type: bundle.unit-test
     platform: macOS
-    sources: [JSPowerCoreTests]
+    sources: [EditSmithCoreTests]
     dependencies:
-      - package: JSPowerCore
+      - package: EditSmithCore
 schemes:
-  JSPower:
+  EditSmith:
     build:
       targets:
-        JSPower: all
-        JSPowerCoreTests: [test]
+        EditSmith: all
+        EditSmithCoreTests: [test]
     test:
-      targets: [JSPowerCoreTests]
+      targets: [EditSmithCoreTests]
