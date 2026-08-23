@@ -51,7 +51,7 @@ struct RecipeEditor: View {
         }
         .navigationTitle(recipe.name)
         .inspector(isPresented: $isShowingInspector) {
-            RecipeInspector(recipe: $recipe, selection: $inspectorSection)
+            RecipeInspector(recipe: $recipe, selection: $inspectorSection, library: library)
                 .inspectorColumnWidth(min: 280, ideal: 320, max: 380)
         }
         .task(id: recipe.source) {
@@ -76,6 +76,9 @@ struct RecipeEditor: View {
             }
             Button("Save", systemImage: "square.and.arrow.down", action: library.save)
                 .keyboardShortcut("s", modifiers: [.command])
+            if recipe.kind != .javascript {
+                Button("Copy as Script", systemImage: "doc.on.doc", action: library.copyBuiltinToScript)
+            }
             Button("Inspector", systemImage: "sidebar.trailing") {
                 isShowingInspector.toggle()
             }
@@ -143,16 +146,32 @@ private struct BuiltinActionSummary: View {
                 .background(.tint.opacity(0.1), in: .rect(cornerRadius: 14))
 
             VStack(alignment: .leading, spacing: 5) {
-                Text("Built-in transformation").font(.headline)
+                HStack {
+                    Text(recipe.kind == .composed ? "Composed transformation" : "Built-in transformation").font(.headline)
+                    if recipe.isFeatured {
+                        Label("Featured", systemImage: "sparkles").font(.caption).foregroundStyle(.orange)
+                    }
+                }
                 Text(recipe.summary).foregroundStyle(.secondary)
-                Text("Implemented natively by EditSmith · No script editing required")
+                Text(recipe.kind == .composed ? "Runs a local pipeline of built-in capabilities" : "Implemented natively by EditSmith · No script editing required")
                     .font(.caption)
                     .foregroundStyle(.tertiary)
+                if !recipe.componentIDs.isEmpty {
+                    Text(componentNames)
+                        .font(.caption.monospaced())
+                        .foregroundStyle(.secondary)
+                }
             }
             Spacer()
         }
         .padding(18)
         .background(.background)
+    }
+
+    private var componentNames: String {
+        recipe.componentIDs.compactMap { identifier in
+            BuiltinRecipes.all.first { $0.id == identifier }?.name
+        }.joined(separator: " → ")
     }
 }
 

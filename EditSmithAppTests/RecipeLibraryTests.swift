@@ -56,6 +56,27 @@ struct RecipeLibraryTests {
         #expect(ScriptLinter.inspect("function transform(input) { return fetch(input); }").contains { $0.severity == .warning })
     }
 
+    @Test func capabilityLibraryFiltersPersistsAndCopiesScripts() throws {
+        try withLibrary { library in
+            #expect(library.builtinCount >= 80)
+            #expect(library.enabledCount == 10)
+            library.scope = .featured
+            #expect(!library.visibleRecipes.isEmpty)
+            #expect(library.visibleRecipes.allSatisfy { $0.isFeatured })
+
+            let builtin = try #require(library.recipes.first { $0.kind == .builtin })
+            library.selection = builtin.id
+            library.toggleFavorite(builtin.id)
+            #expect(library.recipes.first { $0.id == builtin.id }?.isFavorite == true)
+            library.copyBuiltinToScript()
+            #expect(library.recipes.last?.kind == .javascript)
+            #expect(library.recipes.last?.isEnabled == false)
+            #expect(library.recipes.last?.source.contains("function transform(input)") == true)
+            library.runAll()
+            #expect(library.testResults.allSatisfy { $0.passed })
+        }
+    }
+
     @Test func exportAndImportRoundTripDisablesImportedActions() throws {
         let suite = "EditSmithAppTests.Export.\(UUID().uuidString)"
         let defaults = try #require(UserDefaults(suiteName: suite))

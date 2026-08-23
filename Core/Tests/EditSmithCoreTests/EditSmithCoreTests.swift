@@ -14,8 +14,9 @@ struct RecipeEngineTests {
     }
     @Test @MainActor func builtinsTransformText() throws {
         let engine = RecipeEngine()
-        #expect(try engine.run(BuiltinRecipes.all[0], input: "z\na") == "a\nz")
-        #expect(try engine.run(BuiltinRecipes.all[1], input: "a  \nb\t") == "a\nb")
+        let recipes = Dictionary(uniqueKeysWithValues: BuiltinRecipes.all.map { ($0.source, $0) })
+        #expect(try engine.run(recipes["sort-lines"]!, input: "z\na") == "a\nz")
+        #expect(try engine.run(recipes["trim-lines"]!, input: "a  \nb\t") == "a\nb")
     }
 
     @Test @MainActor func javascriptTransformRunsLocally() throws {
@@ -38,6 +39,23 @@ struct RecipeEngineTests {
         #expect(store.load() == recipes)
     }
 
+    @Test func legacyCatalogMigratesWithoutDuplicateBuiltins() throws {
+        let suite = "EditSmithCatalogMigration.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defer { defaults.removePersistentDomain(forName: suite) }
+        let legacy = [
+            Recipe(id: "builtin.sort-lines", name: "Sort Lines", summary: "", kind: .builtin, source: "sort-lines", isEnabled: true),
+            Recipe(id: "builtin.remove-duplicates", name: "Old Duplicate", summary: "", kind: .builtin, source: "remove-duplicate-lines", isEnabled: true),
+        ]
+        defaults.set(try JSONEncoder().encode(legacy), forKey: "swift.recipes.v2")
+        let store = RecipeStore(defaults: defaults)
+        let migrated = store.load()
+        #expect(migrated.filter { $0.kind != .javascript }.count == BuiltinRecipes.all.count)
+        #expect(migrated.filter(\.isEnabled).count == 10)
+        #expect(!migrated.contains { $0.id == "builtin.remove-duplicates" })
+        #expect(store.load().filter(\.isEnabled).count == 10)
+    }
+
     @Test func recipeArchiveRoundTripsAndRejectsInvalidInput() throws {
         let recipe = Recipe(
             name: "Wrap",
@@ -56,6 +74,34 @@ struct RecipeEngineTests {
         #expect(throws: RecipeArchiveError.unsupportedFormat(99)) { try RecipeArchive.decode(future) }
         let empty = try RecipeArchive(recipes: []).encoded()
         #expect(throws: RecipeArchiveError.emptyArchive) { try RecipeArchive.decode(empty) }
+
+        let unsafe = Recipe(name: "Unsafe", summary: "", kind: .javascript, source: "function transform(input) { return eval(input); }")
+        #expect(throws: RecipeArchiveError.unsafeRecipe) {
+            try RecipeArchive.decode(RecipeArchive(recipes: [unsafe]).encoded())
+        }
+    }
+
+    @Test func catalogHasEightyCapabilitiesAndTenDefaults() {
+        #expect(BuiltinRecipes.all.count >= 80)
+        #expect(BuiltinRecipes.all.filter(\.isEnabled).count == 10)
+        #expect(BuiltinRecipes.featured.count >= 10)
+        #expect(Set(BuiltinRecipes.all.map(\.id)).count == BuiltinRecipes.all.count)
+        #expect(Set(BuiltinRecipes.all.map(\.source)).count == BuiltinRecipes.all.count)
+        #expect(CapabilityCategory.allCases.allSatisfy { category in
+            BuiltinRecipes.all.contains { $0.category == category.rawValue }
+        })
+    }
+
+    @Test @MainActor func deterministicBuiltinExamplesPass() {
+        for recipe in BuiltinRecipes.all where !recipe.testCases.isEmpty {
+            let results = RecipeTestRunner().runAll(recipe: recipe)
+            #expect(results.allSatisfy { $0.passed }, "Built-in example failed: \(recipe.name)")
+        }
+    }
+
+    @Test @MainActor func composedCapabilityRunsItsPipeline() throws {
+        let composed = BuiltinRecipes.all.first { $0.kind == .composed }!
+        #expect(try RecipeEngine().run(composed, input: " b \n\na\nb ") == "a\nb")
     }
 
     @Test @MainActor func selectedRangesAreTransformedWithoutTouchingOtherText() throws {

@@ -4,6 +4,14 @@ import EditSmithCore
 
 @MainActor @Observable
 final class RecipeLibrary {
+    enum Scope: String, CaseIterable, Identifiable {
+        case featured = "Featured"
+        case enabled = "Enabled"
+        case favorites = "Favorites"
+        case all = "All Capabilities"
+        case custom = "Custom Scripts"
+        var id: Self { self }
+    }
     enum ResultMode: String, CaseIterable, Identifiable {
         case output = "Output"
         case diff = "Diff"
@@ -18,6 +26,9 @@ final class RecipeLibrary {
     var testResults: [RecipeTestResult] = []
     var resultMode = ResultMode.output
     var errorMessage: String?
+    var searchText = ""
+    var scope = Scope.featured
+    var category: CapabilityCategory?
     private let store: RecipeStore
 
     init(store: RecipeStore = RecipeStore()) {
@@ -28,6 +39,28 @@ final class RecipeLibrary {
     }
 
     var selectedIndex: Int? { selection.flatMap { id in recipes.firstIndex { $0.id == id } } }
+
+    var visibleRecipes: [Recipe] {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        return recipes.filter { recipe in
+            let inScope: Bool
+            if let category {
+                inScope = recipe.category == category.rawValue
+            } else {
+                inScope = switch scope {
+                case .featured: recipe.isFeatured
+                case .enabled: recipe.isEnabled
+                case .favorites: recipe.isFavorite
+                case .all: true
+                case .custom: recipe.kind == .javascript
+                }
+            }
+            return inScope && (query.isEmpty || recipe.name.localizedCaseInsensitiveContains(query) || recipe.summary.localizedCaseInsensitiveContains(query) || recipe.category.localizedCaseInsensitiveContains(query))
+        }
+    }
+
+    var enabledCount: Int { recipes.count(where: \.isEnabled) }
+    var builtinCount: Int { recipes.count { $0.kind != .javascript } }
 
     var selectedTestIndex: Int? {
         guard let selectedIndex, let testSelection else { return nil }
@@ -64,7 +97,7 @@ final class RecipeLibrary {
     }
 
     func addTemplate(_ template: Recipe) {
-        let recipe = Recipe(name: template.name, summary: template.summary, kind: template.kind, source: template.source, isEnabled: false, version: template.version, applicability: template.applicability, parameters: template.parameters, testCases: template.testCases)
+        let recipe = Recipe(name: template.name, summary: template.summary, kind: template.kind, source: template.source, isEnabled: false, version: template.version, applicability: template.applicability, parameters: template.parameters, testCases: template.testCases, category: "Custom Scripts")
         recipes.append(recipe); selection = recipe.id; testSelection = recipe.testCases.first?.id; save()
     }
 
@@ -104,11 +137,61 @@ final class RecipeLibrary {
                     expectedOutput: $0.expectedOutput,
                     expectedError: $0.expectedError
                 )
-            }
+            },
+            category: "Custom Scripts"
         )
         recipes.append(copy)
         selection = copy.id
         testSelection = copy.testCases.first?.id
+        save()
+    }
+
+    func copyBuiltinToScript() {
+        guard let selectedIndex else { return }
+        let original = recipes[selectedIndex]
+        guard original.kind != .javascript else { duplicateSelection(); return }
+        let testCases = original.testCases.map { RecipeTestCase(name: $0.name, input: $0.input, selections: $0.selections, expectedOutput: $0.expectedOutput, expectedError: $0.expectedError) }
+        let copy = Recipe(name: original.name + " Script", summary: "Custom copy of \(original.name)", kind: .javascript, source: BuiltinRecipes.scriptSource(for: original), isEnabled: false, parameters: original.parameters, testCases: testCases, category: "Custom Scripts")
+        recipes.append(copy)
+        selection = copy.id
+        testSelection = copy.testCases.first?.id
+        scope = .custom
+        category = nil
+        save()
+    }
+
+    func toggleEnabled(_ id: Recipe.ID) {
+        guard let index = recipes.firstIndex(where: { $0.id == id }) else { return }
+        recipes[index].isEnabled.toggle()
+        save()
+    }
+
+    func toggleFavorite(_ id: Recipe.ID) {
+        guard let index = recipes.firstIndex(where: { $0.id == id }) else { return }
+        recipes[index].isFavorite.toggle()
+        save()
+    }
+
+    func moveVisible(from offsets: IndexSet, to destination: Int) {
+        let visible = visibleRecipes
+        guard destination <= visible.count else { return }
+        let movingIDs = offsets.map { visible[$0].id }
+        let targetID = destination < visible.count ? visible[destination].id : nil
+        let moving = recipes.filter { movingIDs.contains($0.id) }
+        recipes.removeAll { movingIDs.contains($0.id) }
+        let targetIndex = targetID.flatMap { id in recipes.firstIndex { $0.id == id } } ?? recipes.endIndex
+        recipes.insert(contentsOf: moving, at: targetIndex)
+        save()
+    }
+
+    func assignShortcut(_ shortcut: String?, to id: Recipe.ID) {
+        guard let index = recipes.firstIndex(where: { $0.id == id }) else { return }
+        let cleaned = shortcut?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        if let cleaned, !cleaned.isEmpty, recipes.contains(where: { $0.id != id && $0.keyboardShortcut == cleaned }) {
+            errorMessage = "That shortcut is already assigned to another action."
+            return
+        }
+        recipes[index].keyboardShortcut = cleaned?.isEmpty == false ? cleaned : nil
         save()
     }
 

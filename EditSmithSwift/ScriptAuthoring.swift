@@ -10,6 +10,7 @@ struct ScriptAPIItem: Identifiable, Hashable, Sendable {
 
 enum ScriptAPICatalog {
     static let items: [ScriptAPIItem] = [
+        .init(id: "builtin", title: "Built-in composition", signature: "EditSmith.runBuiltin(identifier, input, parameters)", summary: "Compose any local built-in capability inside a custom script.", snippet: "return EditSmith.runBuiltin(\"trim-lines\", input, {});"),
         .init(
             id: "transform",
             title: "Transform entry point",

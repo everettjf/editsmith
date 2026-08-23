@@ -10,6 +10,7 @@ struct RecipeInspector: View {
 
     @Binding var recipe: Recipe
     @Binding var selection: Section
+    let library: RecipeLibrary
 
     var body: some View {
         VStack(spacing: 0) {
@@ -52,6 +53,8 @@ struct RecipeInspector: View {
                 TextField("Description", text: $recipe.summary, axis: .vertical)
                     .lineLimit(2...4)
                 Toggle("Available in Xcode", isOn: $recipe.isEnabled)
+                Toggle("Favorite", isOn: $recipe.isFavorite)
+                TextField("Keyboard shortcut", text: shortcutBinding, prompt: Text("e.g. j"))
                 Stepper("Version \(recipe.version)", value: $recipe.version, in: 1...999)
             }
 
@@ -64,19 +67,33 @@ struct RecipeInspector: View {
                     .foregroundStyle(.secondary)
             }
 
-            if recipe.source == "wrap-selection" {
-                SwiftUI.Section("Wrapping") {
-                    TextField("Prefix", text: parameterBinding("prefix"))
-                    TextField("Suffix", text: parameterBinding("suffix"))
+            if let descriptor = BuiltinRecipes.descriptor(for: recipe.id), !descriptor.options.isEmpty {
+                SwiftUI.Section("Parameters") {
+                    ForEach(descriptor.options) { option in
+                        TextField(option.title, text: parameterBinding(option.id))
+                    }
                 }
-            } else if recipe.source == "regex-replace" {
-                SwiftUI.Section("Replacement") {
-                    TextField("Pattern", text: parameterBinding("pattern"))
-                    TextField("Replacement", text: parameterBinding("replacement"))
+            }
+
+            if let descriptor = BuiltinRecipes.descriptor(for: recipe.id), let example = descriptor.examples.first {
+                SwiftUI.Section("Example") {
+                    LabeledContent("Input") {
+                        Text(example.input).font(.system(.caption, design: .monospaced)).textSelection(.enabled)
+                    }
+                    LabeledContent("Output") {
+                        Text(example.output).font(.system(.caption, design: .monospaced)).textSelection(.enabled)
+                    }
                 }
             }
         }
         .formStyle(.grouped)
+    }
+
+    private var shortcutBinding: Binding<String> {
+        Binding(
+            get: { recipe.keyboardShortcut ?? "" },
+            set: { library.assignShortcut($0, to: recipe.id) }
+        )
     }
 
     private var fileTypesBinding: Binding<String> {

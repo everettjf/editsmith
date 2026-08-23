@@ -15,15 +15,7 @@ struct RecipeWorkbench: View {
     var body: some View {
         @Bindable var library = library
         NavigationSplitView {
-            List(library.recipes, selection: $library.selection) { recipe in
-                VStack(alignment: .leading, spacing: 3) {
-                    Label(recipe.name, systemImage: recipe.kind == .builtin ? "wand.and.stars" : "curlybraces")
-                    Text(recipe.summary).font(.caption).foregroundStyle(.secondary).lineLimit(2)
-                }
-                .tag(recipe.id)
-            }
-            .navigationTitle("Recipes")
-            .navigationSplitViewColumnWidth(min: 230, ideal: 280)
+            CapabilitySidebar(library: library)
             .toolbar {
                 Menu("Add Recipe", systemImage: "plus") {
                     Button("Blank JavaScript Recipe", action: library.addRecipe)
@@ -34,6 +26,8 @@ struct RecipeWorkbench: View {
                 Menu("Library", systemImage: "ellipsis.circle") {
                     Button("Duplicate Action", systemImage: "plus.square.on.square", action: library.duplicateSelection)
                         .disabled(library.selectedIndex == nil)
+                    Button("Copy Built-in as Script", systemImage: "doc.on.doc", action: library.copyBuiltinToScript)
+                        .disabled(library.selectedIndex.map { library.recipes[$0].kind == .javascript } ?? true)
                     Divider()
                     Button("Import Actions…", systemImage: "square.and.arrow.down") { isImporting = true }
                     Button("Export User Actions…", systemImage: "square.and.arrow.up") {

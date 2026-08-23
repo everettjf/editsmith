@@ -59,7 +59,7 @@ public struct ActionApplicability: Codable, Equatable, Hashable, Sendable {
 }
 
 public struct Recipe: Codable, Identifiable, Hashable, Sendable {
-    public enum Kind: String, Codable, Sendable { case builtin, javascript }
+    public enum Kind: String, Codable, Sendable { case builtin, javascript, composed }
     public let id: String
     public var name: String
     public var summary: String
@@ -70,6 +70,11 @@ public struct Recipe: Codable, Identifiable, Hashable, Sendable {
     public var applicability: ActionApplicability
     public var parameters: [String: String]
     public var testCases: [RecipeTestCase]
+    public var category: String
+    public var isFeatured: Bool
+    public var isFavorite: Bool
+    public var keyboardShortcut: String?
+    public var componentIDs: [String]
 
     public init(
         id: String = UUID().uuidString,
@@ -81,7 +86,12 @@ public struct Recipe: Codable, Identifiable, Hashable, Sendable {
         version: Int = 1,
         applicability: ActionApplicability = .init(),
         parameters: [String: String] = [:],
-        testCases: [RecipeTestCase] = []
+        testCases: [RecipeTestCase] = [],
+        category: String = "Custom Scripts",
+        isFeatured: Bool = false,
+        isFavorite: Bool = false,
+        keyboardShortcut: String? = nil,
+        componentIDs: [String] = []
     ) {
         self.id = id
         self.name = name
@@ -93,10 +103,16 @@ public struct Recipe: Codable, Identifiable, Hashable, Sendable {
         self.applicability = applicability
         self.parameters = parameters
         self.testCases = testCases
+        self.category = category
+        self.isFeatured = isFeatured
+        self.isFavorite = isFavorite
+        self.keyboardShortcut = keyboardShortcut
+        self.componentIDs = componentIDs
     }
 
     private enum CodingKeys: String, CodingKey {
         case id, name, summary, kind, source, isEnabled, version, applicability, parameters, testCases
+        case category, isFeatured, isFavorite, keyboardShortcut, componentIDs
     }
 
     public init(from decoder: Decoder) throws {
@@ -111,6 +127,11 @@ public struct Recipe: Codable, Identifiable, Hashable, Sendable {
         applicability = try values.decodeIfPresent(ActionApplicability.self, forKey: .applicability) ?? .init()
         parameters = try values.decodeIfPresent([String: String].self, forKey: .parameters) ?? [:]
         testCases = try values.decodeIfPresent([RecipeTestCase].self, forKey: .testCases) ?? []
+        category = try values.decodeIfPresent(String.self, forKey: .category) ?? (kind == .javascript ? "Custom Scripts" : "Text")
+        isFeatured = try values.decodeIfPresent(Bool.self, forKey: .isFeatured) ?? false
+        isFavorite = try values.decodeIfPresent(Bool.self, forKey: .isFavorite) ?? false
+        keyboardShortcut = try values.decodeIfPresent(String.self, forKey: .keyboardShortcut)
+        componentIDs = try values.decodeIfPresent([String].self, forKey: .componentIDs) ?? []
     }
 }
 
@@ -294,42 +315,15 @@ public struct RecipeRunner {
 
     private func run(_ recipe: Recipe, input: String, request: ExecutionRequest, logs: inout [ExecutionLog]) throws -> String {
         switch recipe.kind {
-        case .builtin: return try runBuiltin(recipe, input: input)
+        case .builtin: return try BuiltinTransformer.transform(input, recipe: recipe)
         case .javascript: return try runJavaScript(recipe.source, input: input, request: request, logs: &logs)
-        }
-    }
-
-    private func runBuiltin(_ recipe: Recipe, input: String) throws -> String {
-        switch recipe.source {
-        case "sort-lines": return input.components(separatedBy: .newlines).sorted().joined(separator: "\n")
-        case "remove-duplicate-lines":
-            return input.components(separatedBy: .newlines).reduce(into: (seen: Set<String>(), lines: [String]())) { result, line in
-                if result.seen.insert(line).inserted { result.lines.append(line) }
-            }.lines.joined(separator: "\n")
-        case "trim-trailing-whitespace": return input.components(separatedBy: .newlines).map { $0.replacingOccurrences(of: #"\s+$"#, with: "", options: .regularExpression) }.joined(separator: "\n")
-        case "toggle-line-comment":
-            return input.components(separatedBy: .newlines).map { line in
-                let indentation = line.prefix { $0 == " " || $0 == "\t" }
-                let content = line.dropFirst(indentation.count)
-                return content.hasPrefix("//")
-                    ? indentation + content.dropFirst(2).drop(while: { $0 == " " })
-                    : indentation + "// " + content
-            }.joined(separator: "\n")
-        case "uppercase": return input.uppercased()
-        case "lowercase": return input.lowercased()
-        case "wrap-selection":
-            return (recipe.parameters["prefix"] ?? "") + input + (recipe.parameters["suffix"] ?? "")
-        case "regex-replace":
-            let pattern = recipe.parameters["pattern"] ?? ""
-            let replacement = recipe.parameters["replacement"] ?? ""
-            return try NSRegularExpression(pattern: pattern).stringByReplacingMatches(
-                in: input,
-                range: NSRange(location: 0, length: (input as NSString).length),
-                withTemplate: replacement
-            )
-        case "pretty-json":
-            return String(decoding: try JSONSerialization.data(withJSONObject: JSONSerialization.jsonObject(with: Data(input.utf8)), options: [.prettyPrinted, .sortedKeys]), as: UTF8.self)
-        default: throw RecipeError.unknownBuiltin(recipe.source)
+        case .composed:
+            return try recipe.componentIDs.reduce(input) { value, identifier in
+                guard let component = BuiltinRecipes.all.first(where: { $0.id == identifier }) else {
+                    throw RecipeError.unknownBuiltin(identifier)
+                }
+                return try BuiltinTransformer.transform(value, recipe: component)
+            }
         }
     }
 
@@ -354,13 +348,19 @@ public struct RecipeRunner {
             let logBlock: @convention(block) (String, String) -> Void = { level, message in
                 capturedLogs.append(ExecutionLog(level: ExecutionLog.Level(rawValue: level) ?? .log, message: message))
             }
+            let builtinBlock: @convention(block) (String, String, JSValue) -> String = { source, value, parametersValue in
+                let parameters = parametersValue.toDictionary() as? [String: String] ?? [:]
+                let builtin = Recipe(name: source, summary: "Script API", kind: .builtin, source: source, parameters: parameters)
+                return (try? BuiltinTransformer.transform(value, recipe: builtin)) ?? value
+            }
             context.setObject(logBlock, forKeyedSubscript: "__editSmithLog" as NSString)
+            context.setObject(builtinBlock, forKeyedSubscript: "__editSmithRunBuiltin" as NSString)
             context.setObject([
                 "fileName": request.fileName,
                 "fileType": request.fileType,
                 "indentationWidth": request.indentationWidth,
             ], forKeyedSubscript: "environment" as NSString)
-            context.evaluateScript(Self.consolePrelude)
+            context.evaluateScript(Self.apiPrelude)
             context.evaluateScript(source, withSourceURL: URL(string: "editsmith://recipe.js"))
             if timeoutFlag.pointee { throw RecipeError.executionTimedOut }
             if let exception {
@@ -380,7 +380,7 @@ public struct RecipeRunner {
         }
     }
 
-    private static let consolePrelude = """
+    private static let apiPrelude = """
     const console = {};
     for (const level of ['log', 'info', 'warn', 'error']) {
       console[level] = (...values) => __editSmithLog(level, values.map(value => {
@@ -388,6 +388,9 @@ public struct RecipeRunner {
         try { return JSON.stringify(value); } catch (_) { return String(value); }
       }).join(' '));
     }
+    const EditSmith = Object.freeze({
+      runBuiltin: (identifier, input, parameters = {}) => __editSmithRunBuiltin(identifier, input, parameters)
+    });
     """
 
     private func offsetRange(_ range: TextRange, lines: [String]) -> NSRange? {
@@ -476,20 +479,6 @@ public struct RecipeEngine: Sendable {
     }
 }
 
-public enum BuiltinRecipes {
-    public static let all: [Recipe] = [
-        .init(id: "builtin.sort-lines", name: "Sort Lines", summary: "Sort selected lines in ascending order.", kind: .builtin, source: "sort-lines"),
-        .init(id: "builtin.trim-trailing", name: "Trim Trailing Whitespace", summary: "Remove whitespace at line endings.", kind: .builtin, source: "trim-trailing-whitespace"),
-        .init(id: "builtin.remove-duplicates", name: "Remove Duplicate Lines", summary: "Keep the first occurrence of each selected line.", kind: .builtin, source: "remove-duplicate-lines"),
-        .init(id: "builtin.toggle-comments", name: "Toggle Line Comments", summary: "Add or remove Swift-style line comments.", kind: .builtin, source: "toggle-line-comment", applicability: .init(requiresSelection: true)),
-        .init(id: "builtin.pretty-json", name: "Pretty Print JSON", summary: "Format and sort JSON keys.", kind: .builtin, source: "pretty-json"),
-        .init(id: "builtin.uppercase", name: "Uppercase", summary: "Convert text to uppercase.", kind: .builtin, source: "uppercase"),
-        .init(id: "builtin.lowercase", name: "Lowercase", summary: "Convert text to lowercase.", kind: .builtin, source: "lowercase"),
-        .init(id: "builtin.wrap", name: "Wrap Selection", summary: "Wrap selected text with configurable text.", kind: .builtin, source: "wrap-selection", applicability: .init(requiresSelection: true), parameters: ["prefix": "(", "suffix": ")"]),
-        .init(id: "builtin.regex", name: "Regex Replace", summary: "Apply a configured regular-expression replacement.", kind: .builtin, source: "regex-replace", parameters: ["pattern": #"(?m)\s+$"#, "replacement": ""]),
-    ]
-}
-
 public enum RecipeTemplates {
     public static let javascript: [Recipe] = [
         .init(id: "template.wrap-main-actor", name: "Wrap in MainActor Task", summary: "Wrap selected Swift code in a MainActor task.", kind: .javascript, source: "function transform(input) { return 'Task { @MainActor in\\n' + input.split('\\n').map(line => '    ' + line).join('\\n') + '\\n}'; }", isEnabled: false, testCases: [.init(input: "updateUI()", expectedOutput: "Task { @MainActor in\n    updateUI()\n}")]),
@@ -515,6 +504,8 @@ public struct ExtensionPreferences {
 public struct RecipeStore {
     public static let suiteName = "group.com.xnu.editsmith"
     private static let key = "swift.recipes.v2"
+    private static let catalogVersionKey = "swift.capabilityCatalogVersion"
+    private static let currentCatalogVersion = 3
     private let defaults: UserDefaults
 
     public init(defaults: UserDefaults? = UserDefaults(suiteName: Self.suiteName)) {
@@ -522,12 +513,34 @@ public struct RecipeStore {
     }
 
     public func load() -> [Recipe] {
-        guard let data = defaults.data(forKey: Self.key), let saved = try? JSONDecoder().decode([Recipe].self, from: data) else { return BuiltinRecipes.all }
-        return saved
+        guard let data = defaults.data(forKey: Self.key), let saved = try? JSONDecoder().decode([Recipe].self, from: data) else {
+            defaults.set(Self.currentCatalogVersion, forKey: Self.catalogVersionKey)
+            return BuiltinRecipes.all
+        }
+        let catalogIDs = Set(BuiltinRecipes.all.map(\.id))
+        guard saved.contains(where: { catalogIDs.contains($0.id) }) else { return saved }
+        let isUpgradingLegacyCatalog = defaults.integer(forKey: Self.catalogVersionKey) < Self.currentCatalogVersion
+        let savedByID = Dictionary(uniqueKeysWithValues: saved.map { ($0.id, $0) })
+        let mergedBuiltins = BuiltinRecipes.all.map { catalogRecipe -> Recipe in
+            guard let existing = savedByID[catalogRecipe.id] else { return catalogRecipe }
+            var merged = catalogRecipe
+            if !isUpgradingLegacyCatalog { merged.isEnabled = existing.isEnabled }
+            merged.isFavorite = existing.isFavorite
+            merged.keyboardShortcut = existing.keyboardShortcut
+            merged.parameters.merge(existing.parameters) { _, savedValue in savedValue }
+            return merged
+        }
+        let migrated = mergedBuiltins + saved.filter { $0.kind == .javascript && !catalogIDs.contains($0.id) }
+        if isUpgradingLegacyCatalog {
+            defaults.set(try? JSONEncoder().encode(migrated), forKey: Self.key)
+        }
+        defaults.set(Self.currentCatalogVersion, forKey: Self.catalogVersionKey)
+        return migrated
     }
 
     public func save(_ recipes: [Recipe]) throws {
         defaults.set(try JSONEncoder().encode(recipes), forKey: Self.key)
+        defaults.set(Self.currentCatalogVersion, forKey: Self.catalogVersionKey)
     }
 }
 
@@ -548,6 +561,7 @@ public struct RecipeArchive: Codable, Equatable, Sendable {
     }
 
     public static func decode(_ data: Data) throws -> RecipeArchive {
+        guard data.count <= 2 * 1_024 * 1_024 else { throw RecipeArchiveError.archiveTooLarge }
         let archive = try JSONDecoder().decode(RecipeArchive.self, from: data)
         guard archive.formatVersion == currentFormatVersion else {
             throw RecipeArchiveError.unsupportedFormat(archive.formatVersion)
@@ -555,6 +569,12 @@ public struct RecipeArchive: Codable, Equatable, Sendable {
         guard !archive.recipes.isEmpty else { throw RecipeArchiveError.emptyArchive }
         guard archive.recipes.allSatisfy({ !$0.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) else {
             throw RecipeArchiveError.invalidRecipeName
+        }
+        guard archive.recipes.allSatisfy({ $0.kind == .javascript && $0.source.utf8.count <= 256 * 1_024 }) else {
+            throw RecipeArchiveError.unsafeRecipe
+        }
+        guard archive.recipes.allSatisfy({ ScriptSecurityValidator.isSafe($0.source) }) else {
+            throw RecipeArchiveError.unsafeRecipe
         }
         return archive
     }
@@ -564,13 +584,24 @@ public enum RecipeArchiveError: LocalizedError, Equatable {
     case unsupportedFormat(Int)
     case emptyArchive
     case invalidRecipeName
+    case archiveTooLarge
+    case unsafeRecipe
 
     public var errorDescription: String? {
         switch self {
         case .unsupportedFormat(let version): "Unsupported EditSmith archive version: \(version)."
         case .emptyArchive: "The EditSmith archive does not contain any actions."
         case .invalidRecipeName: "Every imported action must have a name."
+        case .archiveTooLarge: "The action archive is larger than the 2 MB import limit."
+        case .unsafeRecipe: "The archive contains unsupported or unsafe script content."
         }
+    }
+}
+
+public enum ScriptSecurityValidator {
+    public static func isSafe(_ source: String) -> Bool {
+        let forbidden = ["eval(", "Function(", "import(", "XMLHttpRequest", "fetch(", "WebSocket", "require(", "process.", "Deno."]
+        return forbidden.allSatisfy { !source.localizedCaseInsensitiveContains($0) }
     }
 }
 

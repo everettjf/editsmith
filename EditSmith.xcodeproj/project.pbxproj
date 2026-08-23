@@ -10,6 +10,7 @@
 		0F7B66F5A8DB7C44228855F4 /* CodeEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 66D5C950C842E6CCCCF35F08 /* CodeEditor */; };
 		1A865D95F673B70094F07F71 /* EditSmithCoreSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98AC9916ADB41F3520C77A6 /* EditSmithCoreSmokeTests.swift */; };
 		1C124678B3AED73BAA2128A8 /* ExtensionHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BBD32A7BE89BBE98431F05A /* ExtensionHelpView.swift */; };
+		2A3BE929DB6B785DC63CD7A2 /* CapabilitySidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B6575519C024E45624506FD /* CapabilitySidebar.swift */; };
 		2D6C5C57455E09D30664A1F7 /* ScriptAuthoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A5B72E55C7F92DF0462D6D4 /* ScriptAuthoring.swift */; };
 		368C41AA508294A041CDC28E /* EditSmithApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED295DA601F12F90DAD4C392 /* EditSmithApp.swift */; };
 		3EBDFCFDCBA102F4ED6D2026 /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = F433AC195492EE54EB36CA87 /* EditSmithCore */; };
@@ -73,6 +74,7 @@
 		7A5B72E55C7F92DF0462D6D4 /* ScriptAuthoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptAuthoring.swift; sourceTree = "<group>"; };
 		7BBD32A7BE89BBE98431F05A /* ExtensionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionHelpView.swift; sourceTree = "<group>"; };
 		94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EditSmithExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B6575519C024E45624506FD /* CapabilitySidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapabilitySidebar.swift; sourceTree = "<group>"; };
 		C98AC9916ADB41F3520C77A6 /* EditSmithCoreSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSmithCoreSmokeTests.swift; sourceTree = "<group>"; };
 		CC4DE8B824D7CFE73F086884 /* RecipeLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeLibrary.swift; sourceTree = "<group>"; };
 		CDE1142DDE452CF922E640C8 /* RecipeLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeLibraryTests.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 		471733E9A0C2FFAAB622AE6A /* EditSmithSwift */ = {
 			isa = PBXGroup;
 			children = (
+				9B6575519C024E45624506FD /* CapabilitySidebar.swift */,
 				783A8F9403FD17609008BCF4 /* CodeEditor.swift */,
 				ED295DA601F12F90DAD4C392 /* EditSmithApp.swift */,
 				7BBD32A7BE89BBE98431F05A /* ExtensionHelpView.swift */,
@@ -346,6 +349,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2A3BE929DB6B785DC63CD7A2 /* CapabilitySidebar.swift in Sources */,
 				5499C91C178E86119A66FBDB /* CodeEditor.swift in Sources */,
 				368C41AA508294A041CDC28E /* EditSmithApp.swift in Sources */,
 				1C124678B3AED73BAA2128A8 /* ExtensionHelpView.swift in Sources */,
