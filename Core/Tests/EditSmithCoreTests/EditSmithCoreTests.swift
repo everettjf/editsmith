@@ -144,6 +144,19 @@ struct RecipeEngineTests {
         #expect(throws: RecipeError.scriptTooLarge) { try RecipeEngine().run(oversizedScript, input: "x") }
     }
 
+    @Test @MainActor func runawayJavaScriptIsTerminated() {
+        let runaway = Recipe(
+            name: "Runaway",
+            summary: "",
+            kind: .javascript,
+            source: "function transform(input) { while (true) {} }"
+        )
+        let started = ContinuousClock.now
+        let result = RecipeRunner().execute(ExecutionRequest(text: "x"), recipe: runaway)
+        #expect(result.diagnostic?.message == RecipeError.executionTimedOut.localizedDescription)
+        #expect(started.duration(to: .now) < .seconds(2))
+    }
+
     @Test @MainActor func wholeBufferAndCRLFLinesArePreserved() throws {
         let upper = Recipe(name: "Upper", summary: "", kind: .builtin, source: "uppercase")
         #expect(try TextBufferTransformer().transform(lines: ["a\r\n", "b\r\n"], ranges: [], recipe: upper) == ["A\r\n", "B\r\n"])

@@ -118,6 +118,7 @@ public enum RecipeError: LocalizedError, Equatable {
     case inputTooLarge
     case scriptTooLarge
     case outputTooLarge
+    case executionTimedOut
     case notApplicable
     case unknownBuiltin(String)
     case javaScript(String)
@@ -129,6 +130,7 @@ public enum RecipeError: LocalizedError, Equatable {
         case .inputTooLarge: "Input is larger than the 5 MB safety limit."
         case .scriptTooLarge: "Recipe source is larger than the 256 KB safety limit."
         case .outputTooLarge: "Recipe output is larger than the 5 MB safety limit."
+        case .executionTimedOut: "Recipe exceeded the 1 second execution limit."
         case .notApplicable: "This action is not available for the current file or selection."
         case .unknownBuiltin(let name): "Unknown built-in recipe: \(name)."
         case .javaScript(let message): "JavaScript error: \(message)"
@@ -339,34 +341,43 @@ public struct RecipeRunner {
     ) throws -> String {
         guard source.utf8.count <= 256 * 1_024 else { throw RecipeError.scriptTooLarge }
         guard let context = JSContext() else { throw RecipeError.javaScript("Could not create JavaScript context.") }
-        var exception: JSValue?
-        context.exceptionHandler = { _, value in exception = value }
+        var didTimeOut = false
+        return try withUnsafeMutablePointer(to: &didTimeOut) { timeoutFlag in
+            let group = JSContextGetGroup(context.jsGlobalContextRef)
+            JSContextGroupSetExecutionTimeLimit(group, 1, editSmithShouldTerminate, timeoutFlag)
+            defer { JSContextGroupClearExecutionTimeLimit(group) }
 
-        var capturedLogs: [ExecutionLog] = []
-        let logBlock: @convention(block) (String, String) -> Void = { level, message in
-            capturedLogs.append(ExecutionLog(level: ExecutionLog.Level(rawValue: level) ?? .log, message: message))
-        }
-        context.setObject(logBlock, forKeyedSubscript: "__editSmithLog" as NSString)
-        context.setObject([
-            "fileName": request.fileName,
-            "fileType": request.fileType,
-            "indentationWidth": request.indentationWidth,
-        ], forKeyedSubscript: "environment" as NSString)
-        context.evaluateScript(Self.consolePrelude)
-        context.evaluateScript(source, withSourceURL: URL(string: "editsmith://recipe.js"))
-        if let exception {
+            var exception: JSValue?
+            context.exceptionHandler = { _, value in exception = value }
+
+            var capturedLogs: [ExecutionLog] = []
+            let logBlock: @convention(block) (String, String) -> Void = { level, message in
+                capturedLogs.append(ExecutionLog(level: ExecutionLog.Level(rawValue: level) ?? .log, message: message))
+            }
+            context.setObject(logBlock, forKeyedSubscript: "__editSmithLog" as NSString)
+            context.setObject([
+                "fileName": request.fileName,
+                "fileType": request.fileType,
+                "indentationWidth": request.indentationWidth,
+            ], forKeyedSubscript: "environment" as NSString)
+            context.evaluateScript(Self.consolePrelude)
+            context.evaluateScript(source, withSourceURL: URL(string: "editsmith://recipe.js"))
+            if timeoutFlag.pointee { throw RecipeError.executionTimedOut }
+            if let exception {
+                logs.append(contentsOf: capturedLogs)
+                throw JavaScriptFailure(value: exception)
+            }
+
+            guard let function = context.objectForKeyedSubscript("transform"), !function.isUndefined else {
+                throw RecipeError.javaScript("Missing transform(input) function.")
+            }
+            let value = function.call(withArguments: [input])
             logs.append(contentsOf: capturedLogs)
-            throw JavaScriptFailure(value: exception)
+            if timeoutFlag.pointee { throw RecipeError.executionTimedOut }
+            if let exception { throw JavaScriptFailure(value: exception) }
+            guard let value, value.isString, let result = value.toString() else { throw RecipeError.invalidResult }
+            return result
         }
-
-        guard let function = context.objectForKeyedSubscript("transform"), !function.isUndefined else {
-            throw RecipeError.javaScript("Missing transform(input) function.")
-        }
-        let value = function.call(withArguments: [input])
-        logs.append(contentsOf: capturedLogs)
-        if let exception { throw JavaScriptFailure(value: exception) }
-        guard let value, value.isString, let result = value.toString() else { throw RecipeError.invalidResult }
-        return result
     }
 
     private static let consolePrelude = """
@@ -413,6 +424,24 @@ public struct RecipeRunner {
         let nsText = text as NSString
         return expression.matches(in: text, range: NSRange(location: 0, length: nsText.length)).map { nsText.substring(with: $0.range) }
     }
+}
+
+private typealias JSShouldTerminateCallback = @convention(c) (JSContextRef?, UnsafeMutableRawPointer?) -> Bool
+
+@_silgen_name("JSContextGroupSetExecutionTimeLimit")
+private func JSContextGroupSetExecutionTimeLimit(
+    _ group: JSContextGroupRef?,
+    _ limit: Double,
+    _ callback: JSShouldTerminateCallback?,
+    _ context: UnsafeMutableRawPointer?
+)
+
+@_silgen_name("JSContextGroupClearExecutionTimeLimit")
+private func JSContextGroupClearExecutionTimeLimit(_ group: JSContextGroupRef?)
+
+private func editSmithShouldTerminate(_: JSContextRef?, context: UnsafeMutableRawPointer?) -> Bool {
+    context?.assumingMemoryBound(to: Bool.self).pointee = true
+    return true
 }
 
 private struct JavaScriptFailure: Error {

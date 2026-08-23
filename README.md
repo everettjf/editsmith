@@ -28,7 +28,7 @@
 
 ## Recipe model
 
-Each recipe is a versioned action with applicability rules, parameters, and test fixtures. JavaScript actions define a `transform(input)` function that returns replacement text. The workbench supports multiple fixtures, Xcode-style selection ranges, expected output and errors, snapshot updates, output diffs, console logs, source-located JavaScript diagnostics, duplication, and versioned JSON import/export.
+Each recipe is a versioned action with applicability rules, parameters, and test fixtures. JavaScript actions define a `transform(input)` function that returns replacement text. Script execution has input, source, output, and one-second runtime limits. The workbench supports multiple fixtures, Xcode-style selection ranges, expected output and errors, snapshot updates, output diffs, console logs, source-located JavaScript diagnostics, duplication, and versioned JSON import/export.
 
 Apple Intelligence is used only to author an optional draft on supported Macs. Generated actions are disabled by default, and saved actions run deterministically through JavaScriptCore without invoking a model.
 
