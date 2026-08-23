@@ -24,6 +24,7 @@
 		939E960D7B033633924A3BF5 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4998059E598CBD141CCE6077 /* XcodeKit.framework */; };
 		9E9AB5BF49E43FF70FBD57E9 /* RecipeWorkbench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FC25212C48AF82655986696 /* RecipeWorkbench.swift */; };
 		A43024A8ECDF1541B1394964 /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = B724C3A0B092FCB8924EBC00 /* EditSmithCore */; };
+		B18A65D1F7E34C99A4E36D21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B18A65D2F7E34C99A4E36D21 /* Assets.xcassets */; };
 		CF8F455B7B1FEF17E402499B /* EditSmithExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E795A76A437DCBBD58959DA9 /* ResultViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A0F4464F725F6BAB2E51EC /* ResultViews.swift */; };
 		F195B84A463B2BEDE76CD440 /* SourceEditorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FFB520978B6028BF74CC64 /* SourceEditorExtension.swift */; };
@@ -75,6 +76,7 @@
 		7BBD32A7BE89BBE98431F05A /* ExtensionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionHelpView.swift; sourceTree = "<group>"; };
 		94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EditSmithExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B6575519C024E45624506FD /* CapabilitySidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapabilitySidebar.swift; sourceTree = "<group>"; };
+		B18A65D2F7E34C99A4E36D21 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = EditSmith/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		C98AC9916ADB41F3520C77A6 /* EditSmithCoreSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSmithCoreSmokeTests.swift; sourceTree = "<group>"; };
 		CC4DE8B824D7CFE73F086884 /* RecipeLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeLibrary.swift; sourceTree = "<group>"; };
 		CDE1142DDE452CF922E640C8 /* RecipeLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeLibraryTests.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 		2EB28A4827F2A51BD694F7A7 = {
 			isa = PBXGroup;
 			children = (
+				B18A65D2F7E34C99A4E36D21 /* Assets.xcassets */,
 				E66D31ED8FB1FEF0AB62601E /* EditSmithAppTests */,
 				BF49714D964F005AC73DEBD3 /* EditSmithCoreTests */,
 				CD35F33A38DD5DA4556E3BAF /* EditSmithExtensionSwift */,
@@ -271,6 +274,7 @@
 			buildPhases = (
 				3A828588021D9866EA0B5ACE /* Sources */,
 				CA4D4B9BBEDE8576BB8A9D15 /* Frameworks */,
+				B18A65D3F7E34C99A4E36D21 /* Resources */,
 				AB890E0EA81A4B40C662EDB8 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
@@ -335,6 +339,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B18A65D3F7E34C99A4E36D21 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B18A65D1F7E34C99A4E36D21 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		03584B94DC9D51CF30D4D602 /* Sources */ = {
