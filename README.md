@@ -50,6 +50,8 @@ xcodebuild -project EditSmith.xcodeproj -scheme EditSmith \
 The app and Source Editor Extension are implemented in Swift. The core has no third-party dependencies.
 
 Before publishing a build, follow the [release checklist](RELEASE_CHECKLIST.md).
+The repository also includes a repeatable `scripts/verify-release.sh` gate and
+the current [release notes](RELEASE_NOTES.md).
 
 ## Privacy
 
