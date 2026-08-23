@@ -38,6 +38,26 @@ struct RecipeEngineTests {
         #expect(store.load() == recipes)
     }
 
+    @Test func recipeArchiveRoundTripsAndRejectsInvalidInput() throws {
+        let recipe = Recipe(
+            name: "Wrap",
+            summary: "Test",
+            kind: .javascript,
+            source: "function transform(input) { return input; }",
+            version: 3,
+            applicability: .init(fileTypes: ["public.swift-source"], requiresSelection: true),
+            parameters: ["prefix": "("]
+        )
+        let data = try RecipeArchive(recipes: [recipe]).encoded()
+        let decoded = try RecipeArchive.decode(data)
+        #expect(decoded.recipes == [recipe])
+
+        let future = try RecipeArchive(formatVersion: 99, recipes: [recipe]).encoded()
+        #expect(throws: RecipeArchiveError.unsupportedFormat(99)) { try RecipeArchive.decode(future) }
+        let empty = try RecipeArchive(recipes: []).encoded()
+        #expect(throws: RecipeArchiveError.emptyArchive) { try RecipeArchive.decode(empty) }
+    }
+
     @Test @MainActor func selectedRangesAreTransformedWithoutTouchingOtherText() throws {
         let recipe = Recipe(name: "Upper", summary: "", kind: .builtin, source: "uppercase")
         let lines = ["let one = alpha\n", "let two = beta\n"]
@@ -54,6 +74,58 @@ struct RecipeEngineTests {
         #expect(try RecipeEngine().run(recipes["uppercase"]!, input: "Abc") == "ABC")
         #expect(try RecipeEngine().run(recipes["lowercase"]!, input: "AbC") == "abc")
         #expect(try RecipeEngine().run(recipes["pretty-json"]!, input: #"{"z":1,"a":2}"#) == "{\n  \"a\" : 2,\n  \"z\" : 1\n}")
+        #expect(try RecipeEngine().run(recipes["remove-duplicate-lines"]!, input: "a\nb\na") == "a\nb")
+        #expect(try RecipeEngine().run(recipes["regex-replace"]!, input: "a  \nb\t") == "a\nb")
+    }
+
+    @Test @MainActor func builtinsSupportCommentsAndParameterizedWrapping() throws {
+        let recipes = Dictionary(uniqueKeysWithValues: BuiltinRecipes.all.map { ($0.source, $0) })
+        let selection = TextRange(start: .init(line: 0, column: 0), end: .init(line: 0, column: 5))
+        let commented = RecipeRunner().execute(
+            ExecutionRequest(text: "value", selections: [selection]),
+            recipe: recipes["toggle-line-comment"]!
+        )
+        #expect(commented.outputText == "// value")
+        let uncommentedSelection = TextRange(start: .init(line: 0, column: 0), end: .init(line: 0, column: 8))
+        let uncommented = RecipeRunner().execute(
+            ExecutionRequest(text: commented.outputText, selections: [uncommentedSelection]),
+            recipe: recipes["toggle-line-comment"]!
+        )
+        #expect(uncommented.outputText == "value")
+        let wrapped = RecipeRunner().execute(
+            ExecutionRequest(text: "value", selections: [selection]),
+            recipe: recipes["wrap-selection"]!
+        )
+        #expect(wrapped.outputText == "(value)")
+    }
+
+    @Test @MainActor func applicabilityAndOutputLimitsAreEnforced() {
+        let selectionOnly = Recipe(
+            name: "Selection",
+            summary: "",
+            kind: .builtin,
+            source: "uppercase",
+            applicability: .init(fileTypes: ["public.swift-source"], requiresSelection: true)
+        )
+        let noSelection = RecipeRunner().execute(ExecutionRequest(text: "value"), recipe: selectionOnly)
+        #expect(noSelection.diagnostic?.message == RecipeError.notApplicable.localizedDescription)
+
+        let huge = Recipe(
+            name: "Huge output",
+            summary: "",
+            kind: .javascript,
+            source: "function transform(input) { return 'x'.repeat(5 * 1024 * 1024 + 1); }"
+        )
+        let result = RecipeRunner().execute(ExecutionRequest(text: "x"), recipe: huge)
+        #expect(result.diagnostic?.message == RecipeError.outputTooLarge.localizedDescription)
+    }
+
+    @Test func legacyRecipesDefaultVersionApplicabilityAndParameters() throws {
+        let data = #"{"id":"legacy","name":"Legacy","summary":"","kind":"builtin","source":"uppercase","isEnabled":true}"#.data(using: .utf8)!
+        let recipe = try JSONDecoder().decode(Recipe.self, from: data)
+        #expect(recipe.version == 1)
+        #expect(recipe.applicability == .init())
+        #expect(recipe.parameters.isEmpty)
     }
 
     @Test @MainActor func malformedJavaScriptContractsAreRejected() {

@@ -1,6 +1,10 @@
 import SwiftUI
 import Observation
+import UniformTypeIdentifiers
 import EditSmithCore
+#if canImport(FoundationModels)
+import FoundationModels
+#endif
 
 @MainActor @Observable
 final class RecipeLibrary {
@@ -63,8 +67,89 @@ final class RecipeLibrary {
     }
 
     func addTemplate(_ template: Recipe) {
-        let recipe = Recipe(name: template.name, summary: template.summary, kind: template.kind, source: template.source, isEnabled: false, testCases: template.testCases)
+        let recipe = Recipe(name: template.name, summary: template.summary, kind: template.kind, source: template.source, isEnabled: false, version: template.version, applicability: template.applicability, parameters: template.parameters, testCases: template.testCases)
         recipes.append(recipe); selection = recipe.id; testSelection = recipe.testCases.first?.id; save()
+    }
+
+    func addGeneratedDraft(name: String, source: String, prompt: String) {
+        let test = RecipeTestCase(name: "Review this fixture", input: "sample input", expectedOutput: "sample input")
+        let recipe = Recipe(
+            name: name,
+            summary: "On-device draft: \(prompt)",
+            kind: .javascript,
+            source: source,
+            isEnabled: false,
+            testCases: [test]
+        )
+        recipes.append(recipe)
+        selection = recipe.id
+        testSelection = test.id
+        save()
+    }
+
+    func duplicateSelection() {
+        guard let selectedIndex else { return }
+        let original = recipes[selectedIndex]
+        let copy = Recipe(
+            name: original.name + " Copy",
+            summary: original.summary,
+            kind: original.kind,
+            source: original.source,
+            isEnabled: false,
+            version: original.version,
+            applicability: original.applicability,
+            parameters: original.parameters,
+            testCases: original.testCases.map {
+                RecipeTestCase(
+                    name: $0.name,
+                    input: $0.input,
+                    selections: $0.selections,
+                    expectedOutput: $0.expectedOutput,
+                    expectedError: $0.expectedError
+                )
+            }
+        )
+        recipes.append(copy)
+        selection = copy.id
+        testSelection = copy.testCases.first?.id
+        save()
+    }
+
+    func importArchive(from url: URL) {
+        let accessing = url.startAccessingSecurityScopedResource()
+        defer { if accessing { url.stopAccessingSecurityScopedResource() } }
+        do {
+            let archive = try RecipeArchive.decode(Data(contentsOf: url))
+            let imported = archive.recipes.map { recipe in
+                Recipe(
+                    name: recipe.name,
+                    summary: recipe.summary,
+                    kind: recipe.kind,
+                    source: recipe.source,
+                    isEnabled: false,
+                    version: recipe.version,
+                    applicability: recipe.applicability,
+                    parameters: recipe.parameters,
+                    testCases: recipe.testCases
+                )
+            }
+            recipes.append(contentsOf: imported)
+            selection = imported.first?.id
+            synchronizeTestSelection()
+            save()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func exportDocument() -> RecipeArchiveDocument? {
+        do {
+            let exportable = recipes.filter { $0.kind == .javascript }
+            return RecipeArchiveDocument(data: try RecipeArchive(recipes: exportable).encoded())
+        } catch {
+            errorMessage = error.localizedDescription
+            return nil
+        }
     }
 
     func deleteSelection() {
@@ -146,6 +231,10 @@ final class RecipeLibrary {
 
 struct RecipeWorkbench: View {
     @State private var library = RecipeLibrary()
+    @State private var isImporting = false
+    @State private var isExporting = false
+    @State private var exportDocument = RecipeArchiveDocument()
+    @State private var isShowingAssistant = false
 
     var body: some View {
         @Bindable var library = library
@@ -166,6 +255,24 @@ struct RecipeWorkbench: View {
                 }
                 Button("Delete Recipe", systemImage: "trash", role: .destructive, action: library.deleteSelection)
                     .disabled(library.selectedIndex.map { library.recipes[$0].kind == .builtin } ?? true)
+                Menu("Library", systemImage: "ellipsis.circle") {
+                    Button("Duplicate Action", systemImage: "plus.square.on.square", action: library.duplicateSelection)
+                        .disabled(library.selectedIndex == nil)
+                    Divider()
+                    Button("Import Actions…", systemImage: "square.and.arrow.down") { isImporting = true }
+                    Button("Export User Actions…", systemImage: "square.and.arrow.up") {
+                        guard let document = library.exportDocument() else { return }
+                        exportDocument = document
+                        isExporting = true
+                    }
+                }
+#if canImport(FoundationModels)
+                if #available(macOS 26.0, *) {
+                    Button("Draft with Apple Intelligence", systemImage: "apple.intelligence") {
+                        isShowingAssistant = true
+                    }
+                }
+#endif
             }
         } detail: {
             if let index = library.selectedIndex {
@@ -179,6 +286,125 @@ struct RecipeWorkbench: View {
         .alert("Recipe Error", isPresented: $library.isShowingError) {
             Button("OK", role: .cancel) {}
         } message: { Text(library.errorMessage ?? "") }
+        .fileImporter(isPresented: $isImporting, allowedContentTypes: [.json]) { result in
+            switch result {
+            case .success(let url): library.importArchive(from: url)
+            case .failure(let error): library.errorMessage = error.localizedDescription
+            }
+        }
+        .fileExporter(
+            isPresented: $isExporting,
+            document: exportDocument,
+            contentType: .json,
+            defaultFilename: "EditSmith Actions"
+        ) { result in
+            if case .failure(let error) = result { library.errorMessage = error.localizedDescription }
+        }
+#if canImport(FoundationModels)
+        .sheet(isPresented: $isShowingAssistant) {
+            if #available(macOS 26.0, *) {
+                ActionDraftAssistantView { name, source, prompt in
+                    library.addGeneratedDraft(name: name, source: source, prompt: prompt)
+                    isShowingAssistant = false
+                }
+            }
+        }
+#endif
+    }
+}
+
+#if canImport(FoundationModels)
+@available(macOS 26.0, *)
+private struct ActionDraftAssistantView: View {
+    let onCreate: (String, String, String) -> Void
+    @Environment(\.dismiss) private var dismiss
+    @State private var name = "Generated Action"
+    @State private var prompt = ""
+    @State private var draft = ""
+    @State private var errorMessage: String?
+    @State private var isGenerating = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text("Draft an Action").font(.title2.bold())
+            Text("Apple Intelligence creates JavaScript locally. The draft stays disabled until you test and enable it.")
+                .foregroundStyle(.secondary)
+            TextField("Action name", text: $name)
+            TextField("Describe the text transformation", text: $prompt, axis: .vertical)
+                .lineLimit(3...6)
+            if !draft.isEmpty {
+                TextEditor(text: $draft)
+                    .font(.system(.body, design: .monospaced))
+                    .frame(minHeight: 220)
+                    .accessibilityLabel("Generated JavaScript draft")
+            }
+            if let errorMessage { Text(errorMessage).foregroundStyle(.red) }
+            HStack {
+                Button("Cancel", role: .cancel) { dismiss() }
+                Spacer()
+                Button("Generate") { generate() }
+                    .disabled(prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || isGenerating)
+                Button("Create Disabled Draft") { onCreate(name, draft, prompt) }
+                    .keyboardShortcut(.defaultAction)
+                    .disabled(draft.isEmpty)
+            }
+        }
+        .padding(24)
+        .frame(minWidth: 620, minHeight: 420)
+    }
+
+    private func generate() {
+        isGenerating = true
+        errorMessage = nil
+        Task {
+            do {
+                let model = SystemLanguageModel.default
+                guard model.isAvailable else {
+                    throw ActionAssistantError.modelUnavailable
+                }
+                let session = LanguageModelSession(instructions: """
+                    You create deterministic, local EditSmith JavaScript actions. Return only JavaScript source defining function transform(input) that returns a string. Do not use network, files, processes, imports, eval, or dynamic code generation.
+                    """)
+                let response = try await session.respond(to: prompt)
+                draft = Self.cleaned(response.content)
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+            isGenerating = false
+        }
+    }
+
+    private static func cleaned(_ source: String) -> String {
+        source
+            .replacingOccurrences(of: "```javascript", with: "")
+            .replacingOccurrences(of: "```js", with: "")
+            .replacingOccurrences(of: "```", with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
+@available(macOS 26.0, *)
+private enum ActionAssistantError: LocalizedError {
+    case modelUnavailable
+    var errorDescription: String? { "Apple Intelligence is not available on this Mac." }
+}
+#endif
+
+struct RecipeArchiveDocument: FileDocument {
+    static var readableContentTypes: [UTType] { [.json] }
+    var data = Data()
+
+    init(data: Data = Data()) { self.data = data }
+
+    init(configuration: ReadConfiguration) throws {
+        guard let data = configuration.file.regularFileContents else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+        self.data = data
+    }
+
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        FileWrapper(regularFileWithContents: data)
     }
 }
 
@@ -193,9 +419,30 @@ private struct RecipeEditor: View {
                 TextField("Name", text: $recipe.name)
                 TextField("Description", text: $recipe.summary)
                 Toggle("Enabled in Xcode", isOn: $recipe.isEnabled)
+                Stepper("Action version: \(recipe.version)", value: $recipe.version, in: 1...999)
+                Toggle("Requires a selection", isOn: $recipe.applicability.requiresSelection)
+                TextField(
+                    "File types (comma-separated UTIs; empty means any)",
+                    text: Binding(
+                        get: { recipe.applicability.fileTypes.joined(separator: ", ") },
+                        set: { value in
+                            recipe.applicability.fileTypes = value
+                                .split(separator: ",")
+                                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                                .filter { !$0.isEmpty }
+                        }
+                    )
+                )
+                if recipe.source == "wrap-selection" {
+                    TextField("Prefix", text: parameterBinding("prefix"))
+                    TextField("Suffix", text: parameterBinding("suffix"))
+                } else if recipe.source == "regex-replace" {
+                    TextField("Regex pattern", text: parameterBinding("pattern"))
+                    TextField("Replacement", text: parameterBinding("replacement"))
+                }
             }
             .formStyle(.grouped)
-            .frame(height: 132)
+            .frame(minHeight: 190, idealHeight: 240, maxHeight: 280)
 
             if let testIndex = library.selectedTestIndex {
                 VSplitView {
@@ -239,6 +486,13 @@ private struct RecipeEditor: View {
             Button("Save", systemImage: "square.and.arrow.down", action: library.save)
                 .keyboardShortcut("s", modifiers: [.command])
         }
+    }
+
+    private func parameterBinding(_ key: String) -> Binding<String> {
+        Binding(
+            get: { recipe.parameters[key] ?? "" },
+            set: { recipe.parameters[key] = $0 }
+        )
     }
 }
 

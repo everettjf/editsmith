@@ -43,6 +43,15 @@ final class SourceEditorCommand: NSObject, XCSourceEditorCommand {
                 if preferences.dryRun { completionHandler(nil); return }
                 invocation.buffer.lines.removeAllObjects()
                 invocation.buffer.lines.addObjects(from: splitLines(result.outputText))
+                if !result.outputSelections.isEmpty {
+                    invocation.buffer.selections.removeAllObjects()
+                    invocation.buffer.selections.addObjects(from: result.outputSelections.map { range in
+                        XCSourceTextRange(
+                            start: XCSourceTextPosition(line: range.start.line, column: range.start.column),
+                            end: XCSourceTextPosition(line: range.end.line, column: range.end.column)
+                        )
+                    })
+                }
                 completionHandler(nil)
             } catch {
                 completionHandler(error)

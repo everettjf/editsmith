@@ -14,8 +14,10 @@
 - **Stay inside Xcode.** Run named text actions from the Editor menu without moving source to another app.
 - **Make transformations repeatable.** Save a JavaScript recipe once and reuse it across projects.
 - **Test before enabling.** Verify output, selections, expected errors, diffs, and console logs in the app.
+- **Move actions safely.** Duplicate actions or import and export a versioned JSON archive; imported actions start disabled.
 - **Keep source local.** Recipes run in JavaScriptCore and receive only the text supplied by XcodeKit.
-- **Start with useful actions.** Sorting, whitespace cleanup, JSON formatting, and case conversion are included.
+- **Start with useful actions.** Sorting, deduplication, comments, wrapping, regex replacement, whitespace cleanup, JSON formatting, and case conversion are included.
+- **Draft with Apple Intelligence.** On macOS 26 or later, optionally generate a local JavaScript draft, then test and enable it yourself.
 
 ## Quick start
 
@@ -26,7 +28,9 @@
 
 ## Recipe model
 
-Each recipe is local JavaScript with a `transform(input)` function that returns the replacement text. The workbench supports multiple fixtures, Xcode-style selection ranges, expected output and errors, snapshot updates, output diffs, console logs, and source-located JavaScript diagnostics.
+Each recipe is a versioned action with applicability rules, parameters, and test fixtures. JavaScript actions define a `transform(input)` function that returns replacement text. The workbench supports multiple fixtures, Xcode-style selection ranges, expected output and errors, snapshot updates, output diffs, console logs, source-located JavaScript diagnostics, duplication, and versioned JSON import/export.
+
+Apple Intelligence is used only to author an optional draft on supported Macs. Generated actions are disabled by default, and saved actions run deterministically through JavaScriptCore without invoking a model.
 
 ## Requirements
 
@@ -44,6 +48,8 @@ xcodebuild -project EditSmith.xcodeproj -scheme EditSmith \
 ```
 
 The app and Source Editor Extension are implemented in Swift. The core has no third-party dependencies.
+
+Before publishing a build, follow the [release checklist](RELEASE_CHECKLIST.md).
 
 ## Privacy
 

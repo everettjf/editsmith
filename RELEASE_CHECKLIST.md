@@ -1,0 +1,70 @@
+# EditSmith Release Checklist
+
+Use this checklist for every public build. An unsigned debug build proves source
+compatibility only; it does not prove signing, notarization, or store readiness.
+
+## Product and documentation
+
+- [ ] `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` are intentional.
+- [ ] GitHub About, topics, website, README, privacy policy, and support links
+      use the current EditSmith identity.
+- [ ] The README quick start matches the current macOS and Xcode UI.
+- [ ] App icon renders correctly at 16, 32, 128, 256, 512, and 1024 points.
+- [ ] Capture a current Workbench screenshot and a short Xcode Editor-menu demo.
+- [ ] Release notes describe user-visible changes and known limitations.
+
+## Automated verification
+
+```sh
+xcodegen generate --spec project.yml
+(cd Core && swift test)
+xcodebuild -project EditSmith.xcodeproj -scheme EditSmith \
+  -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build
+```
+
+- [ ] Core tests pass, including fixtures, selections, archives, safety limits,
+      diagnostics, built-ins, and legacy decoding.
+- [ ] The application and embedded Source Editor Extension build together.
+- [ ] `git diff --check` passes and the working tree contains no generated files.
+
+## Manual workflow verification
+
+- [ ] A fresh launch shows built-in actions and the Workbench.
+- [ ] Create, duplicate, rename, delete, import, and export a user action.
+- [ ] Run one fixture, run all fixtures, inspect output/diff/console, and update a
+      snapshot.
+- [ ] Invalid JavaScript shows a useful line, column, and stack.
+- [ ] Enable the extension using the Settings guidance.
+- [ ] Run whole-buffer, single-selection, and multi-selection actions in Xcode.
+- [ ] Confirm output selections are restored and one Undo reverses the edit.
+- [ ] Confirm Dry Run saves a preview without changing the Xcode buffer.
+- [ ] Confirm the rollback command restores the most recent saved buffer.
+- [ ] On macOS 26 or later, generate an Apple Intelligence draft, verify it is
+      disabled, test it, preview its diff, and enable it manually.
+- [ ] On macOS 14 or 15, launch and use the deterministic workflow without
+      loading Foundation Models.
+
+## Security and privacy
+
+- [ ] App and extension remain sandboxed with only the shared App Group.
+- [ ] Neither target has a network entitlement.
+- [ ] Imported actions are disabled by default.
+- [ ] AI-created actions are disabled by default and execute without AI after
+      they are saved.
+- [ ] Oversized input, script, and output fixtures fail without modifying text.
+- [ ] Test source, fixtures, logs, settings, and snapshots remain in the shared
+      local container.
+- [ ] Privacy policy matches the shipping binary and optional on-device model
+      behavior.
+
+## Signed archive
+
+- [ ] Confirm the distribution channel and signing identity.
+- [ ] Confirm the App ID, extension App ID, and App Group exist in the selected
+      developer account.
+- [ ] Archive the `EditSmith` scheme with signing enabled.
+- [ ] Validate the archive's app and extension bundle identifiers, versions,
+      entitlements, embedded provisioning profiles, and architectures.
+- [ ] Launch the exported build on a clean user account and enable the extension.
+- [ ] Complete notarization or App Store validation for the selected channel.
+- [ ] Tag the exact reviewed commit and attach release notes and artifacts.
