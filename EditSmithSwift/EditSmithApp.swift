@@ -33,7 +33,8 @@ private struct WindowSizeGuard: NSViewRepresentable {
             guard let window,
                   let screen = window.screen ?? NSScreen.main else { return }
             let visibleFrame = screen.visibleFrame
-            guard window.frame.width > visibleFrame.width
+            window.contentMinSize = NSSize(width: 900, height: 520)
+            guard window.frame.width > 1_440
                     || window.frame.height > visibleFrame.height else { return }
 
             let size = NSSize(

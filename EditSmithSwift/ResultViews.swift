@@ -129,7 +129,7 @@ struct DiffView: View {
             }
             .background(color.opacity(0.05))
         }
-        .frame(minWidth: 300)
+        .frame(minWidth: 220)
     }
 }
 

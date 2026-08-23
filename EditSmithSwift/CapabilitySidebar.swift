@@ -16,7 +16,7 @@ struct CapabilitySidebar: View {
         }
         .searchable(text: $library.searchText, placement: .sidebar, prompt: "Search 80+ capabilities")
         .navigationTitle("Capabilities")
-        .navigationSplitViewColumnWidth(min: 260, ideal: 310, max: 380)
+        .navigationSplitViewColumnWidth(min: 220, ideal: 260, max: 340)
     }
 
     private var scopePicker: some View {

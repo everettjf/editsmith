@@ -52,7 +52,7 @@ struct RecipeEditor: View {
         .navigationTitle(recipe.name)
         .inspector(isPresented: $isShowingInspector) {
             RecipeInspector(recipe: $recipe, selection: $inspectorSection, library: library)
-                .inspectorColumnWidth(min: 280, ideal: 320, max: 380)
+                .inspectorColumnWidth(min: 240, ideal: 280, max: 360)
         }
         .task(id: recipe.source) {
             guard recipe.kind == .javascript else { issues = []; return }
@@ -230,7 +230,7 @@ private struct TestFixtureEditor: View {
                 .frame(height: 72)
             }
         }
-        .frame(minWidth: 300)
+        .frame(minWidth: 220)
         .accessibilityElement(children: .contain)
         .accessibilityLabel("Xcode buffer test fixture")
     }
@@ -278,7 +278,7 @@ private struct EditorPane: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(.background)
         }
-        .frame(minWidth: 300)
+        .frame(minWidth: 220)
     }
 }
 
