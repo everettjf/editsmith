@@ -51,11 +51,19 @@ targets:
     sources: [EditSmithCoreTests]
     dependencies:
       - package: EditSmithCore
+  EditSmithAppTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources: [EditSmithAppTests]
+    dependencies:
+      - target: EditSmith
+      - package: EditSmithCore
 schemes:
   EditSmith:
     build:
       targets:
         EditSmith: all
         EditSmithCoreTests: [test]
+        EditSmithAppTests: [test]
     test:
-      targets: [EditSmithCoreTests]
+      targets: [EditSmithCoreTests, EditSmithAppTests]

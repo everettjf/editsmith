@@ -43,8 +43,8 @@ Apple Intelligence is used only to author an optional draft on supported Macs. G
 ```sh
 xcodegen generate --spec project.yml
 cd Core && swift test && cd ..
-xcodebuild -project EditSmith.xcodeproj -scheme EditSmith \
-  -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build
+xcodebuild test -project EditSmith.xcodeproj -scheme EditSmith \
+  -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
 ```
 
 The app and Source Editor Extension are implemented in Swift. The core has no third-party dependencies.

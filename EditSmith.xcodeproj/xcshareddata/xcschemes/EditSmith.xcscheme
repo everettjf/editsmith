@@ -29,6 +29,20 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "75EA20FBB00907D83CD5CD0E"
+               BuildableName = "EditSmithAppTests.xctest"
+               BlueprintName = "EditSmithAppTests"
+               ReferencedContainer = "container:EditSmith.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "C7392AD42581DEEA5F46CABA"
                BuildableName = "EditSmithCoreTests.xctest"
                BlueprintName = "EditSmithCoreTests"
@@ -61,6 +75,17 @@
                BlueprintIdentifier = "C7392AD42581DEEA5F46CABA"
                BuildableName = "EditSmithCoreTests.xctest"
                BlueprintName = "EditSmithCoreTests"
+               ReferencedContainer = "container:EditSmith.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "75EA20FBB00907D83CD5CD0E"
+               BuildableName = "EditSmithAppTests.xctest"
+               BlueprintName = "EditSmithAppTests"
                ReferencedContainer = "container:EditSmith.xcodeproj">
             </BuildableReference>
          </TestableReference>

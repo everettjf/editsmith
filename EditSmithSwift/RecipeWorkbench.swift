@@ -22,9 +22,10 @@ final class RecipeLibrary {
     var testResults: [RecipeTestResult] = []
     var resultMode = ResultMode.output
     var errorMessage: String?
-    private let store = RecipeStore()
+    private let store: RecipeStore
 
-    init() {
+    init(store: RecipeStore = RecipeStore()) {
+        self.store = store
         recipes = store.load()
         selection = recipes.first?.id
         synchronizeTestSelection()

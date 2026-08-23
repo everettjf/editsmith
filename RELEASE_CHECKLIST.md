@@ -18,12 +18,13 @@ compatibility only; it does not prove signing, notarization, or store readiness.
 ```sh
 xcodegen generate --spec project.yml
 (cd Core && swift test)
-xcodebuild -project EditSmith.xcodeproj -scheme EditSmith \
-  -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build
+xcodebuild test -project EditSmith.xcodeproj -scheme EditSmith \
+  -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
 ```
 
-- [ ] Core tests pass, including fixtures, selections, archives, safety limits,
-      diagnostics, built-ins, and legacy decoding.
+- [ ] Core and App tests pass, including fixtures, selections, archives, safety
+      limits, diagnostics, built-ins, legacy decoding, library actions, and
+      disabled import/AI drafts.
 - [ ] The application and embedded Source Editor Extension build together.
 - [ ] `git diff --check` passes and the working tree contains no generated files.
 

@@ -9,9 +9,11 @@
 /* Begin PBXBuildFile section */
 		1A865D95F673B70094F07F71 /* EditSmithCoreSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C98AC9916ADB41F3520C77A6 /* EditSmithCoreSmokeTests.swift */; };
 		368C41AA508294A041CDC28E /* EditSmithApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED295DA601F12F90DAD4C392 /* EditSmithApp.swift */; };
+		3EBDFCFDCBA102F4ED6D2026 /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = F433AC195492EE54EB36CA87 /* EditSmithCore */; };
 		5A2C419EBD536B5C3412FF5A /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = 015C2048CA940419273C74C0 /* EditSmithCore */; };
 		6597F982DA272399F11F76F8 /* SourceEditorCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB811A30C96A6EB3B644E802 /* SourceEditorCommand.swift */; };
 		794F4E73D5FBDDB55F7829FB /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = 487CBEDDDFA28F1115FA490A /* EditSmithCore */; };
+		88C4540AF727C599B2ADC94F /* RecipeLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE1142DDE452CF922E640C8 /* RecipeLibraryTests.swift */; };
 		939E960D7B033633924A3BF5 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4998059E598CBD141CCE6077 /* XcodeKit.framework */; };
 		9E9AB5BF49E43FF70FBD57E9 /* RecipeWorkbench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FC25212C48AF82655986696 /* RecipeWorkbench.swift */; };
 		A43024A8ECDF1541B1394964 /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = B724C3A0B092FCB8924EBC00 /* EditSmithCore */; };
@@ -20,6 +22,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		7A6F0E2F73EFDC2FAE1896EB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D22B41755DD8934296AA89B8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E4394D2590E20B4145B0F4E6;
+			remoteInfo = EditSmith;
+		};
 		E029CA96FB9C0A3CBC23AE49 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = D22B41755DD8934296AA89B8 /* Project object */;
@@ -46,10 +55,12 @@
 /* Begin PBXFileReference section */
 		4998059E598CBD141CCE6077 /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = "$(DEVELOPER_DIR)/Library/Frameworks/XcodeKit.framework"; sourceTree = "<group>"; };
 		4F03104E4250326EA6210DC9 /* EditSmithCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EditSmithCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A2B402562043B397F653D9E /* EditSmithAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EditSmithAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FC25212C48AF82655986696 /* RecipeWorkbench.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeWorkbench.swift; sourceTree = "<group>"; };
 		75112C6E3428FFE1D6CE9A1F /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Core; path = Core; sourceTree = SOURCE_ROOT; };
 		94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EditSmithExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C98AC9916ADB41F3520C77A6 /* EditSmithCoreSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSmithCoreSmokeTests.swift; sourceTree = "<group>"; };
+		CDE1142DDE452CF922E640C8 /* RecipeLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeLibraryTests.swift; sourceTree = "<group>"; };
 		CF52A73E9BBBA599E5A1FE32 /* EditSmith.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EditSmith.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB811A30C96A6EB3B644E802 /* SourceEditorCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceEditorCommand.swift; sourceTree = "<group>"; };
 		E7FFB520978B6028BF74CC64 /* SourceEditorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceEditorExtension.swift; sourceTree = "<group>"; };
@@ -62,6 +73,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				794F4E73D5FBDDB55F7829FB /* EditSmithCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		911D3E83503756C18AC807A0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3EBDFCFDCBA102F4ED6D2026 /* EditSmithCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +107,7 @@
 		2EB28A4827F2A51BD694F7A7 = {
 			isa = PBXGroup;
 			children = (
+				E66D31ED8FB1FEF0AB62601E /* EditSmithAppTests */,
 				BF49714D964F005AC73DEBD3 /* EditSmithCoreTests */,
 				CD35F33A38DD5DA4556E3BAF /* EditSmithExtensionSwift */,
 				471733E9A0C2FFAAB622AE6A /* EditSmithSwift */,
@@ -110,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				CF52A73E9BBBA599E5A1FE32 /* EditSmith.app */,
+				5A2B402562043B397F653D9E /* EditSmithAppTests.xctest */,
 				4F03104E4250326EA6210DC9 /* EditSmithCoreTests.xctest */,
 				94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */,
 			);
@@ -149,9 +170,37 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E66D31ED8FB1FEF0AB62601E /* EditSmithAppTests */ = {
+			isa = PBXGroup;
+			children = (
+				CDE1142DDE452CF922E640C8 /* RecipeLibraryTests.swift */,
+			);
+			path = EditSmithAppTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		75EA20FBB00907D83CD5CD0E /* EditSmithAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 122044A27DA724963B68CBAE /* Build configuration list for PBXNativeTarget "EditSmithAppTests" */;
+			buildPhases = (
+				49582AAF977CE3D87F33D5BB /* Sources */,
+				911D3E83503756C18AC807A0 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2B93010FEBBD8D38D7C669A2 /* PBXTargetDependency */,
+			);
+			name = EditSmithAppTests;
+			packageProductDependencies = (
+				F433AC195492EE54EB36CA87 /* EditSmithCore */,
+			);
+			productName = EditSmithAppTests;
+			productReference = 5A2B402562043B397F653D9E /* EditSmithAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		78D91B9D655442AD62DD49FA /* EditSmithExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C79A783E1BDF176EC45B4F7A /* Build configuration list for PBXNativeTarget "EditSmithExtension" */;
@@ -220,6 +269,9 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					75EA20FBB00907D83CD5CD0E = {
+						DevelopmentTeam = YPV49M8592;
+					};
 					78D91B9D655442AD62DD49FA = {
 						DevelopmentTeam = YPV49M8592;
 					};
@@ -249,6 +301,7 @@
 			projectRoot = "";
 			targets = (
 				E4394D2590E20B4145B0F4E6 /* EditSmith */,
+				75EA20FBB00907D83CD5CD0E /* EditSmithAppTests */,
 				C7392AD42581DEEA5F46CABA /* EditSmithCoreTests */,
 				78D91B9D655442AD62DD49FA /* EditSmithExtension */,
 			);
@@ -273,6 +326,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		49582AAF977CE3D87F33D5BB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				88C4540AF727C599B2ADC94F /* RecipeLibraryTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		ADA42EE809563D49295E607D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -285,6 +346,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		2B93010FEBBD8D38D7C669A2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E4394D2590E20B4145B0F4E6 /* EditSmith */;
+			targetProxy = 7A6F0E2F73EFDC2FAE1896EB /* PBXContainerItemProxy */;
+		};
 		EBDC44D2CC0A3EF1641FCC98 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 78D91B9D655442AD62DD49FA /* EditSmithExtension */;
@@ -488,6 +554,22 @@
 			};
 			name = Debug;
 		};
+		7CF2553D286464CDB8560825 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.EditSmithAppTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EditSmith.app/Contents/MacOS/EditSmith";
+			};
+			name = Debug;
+		};
 		BFABD4736874F695C35CE060 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -504,6 +586,22 @@
 				SDKROOT = macosx;
 			};
 			name = Debug;
+		};
+		F0D03EA0ED5D6A0A5C5D3D3C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.EditSmithAppTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EditSmith.app/Contents/MacOS/EditSmith";
+			};
+			name = Release;
 		};
 		F20539F27C549FC4A2A645D6 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -531,6 +629,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		122044A27DA724963B68CBAE /* Build configuration list for PBXNativeTarget "EditSmithAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7CF2553D286464CDB8560825 /* Debug */,
+				F0D03EA0ED5D6A0A5C5D3D3C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		34F5CA7CA90E703B3F6B1057 /* Build configuration list for PBXNativeTarget "EditSmith" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -586,6 +693,10 @@
 			productName = EditSmithCore;
 		};
 		B724C3A0B092FCB8924EBC00 /* EditSmithCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EditSmithCore;
+		};
+		F433AC195492EE54EB36CA87 /* EditSmithCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = EditSmithCore;
 		};

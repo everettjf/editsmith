@@ -25,8 +25,8 @@ fi
 
 xcodegen generate --spec project.yml
 (cd Core && swift test)
-xcodebuild -project EditSmith.xcodeproj -scheme EditSmith \
-    -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO build
+xcodebuild test -project EditSmith.xcodeproj -scheme EditSmith \
+    -destination 'platform=macOS' CODE_SIGNING_ALLOWED=NO
 
 settings="$(xcodebuild -project EditSmith.xcodeproj -scheme EditSmith -showBuildSettings)"
 product_dir="$(awk -F ' = ' '/TARGET_BUILD_DIR = / { print $2; exit }' <<<"$settings")"
