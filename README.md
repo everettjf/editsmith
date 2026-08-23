@@ -5,7 +5,7 @@
 [![Platform](https://img.shields.io/badge/platform-macOS%20%C2%B7%20Xcode-blue)](#requirements)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-[Website](https://everettjf.github.io/jspowerxcode/) · [GitHub](https://github.com/everettjf/jspowerxcode) · [Discord](https://discord.gg/eGzEaP6TzR)
+[Website](https://xnu.app/jspowerxcode/) · [GitHub](https://github.com/everettjf/jspowerxcode) · [Discord](https://discord.gg/eGzEaP6TzR)
 
 JSPower is a Swift and SwiftUI text-automation workbench for Xcode. Create local JavaScript recipes, test them against sample input, and run enabled recipes from Xcode's Editor menu. Built-in recipes cover line sorting, trailing-whitespace cleanup, JSON formatting, and case conversion.
 
