@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "EditSmithCore",
-    platforms: [.macOS(.v14)],
+    platforms: [.macOS(.v15)],
     products: [.library(name: "EditSmithCore", targets: ["EditSmithCore"])],
     targets: [
         .target(name: "EditSmithCore", linkerSettings: [.linkedFramework("JavaScriptCore")]),

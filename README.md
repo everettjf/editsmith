@@ -36,7 +36,7 @@ Apple Intelligence is used only to author an optional draft on supported Macs. G
 
 ## Requirements
 
-- macOS 14 or later
+- macOS 15 or later
 - A supported Xcode installation
 - XcodeGen when regenerating the checked-in project
 

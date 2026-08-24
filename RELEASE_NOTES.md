@@ -31,7 +31,7 @@ EditSmith brings local, testable text actions to Xcode's Editor menu.
 
 ## Requirements
 
-- macOS 14 or later for the deterministic action workflow.
+- macOS 15 or later for the deterministic action workflow.
 - Xcode with Source Editor Extension support.
 - macOS 26 or later and an available Apple Intelligence model for optional
   action drafting.

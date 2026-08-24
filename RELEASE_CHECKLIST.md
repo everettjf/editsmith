@@ -42,7 +42,7 @@ xcodebuild test -project EditSmith.xcodeproj -scheme EditSmith \
 - [ ] Confirm the rollback command restores the most recent saved buffer.
 - [ ] On macOS 26 or later, generate an Apple Intelligence draft, verify it is
       disabled, test it, preview its diff, and enable it manually.
-- [ ] On macOS 14 or 15, launch and use the deterministic workflow without
+- [ ] On macOS 15, launch and use the deterministic workflow without
       loading Foundation Models.
 
 ## Security and privacy
