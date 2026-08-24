@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -72,11 +72,11 @@
 		5A2B402562043B397F653D9E /* EditSmithAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EditSmithAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6130AE06235699F0ACEE332C /* RecipeInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeInspector.swift; sourceTree = "<group>"; };
 		6FC25212C48AF82655986696 /* RecipeWorkbench.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeWorkbench.swift; sourceTree = "<group>"; };
-		75112C6E3428FFE1D6CE9A1F /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Core; path = Core; sourceTree = SOURCE_ROOT; };
+		75112C6E3428FFE1D6CE9A1F /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Core; sourceTree = SOURCE_ROOT; };
 		783A8F9403FD17609008BCF4 /* CodeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditor.swift; sourceTree = "<group>"; };
 		7A5B72E55C7F92DF0462D6D4 /* ScriptAuthoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptAuthoring.swift; sourceTree = "<group>"; };
 		7BBD32A7BE89BBE98431F05A /* ExtensionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionHelpView.swift; sourceTree = "<group>"; };
-		94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EditSmithExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; name = EditSmithExtension.appex; path = EditSmith.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B6575519C024E45624506FD /* CapabilitySidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapabilitySidebar.swift; sourceTree = "<group>"; };
 		B18A65D2F7E34C99A4E36D21 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = EditSmith/Assets.xcassets; sourceTree = SOURCE_ROOT; };
 		B18A65D6F7E34C99A4E36D21 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = SOURCE_ROOT; };
@@ -314,9 +314,6 @@
 					C7392AD42581DEEA5F46CABA = {
 						DevelopmentTeam = YPV49M8592;
 					};
-					E4394D2590E20B4145B0F4E6 = {
-						DevelopmentTeam = YPV49M8592;
-					};
 				};
 			};
 			buildConfigurationList = 4CFCA0AB1483FD865F828D83 /* Build configuration list for PBXProject "EditSmith" */;
@@ -333,7 +330,6 @@
 				BEE853BD4E15D00EB29CFB3F /* XCRemoteSwiftPackageReference "CodeEditor" */,
 				AA176C43D52161AA9ED6F6D5 /* XCLocalSwiftPackageReference "Core" */,
 			);
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -569,14 +565,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = EditSmith/EditSmith.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = YPV49M8592;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = EditSmith/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.xnu.editsmith;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -640,14 +642,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = EditSmith/EditSmith.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = YPV49M8592;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = EditSmith/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.xnu.editsmith;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
 			};
 			name = Debug;
