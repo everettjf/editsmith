@@ -40,11 +40,11 @@ public struct RecipeStore {
     }
 
     public func save(_ recipes: [Recipe]) throws {
-        let customRecipes = recipes.filter { $0.kind == .javascript }
+        let customRecipes = recipes.filter { $0.kind == .javascript || $0.kind == .model }
         try saveCustomRecipes(customRecipes)
         defaults.set(customRecipes.map(\.id), forKey: Self.customOrderKey)
 
-        let builtins = recipes.filter { $0.kind != .javascript }
+        let builtins = recipes.filter { $0.kind != .javascript && $0.kind != .model }
         defaults.set(try JSONEncoder().encode(builtins), forKey: Self.builtinKey)
         defaults.set(Self.currentCatalogVersion, forKey: Self.catalogVersionKey)
     }
@@ -92,7 +92,7 @@ public struct RecipeStore {
             .compactMap { url in
                 guard let data = try? Data(contentsOf: url),
                       let recipe = try? JSONDecoder().decode(Recipe.self, from: data),
-                      recipe.kind == .javascript else { return nil }
+                      recipe.kind == .javascript || recipe.kind == .model else { return nil }
                 return recipe
             }
     }
@@ -148,7 +148,7 @@ public struct RecipeStore {
         do {
             let catalogIDs = Set(BuiltinRecipes.all.map(\.id))
             let customRecipes = legacyRecipes.filter {
-                $0.kind == .javascript && !catalogIDs.contains($0.id)
+                ($0.kind == .javascript || $0.kind == .model) && !catalogIDs.contains($0.id)
             }
             if loadCustomRecipes().isEmpty {
                 try saveCustomRecipes(customRecipes)

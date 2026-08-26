@@ -48,6 +48,20 @@ struct RecipeEngineTests {
         #expect(defaults.data(forKey: "swift.recipes.v2") == nil)
     }
 
+    @Test func modelRecipesRoundTripWithProviderConfiguration() throws {
+        let recipe = Recipe(
+            name: "Explain Code",
+            summary: "Model example",
+            kind: .model,
+            source: "Explain this code:\n\n{{input}}",
+            isEnabled: false,
+            modelConfiguration: .init(provider: .ollama, modelName: "llama3.2", endpoint: "http://127.0.0.1:11434")
+        )
+        let decoded = try JSONDecoder().decode(Recipe.self, from: JSONEncoder().encode(recipe))
+        #expect(decoded == recipe)
+        #expect(decoded.modelConfiguration?.provider == .ollama)
+    }
+
     @Test func legacyCatalogMigratesWithoutDuplicateBuiltins() throws {
         let suite = "EditSmithCatalogMigration.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!

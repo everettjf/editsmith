@@ -1,5 +1,42 @@
 import Foundation
 import JavaScriptCore
+#if canImport(FoundationModels)
+import FoundationModels
+#endif
+
+public struct ModelRecipeConfiguration: Codable, Equatable, Hashable, Sendable {
+    public enum Provider: String, Codable, CaseIterable, Identifiable, Sendable {
+        case appleOnDevice
+        case applePrivateCloud
+        case ollama
+
+        public var id: Self { self }
+        public var displayName: String {
+            switch self {
+            case .appleOnDevice: "Apple On-Device"
+            case .applePrivateCloud: "Apple Private Cloud Compute"
+            case .ollama: "Ollama / Local LLaMA"
+            }
+        }
+    }
+
+    public var provider: Provider
+    public var modelName: String
+    public var endpoint: String
+    public var instructions: String
+
+    public init(
+        provider: Provider = .appleOnDevice,
+        modelName: String = "llama3.2",
+        endpoint: String = "http://127.0.0.1:11434",
+        instructions: String = "Return only the transformed text. Do not add commentary or Markdown fences."
+    ) {
+        self.provider = provider
+        self.modelName = modelName
+        self.endpoint = endpoint
+        self.instructions = instructions
+    }
+}
 
 public struct TextPosition: Codable, Equatable, Hashable, Sendable {
     public var line: Int
@@ -59,7 +96,7 @@ public struct ActionApplicability: Codable, Equatable, Hashable, Sendable {
 }
 
 public struct Recipe: Codable, Identifiable, Hashable, Sendable {
-    public enum Kind: String, Codable, Sendable { case builtin, javascript, composed }
+    public enum Kind: String, Codable, Sendable { case builtin, javascript, model, composed }
     public let id: String
     public var name: String
     public var summary: String
@@ -75,6 +112,7 @@ public struct Recipe: Codable, Identifiable, Hashable, Sendable {
     public var isFavorite: Bool
     public var keyboardShortcut: String?
     public var componentIDs: [String]
+    public var modelConfiguration: ModelRecipeConfiguration?
 
     public init(
         id: String = UUID().uuidString,
@@ -91,7 +129,8 @@ public struct Recipe: Codable, Identifiable, Hashable, Sendable {
         isFeatured: Bool = false,
         isFavorite: Bool = false,
         keyboardShortcut: String? = nil,
-        componentIDs: [String] = []
+        componentIDs: [String] = [],
+        modelConfiguration: ModelRecipeConfiguration? = nil
     ) {
         self.id = id
         self.name = name
@@ -108,11 +147,12 @@ public struct Recipe: Codable, Identifiable, Hashable, Sendable {
         self.isFavorite = isFavorite
         self.keyboardShortcut = keyboardShortcut
         self.componentIDs = componentIDs
+        self.modelConfiguration = modelConfiguration
     }
 
     private enum CodingKeys: String, CodingKey {
         case id, name, summary, kind, source, isEnabled, version, applicability, parameters, testCases
-        case category, isFeatured, isFavorite, keyboardShortcut, componentIDs
+        case category, isFeatured, isFavorite, keyboardShortcut, componentIDs, modelConfiguration
     }
 
     public init(from decoder: Decoder) throws {
@@ -132,6 +172,7 @@ public struct Recipe: Codable, Identifiable, Hashable, Sendable {
         isFavorite = try values.decodeIfPresent(Bool.self, forKey: .isFavorite) ?? false
         keyboardShortcut = try values.decodeIfPresent(String.self, forKey: .keyboardShortcut)
         componentIDs = try values.decodeIfPresent([String].self, forKey: .componentIDs) ?? []
+        modelConfiguration = try values.decodeIfPresent(ModelRecipeConfiguration.self, forKey: .modelConfiguration)
     }
 }
 
@@ -145,6 +186,7 @@ public enum RecipeError: LocalizedError, Equatable {
     case javaScript(String)
     case invalidResult
     case invalidSelection(String)
+    case modelUnavailable(String)
 
     public var errorDescription: String? {
         switch self {
@@ -157,6 +199,7 @@ public enum RecipeError: LocalizedError, Equatable {
         case .javaScript(let message): "JavaScript error: \(message)"
         case .invalidResult: "The transform function must return a string."
         case .invalidSelection(let message): "Invalid selection: \(message)"
+        case .modelUnavailable(let message): message
         }
     }
 }
@@ -317,6 +360,7 @@ public struct RecipeRunner {
         switch recipe.kind {
         case .builtin: return try BuiltinTransformer.transform(input, recipe: recipe)
         case .javascript: return try runJavaScript(recipe.source, input: input, request: request, logs: &logs)
+        case .model: throw RecipeError.modelUnavailable("Model actions run asynchronously. Use AsyncRecipeRunner.")
         case .composed:
             return try recipe.componentIDs.reduce(input) { value, identifier in
                 guard let component = BuiltinRecipes.all.first(where: { $0.id == identifier }) else {
@@ -429,6 +473,90 @@ public struct RecipeRunner {
     }
 }
 
+public struct AsyncRecipeRunner: Sendable {
+    public init() {}
+
+    @MainActor
+    public func execute(_ request: ExecutionRequest, recipe: Recipe) async -> ExecutionResult {
+        guard recipe.kind == .model else { return RecipeRunner().execute(request, recipe: recipe) }
+        let startedAt = ContinuousClock.now
+        do {
+            guard request.text.utf8.count <= 5 * 1_024 * 1_024 else { throw RecipeError.inputTooLarge }
+            guard recipe.applicability.accepts(request) else { throw RecipeError.notApplicable }
+            let output = try await transformModel(recipe: recipe, input: request.text)
+            guard output.utf8.count <= 5 * 1_024 * 1_024 else { throw RecipeError.outputTooLarge }
+            return ExecutionResult(outputText: output, duration: elapsedSeconds(since: startedAt))
+        } catch {
+            return ExecutionResult(
+                outputText: request.text,
+                duration: elapsedSeconds(since: startedAt),
+                diagnostic: ExecutionDiagnostic(message: error.localizedDescription)
+            )
+        }
+    }
+
+    @MainActor
+    private func transformModel(recipe: Recipe, input: String) async throws -> String {
+        let configuration = recipe.modelConfiguration ?? .init()
+        let prompt = recipe.source.replacingOccurrences(of: "{{input}}", with: input)
+        switch configuration.provider {
+        case .appleOnDevice:
+#if canImport(FoundationModels)
+            if #available(macOS 26.0, *) {
+                let model = SystemLanguageModel.default
+                guard model.isAvailable else { throw RecipeError.modelUnavailable("Apple Intelligence is not available on this Mac.") }
+                let session = LanguageModelSession(model: model, instructions: configuration.instructions)
+                return try await session.respond(to: prompt).content.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+#endif
+            throw RecipeError.modelUnavailable("Apple on-device models require macOS 26 or later.")
+        case .applePrivateCloud:
+#if canImport(FoundationModels)
+            if #available(macOS 27.0, *) {
+                let model = PrivateCloudComputeLanguageModel()
+                guard model.isAvailable else { throw RecipeError.modelUnavailable("Private Cloud Compute is unavailable. Check device eligibility and the PCC entitlement.") }
+                let session = LanguageModelSession(model: model, instructions: configuration.instructions)
+                return try await session.respond(to: prompt).content.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+#endif
+            throw RecipeError.modelUnavailable("Private Cloud Compute requires macOS 27 or later.")
+        case .ollama:
+            return try await runOllama(configuration: configuration, prompt: prompt)
+        }
+    }
+
+    private func runOllama(configuration: ModelRecipeConfiguration, prompt: String) async throws -> String {
+        guard var components = URLComponents(string: configuration.endpoint) else {
+            throw RecipeError.modelUnavailable("The Ollama endpoint is not a valid URL.")
+        }
+        components.path = components.path.trimmingCharacters(in: CharacterSet(charactersIn: "/")) + "/api/generate"
+        guard let url = components.url else { throw RecipeError.modelUnavailable("The Ollama endpoint is not a valid URL.") }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 120
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONSerialization.data(withJSONObject: [
+            "model": configuration.modelName,
+            "prompt": configuration.instructions + "\n\n" + prompt,
+            "stream": false,
+        ])
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
+            throw RecipeError.modelUnavailable("Ollama returned an unsuccessful response.")
+        }
+        guard let payload = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let output = payload["response"] as? String else {
+            throw RecipeError.modelUnavailable("Ollama returned an invalid response.")
+        }
+        return output.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private func elapsedSeconds(since start: ContinuousClock.Instant) -> TimeInterval {
+        let duration = start.duration(to: .now)
+        return TimeInterval(duration.components.seconds) + TimeInterval(duration.components.attoseconds) / 1e18
+    }
+}
+
 private typealias JSShouldTerminateCallback = @convention(c) (JSContextRef?, UnsafeMutableRawPointer?) -> Bool
 
 @_silgen_name("JSContextGroupSetExecutionTimeLimit")
@@ -527,10 +655,10 @@ public struct RecipeArchive: Codable, Equatable, Sendable {
         guard archive.recipes.allSatisfy({ !$0.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) else {
             throw RecipeArchiveError.invalidRecipeName
         }
-        guard archive.recipes.allSatisfy({ $0.kind == .javascript && $0.source.utf8.count <= 256 * 1_024 }) else {
+        guard archive.recipes.allSatisfy({ ($0.kind == .javascript || $0.kind == .model) && $0.source.utf8.count <= 256 * 1_024 }) else {
             throw RecipeArchiveError.unsafeRecipe
         }
-        guard archive.recipes.allSatisfy({ ScriptSecurityValidator.isSafe($0.source) }) else {
+        guard archive.recipes.allSatisfy({ $0.kind != .javascript || ScriptSecurityValidator.isSafe($0.source) }) else {
             throw RecipeArchiveError.unsafeRecipe
         }
         return archive
