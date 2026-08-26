@@ -20,25 +20,13 @@ struct RecipeEditor: View {
                 VSplitView {
                     primaryWorkspace
 
-                    ViewThatFits(in: .horizontal) {
-                        HStack(spacing: 0) {
-                            TestFixtureEditor(test: $recipe.testCases[testIndex], library: library)
-                            Divider()
-                            EditorPane(
-                                title: "Expected Output",
-                                systemImage: "checkmark.rectangle",
-                                text: $recipe.testCases[testIndex].expectedOutput
-                            )
-                        }
-
-                        VSplitView {
-                            TestFixtureEditor(test: $recipe.testCases[testIndex], library: library)
-                            EditorPane(
-                                title: "Expected Output",
-                                systemImage: "checkmark.rectangle",
-                                text: $recipe.testCases[testIndex].expectedOutput
-                            )
-                        }
+                    HSplitView {
+                        TestFixtureEditor(test: $recipe.testCases[testIndex], library: library)
+                        EditorPane(
+                            title: "Expected Output",
+                            systemImage: "checkmark.rectangle",
+                            text: $recipe.testCases[testIndex].expectedOutput
+                        )
                     }
                     .frame(minHeight: 150, idealHeight: 190)
 
