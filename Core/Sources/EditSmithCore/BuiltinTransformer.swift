@@ -113,8 +113,118 @@ public enum BuiltinTransformer {
         case "word-stats":
             let words = input.split { $0.isWhitespace }.count
             return "Lines: \(lines.count)\nWords: \(words)\nCharacters: \(input.count)\nBytes: \(input.utf8.count)"
+
+        case "leet-speak": return leetspeak(input)
+        case "rot13": return rot13(input)
+        case "fullwidth-text": return unicodeStyle(input, uppercase: 0xFF21, lowercase: 0xFF41, digits: 0xFF10, space: 0x3000)
+        case "circled-text": return circled(input)
+        case "monospace-unicode": return unicodeStyle(input, uppercase: 0x1D670, lowercase: 0x1D68A, digits: 0x1D7F6)
+        case "bold-unicode": return unicodeStyle(input, uppercase: 0x1D400, lowercase: 0x1D41A, digits: 0x1D7CE)
+        case "italic-unicode": return unicodeStyle(input, uppercase: 0x1D434, lowercase: 0x1D44E)
+        case "small-caps": return smallCaps(input)
+        case "upside-down": return upsideDown(input)
+        case "reverse-characters": return lines.map { String($0.reversed()) }.joined(separator: "\n")
+        case "zalgo": return zalgo(input, intensity: Int(recipe.parameters["intensity"] ?? "2") ?? 2)
+        case "binary-text": return input.utf8.map { byte in
+            let bits = String(byte, radix: 2)
+            return String(repeating: "0", count: 8 - bits.count) + bits
+        }.joined(separator: " ")
+        case "morse-code": return morse(input)
+        case "ascii-box": return asciiBox(input)
+        case "ascii-banner": return asciiBanner(input)
         default: throw RecipeError.unknownBuiltin(recipe.source)
         }
+    }
+
+    private static func unicodeStyle(_ input: String, uppercase: UInt32, lowercase: UInt32, digits: UInt32? = nil, space: UInt32? = nil) -> String {
+        input.unicodeScalars.map { scalar in
+            let value = scalar.value
+            if (65...90).contains(value), let mapped = UnicodeScalar(uppercase + value - 65) { return String(mapped) }
+            if (97...122).contains(value), let mapped = UnicodeScalar(lowercase + value - 97) { return String(mapped) }
+            if let digits, (48...57).contains(value), let mapped = UnicodeScalar(digits + value - 48) { return String(mapped) }
+            if let space, value == 32, let mapped = UnicodeScalar(space) { return String(mapped) }
+            return String(scalar)
+        }.joined()
+    }
+
+    private static func circled(_ input: String) -> String {
+        input.unicodeScalars.map { scalar in
+            let value = scalar.value
+            if (65...90).contains(value), let mapped = UnicodeScalar(0x24B6 + value - 65) { return String(mapped) }
+            if (97...122).contains(value), let mapped = UnicodeScalar(0x24D0 + value - 97) { return String(mapped) }
+            if value == 48 { return "⓪" }
+            if (49...57).contains(value), let mapped = UnicodeScalar(0x2460 + value - 49) { return String(mapped) }
+            return String(scalar)
+        }.joined()
+    }
+
+    private static func leetspeak(_ input: String) -> String {
+        let map: [Character: String] = ["a": "4", "b": "8", "e": "3", "g": "6", "i": "1", "l": "1", "o": "0", "s": "5", "t": "7", "z": "2"]
+        return input.map { map[Character($0.lowercased())] ?? String($0) }.joined()
+    }
+
+    private static func rot13(_ input: String) -> String {
+        input.unicodeScalars.map { scalar in
+            let value = scalar.value
+            if (65...90).contains(value) { return String(UnicodeScalar(65 + (value - 65 + 13) % 26)!) }
+            if (97...122).contains(value) { return String(UnicodeScalar(97 + (value - 97 + 13) % 26)!) }
+            return String(scalar)
+        }.joined()
+    }
+
+    private static func smallCaps(_ input: String) -> String {
+        let map = Dictionary(uniqueKeysWithValues: zip(Array("abcdefghijklmnopqrstuvwxyz"), Array("ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀꜱᴛᴜᴠᴡxʏᴢ")))
+        return input.lowercased().map { map[$0].map(String.init) ?? String($0) }.joined()
+    }
+
+    private static func upsideDown(_ input: String) -> String {
+        let normal = Array("abcdefghijklmnopqrstuvwxyz0123456789!?.,")
+        let flipped = Array("ɐqɔpǝɟƃɥᴉɾʞlɯuodbɹsʇnʌʍxʎz0ƖᄅƐㄣϛ9ㄥ86¡¿˙'")
+        let map = Dictionary(uniqueKeysWithValues: zip(normal, flipped))
+        return input.lowercased().reversed().map { map[$0].map(String.init) ?? String($0) }.joined()
+    }
+
+    private static func zalgo(_ input: String, intensity: Int) -> String {
+        let marks = ["\u{0301}", "\u{0308}", "\u{0336}"]
+        let count = min(3, max(1, intensity))
+        return input.map { $0.isWhitespace ? String($0) : String($0) + marks.prefix(count).joined() }.joined()
+    }
+
+    private static func morse(_ input: String) -> String {
+        let keys = Array("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+        let values = [".-", "-...", "-.-.", "-..", ".", "..-.", "--.", "....", "..", ".---", "-.-", ".-..", "--", "-.", "---", ".--.", "--.-", ".-.", "...", "-", "..-", "...-", ".--", "-..-", "-.--", "--..", "-----", ".----", "..---", "...--", "....-", ".....", "-....", "--...", "---..", "----."]
+        let map = Dictionary(uniqueKeysWithValues: zip(keys, values))
+        return input.uppercased().map { $0 == " " ? "/" : map[$0] ?? String($0) }.joined(separator: " ")
+    }
+
+    private static func asciiBox(_ input: String) -> String {
+        let lines = input.components(separatedBy: .newlines)
+        let width = lines.map(\.count).max() ?? 0
+        let border = "+" + String(repeating: "-", count: width + 2) + "+"
+        return ([border] + lines.map { "| \($0.padding(toLength: width, withPad: " ", startingAt: 0)) |" } + [border]).joined(separator: "\n")
+    }
+
+    private static func asciiBanner(_ input: String) -> String {
+        let patterns: [Character: String] = [
+            "A":"0111010001111111000110001", "B":"1111010001111101000111110", "C":"0111110000100001000001111",
+            "D":"1111010001100011000111110", "E":"1111110000111101000011111", "F":"1111110000111101000010000",
+            "G":"0111110000101111000101111", "H":"1000110001111111000110001", "I":"1111100100001000010011111",
+            "J":"0011100010000101001001100", "K":"1000110010111001001010001", "L":"1000010000100001000011111",
+            "M":"1000111011101011000110001", "N":"1000111001101011001110001", "O":"0111010001100011000101110",
+            "P":"1111010001111101000010000", "Q":"0111010001101011001001101", "R":"1111010001111101001010001",
+            "S":"0111110000011100000111110", "T":"1111100100001000010000100", "U":"1000110001100011000101110",
+            "V":"1000110001100010101000100", "W":"1000110001101011101110001", "X":"1000101010001000101010001",
+            "Y":"1000101010001000010000100", "Z":"1111100010001000100011111", " ":"0000000000000000000000000"
+        ]
+        let characters = Array(input.uppercased().prefix(24))
+        return (0..<5).map { row in
+            characters.map { character in
+                let pattern = patterns[character] ?? "0000000000000000000000000"
+                let start = pattern.index(pattern.startIndex, offsetBy: row * 5)
+                let end = pattern.index(start, offsetBy: 5)
+                return pattern[start..<end].map { $0 == "1" ? "█" : " " }.joined()
+            }.joined(separator: " ")
+        }.joined(separator: "\n")
     }
 
     private static func regex(_ input: String, _ pattern: String, _ replacement: String) -> String {

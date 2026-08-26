@@ -9,6 +9,7 @@ public enum CapabilityCategory: String, CaseIterable, Codable, Identifiable, Sen
     case extract = "Extract"
     case privacy = "Privacy"
     case timeAndLists = "Time & Lists"
+    case creative = "Creative Lab"
 
     public var id: Self { self }
 }
@@ -145,6 +146,24 @@ public enum BuiltinRecipes {
         make("markdown-checklist", "List to Markdown Checklist", "Turn lines into Markdown tasks.", .timeAndLists, sample: "Design\nBuild"),
         make("json-array", "List to JSON Array", "Convert lines to a JSON string array.", .timeAndLists, sample: "alpha\nbeta"),
         make("word-stats", "Word and Character Statistics", "Report line, word, character, and byte counts.", .timeAndLists, sample: "Hello EditSmith"),
+
+        // Creative Lab (15)
+        make("leet-speak", "Leetspeak", "Turn letters into classic hacker-style leetspeak.", .creative, featured: true, sample: "EditSmith hacker mode"),
+        make("rot13", "ROT13", "Apply the reversible ROT13 letter substitution.", .creative, sample: "Hello EditSmith"),
+        make("fullwidth-text", "Fullwidth Text", "Give ASCII text a wide retro terminal look.", .creative, featured: true, sample: "EditSmith 2026"),
+        make("circled-text", "Circled Text", "Convert letters and digits to circled Unicode symbols.", .creative, featured: true, sample: "EditSmith 123"),
+        make("monospace-unicode", "Unicode Monospace", "Convert ASCII letters and digits to mathematical monospace glyphs.", .creative, sample: "code 404"),
+        make("bold-unicode", "Unicode Bold", "Convert ASCII letters and digits to mathematical bold glyphs.", .creative, sample: "Ship it 10"),
+        make("italic-unicode", "Unicode Italic", "Convert ASCII letters to mathematical italic glyphs.", .creative, sample: "Hello Swift"),
+        make("small-caps", "Small Caps", "Create a compact small-cap Unicode wordmark.", .creative, sample: "EditSmith"),
+        make("upside-down", "Upside Down Text", "Flip and reverse text using upside-down Unicode characters.", .creative, featured: true, sample: "Hello world!"),
+        make("reverse-characters", "Reverse Characters", "Reverse each line by extended grapheme cluster.", .creative, sample: "EditSmith"),
+        make("zalgo", "Glitch / Zalgo Text", "Add deterministic combining marks for a glitch-art effect.", .creative, featured: true, options: [.init("intensity", title: "Intensity (1–3)", defaultValue: "2")], sample: "SIGNAL"),
+        make("binary-text", "Text to Binary", "Render UTF-8 bytes as eight-bit binary groups.", .creative, sample: "Hi"),
+        make("morse-code", "Morse Code", "Encode Latin letters and digits as International Morse code.", .creative, sample: "SOS 2026"),
+        make("ascii-box", "ASCII Box", "Frame every line in a clean ASCII terminal box.", .creative, sample: "EditSmith\nText Lab"),
+        make("ascii-banner", "ASCII Banner", "Render short A–Z text as a five-row block banner.", .creative, featured: true, sample: "HACK"),
+
         composed("clean-and-sort", "Clean and Sort Lines", "Trim, remove blanks and duplicates, then sort.", [.init("builtin.trim-lines"), .init("builtin.remove-empty-lines"), .init("builtin.remove-duplicate-lines"), .init("builtin.sort-lines")])
     ]
 
@@ -205,6 +224,7 @@ public enum BuiltinRecipes {
         case .extract: "text.magnifyingglass"
         case .privacy: "hand.raised"
         case .timeAndLists: "list.bullet.rectangle"
+        case .creative: "sparkles.rectangle.stack"
         }
     }
 }
