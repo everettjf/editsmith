@@ -357,3 +357,44 @@ private struct ConsoleView: View {
         switch level { case .log, .info: .secondary; case .warn: .orange; case .error: .red }
     }
 }
+
+#Preview("Line Diff – Added, Removed, Modified") {
+    DiffView(
+        before: "struct User {\n    let name: String\n    let legacyID: Int\n}",
+        after: "struct User: Sendable {\n    let displayName: String\n    let isActive: Bool\n}"
+    )
+    .frame(width: 820, height: 360)
+}
+
+#Preview("Console – Mixed Levels") {
+    ConsoleView(
+        logs: [
+            ExecutionLog(level: .info, message: "Running fixture: Multiple selections"),
+            ExecutionLog(level: .warn, message: "Input contains two empty lines"),
+            ExecutionLog(level: .error, message: "Example diagnostic for visual review"),
+        ],
+        results: [
+            RecipeTestResult(
+                testCase: RecipeTestCase(name: "Whole buffer", input: "hello", expectedOutput: "HELLO"),
+                execution: ExecutionResult(outputText: "HELLO")
+            ),
+            RecipeTestResult(
+                testCase: RecipeTestCase(name: "Selection", input: "world", expectedOutput: "WORLD"),
+                execution: ExecutionResult(outputText: "world")
+            ),
+        ]
+    )
+    .frame(width: 720, height: 360)
+}
+
+#Preview("Result – Empty State") {
+    ResultInspector(
+        input: "let message = \"Hello\"",
+        source: "function transform(input) { return input; }",
+        execution: nil,
+        results: [],
+        mode: .constant(.output),
+        isRunning: false
+    )
+    .frame(width: 720, height: 360)
+}
