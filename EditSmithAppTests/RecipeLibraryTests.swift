@@ -107,6 +107,16 @@ struct RecipeLibraryTests {
         #expect(imported.id != archive.recipes[0].id)
     }
 
+    @Test func lineDiffAlignsAddedRemovedAndModifiedLines() {
+        let rows = LineDiff.compute(before: "one\ntwo\nthree", after: "one\nTWO\nfour\nthree")
+        #expect(rows.first?.before == "one")
+        #expect(rows.first?.after == "one")
+        #expect(rows.contains { $0.before == "two" && $0.after == "TWO" && $0.kind == .modified })
+        #expect(rows.contains { $0.before == nil && $0.after == "four" && $0.kind == .added })
+        #expect(rows.last?.before == "three")
+        #expect(rows.last?.after == "three")
+    }
+
     private func withLibrary(_ body: (RecipeLibrary) throws -> Void) rethrows {
         let suite = "EditSmithAppTests.\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!

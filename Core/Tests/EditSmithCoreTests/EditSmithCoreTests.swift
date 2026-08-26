@@ -175,6 +175,22 @@ struct RecipeEngineTests {
         #expect(try RecipeEngine().run(recipes["regex-replace"]!, input: "a  \nb\t") == "a\nb")
     }
 
+    @Test @MainActor func creativeLabProvidesPromotionalTransformations() throws {
+        let creative = BuiltinRecipes.all.filter { $0.category == CapabilityCategory.creative.rawValue }
+        #expect(creative.count == 15)
+        let recipes = Dictionary(uniqueKeysWithValues: creative.map { ($0.source, $0) })
+        #expect(try RecipeEngine().run(recipes["leet-speak"]!, input: "Hacker") == "H4ck3r")
+        #expect(try RecipeEngine().run(recipes["rot13"]!, input: "Hello") == "Uryyb")
+        #expect(try RecipeEngine().run(recipes["morse-code"]!, input: "SOS") == "... --- ...")
+        #expect(try RecipeEngine().run(recipes["ascii-banner"]!, input: "A").split(separator: "\n").count == 5)
+    }
+
+    @Test func modelTemplateCatalogHasLearningExamples() {
+        #expect(RecipeTemplates.model.count == 10)
+        #expect(RecipeTemplates.model.allSatisfy { $0.kind == .model && $0.source.contains("{{input}}") })
+        #expect(RecipeTemplates.model.allSatisfy { $0.modelConfiguration?.provider == .appleOnDevice })
+    }
+
     @Test @MainActor func builtinsSupportCommentsAndParameterizedWrapping() throws {
         let recipes = Dictionary(uniqueKeysWithValues: BuiltinRecipes.all.map { ($0.source, $0) })
         let selection = TextRange(start: .init(line: 0, column: 0), end: .init(line: 0, column: 5))
