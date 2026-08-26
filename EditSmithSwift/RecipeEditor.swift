@@ -11,16 +11,16 @@ struct RecipeEditor: View {
     var body: some View {
         @Bindable var library = library
 
-        HStack(spacing: 0) {
-            VStack(spacing: 0) {
-                RecipeHeader(recipe: recipe)
+        VStack(spacing: 0) {
+            RecipeHeader(recipe: recipe)
 
-                Divider()
+            Divider()
 
-                if let testIndex = library.selectedTestIndex {
-                    VSplitView {
-                        primaryWorkspace
+            if let testIndex = library.selectedTestIndex {
+                VSplitView {
+                    primaryWorkspace
 
+                    ViewThatFits(in: .horizontal) {
                         HStack(spacing: 0) {
                             TestFixtureEditor(test: $recipe.testCases[testIndex], library: library)
                             Divider()
@@ -30,36 +30,43 @@ struct RecipeEditor: View {
                                 text: $recipe.testCases[testIndex].expectedOutput
                             )
                         }
-                        .frame(minHeight: 150, idealHeight: 190)
 
-                        ResultInspector(
-                            input: recipe.testCases[testIndex].input,
-                            source: recipe.source,
-                            execution: library.execution,
-                            results: library.testResults,
-                            mode: $library.resultMode
-                        )
-                        .frame(minHeight: 140, idealHeight: 170)
+                        VSplitView {
+                            TestFixtureEditor(test: $recipe.testCases[testIndex], library: library)
+                            EditorPane(
+                                title: "Expected Output",
+                                systemImage: "checkmark.rectangle",
+                                text: $recipe.testCases[testIndex].expectedOutput
+                            )
+                        }
                     }
-                } else {
-                    ContentUnavailableView {
-                        Label("No test cases", systemImage: "checklist")
-                    } description: {
-                        Text("Add a fixture to test this action before enabling it in Xcode.")
-                    } actions: {
-                        Button("Add Test Case", action: library.addTest)
-                    }
+                    .frame(minHeight: 150, idealHeight: 190)
+
+                    ResultInspector(
+                        input: recipe.testCases[testIndex].input,
+                        source: recipe.source,
+                        execution: library.execution,
+                        results: library.testResults,
+                        mode: $library.resultMode
+                    )
+                    .frame(minHeight: 140, idealHeight: 170)
+                }
+            } else {
+                ContentUnavailableView {
+                    Label("No test cases", systemImage: "checklist")
+                } description: {
+                    Text("Add a fixture to test this action before enabling it in Xcode.")
+                } actions: {
+                    Button("Add Test Case", action: library.addTest)
                 }
             }
-            .frame(minWidth: 360, maxWidth: .infinity)
-
-            if isShowingInspector {
-                Divider()
-                RecipeInspector(recipe: $recipe, selection: $inspectorSection, library: library)
-                    .frame(width: 240)
-            }
         }
+        .frame(minWidth: 360, maxWidth: .infinity)
         .navigationTitle(recipe.name)
+        .inspector(isPresented: $isShowingInspector) {
+            RecipeInspector(recipe: $recipe, selection: $inspectorSection, library: library)
+                .inspectorColumnWidth(min: 280, ideal: 320, max: 400)
+        }
         .task(id: recipe.source) {
             guard recipe.kind == .javascript else { issues = []; return }
             do { try await Task.sleep(for: .milliseconds(300)) } catch { return }

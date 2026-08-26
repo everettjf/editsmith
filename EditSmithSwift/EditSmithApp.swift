@@ -9,7 +9,7 @@ struct EditSmithApp: App {
             RecipeWorkbench()
                 .background(WindowSizeGuard())
         }
-            .defaultSize(width: 1_080, height: 660)
+            .defaultSize(width: 1_180, height: 720)
             .commands { TextFormattingCommands() }
         Settings { ExtensionHelpView() }
     }
@@ -60,7 +60,7 @@ private struct WindowSizeGuard: NSViewRepresentable {
                   let screen = window.screen ?? NSScreen.main else { return }
             hasAppliedInitialSize = true
             let visibleFrame = screen.visibleFrame
-            window.contentMinSize = NSSize(width: 820, height: 520)
+            window.contentMinSize = NSSize(width: 860, height: 560)
             guard window.frame.width > 1_440
                     || window.frame.height > visibleFrame.height else { return }
 
@@ -69,8 +69,8 @@ private struct WindowSizeGuard: NSViewRepresentable {
             }
 
             let size = NSSize(
-                width: min(1_080, visibleFrame.width * 0.9),
-                height: min(660, visibleFrame.height * 0.9)
+                width: min(1_180, visibleFrame.width * 0.9),
+                height: min(720, visibleFrame.height * 0.9)
             )
             let frame = NSRect(
                 x: visibleFrame.midX - size.width / 2,
