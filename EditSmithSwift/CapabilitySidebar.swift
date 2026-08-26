@@ -3,6 +3,7 @@ import EditSmithCore
 
 struct CapabilitySidebar: View {
     let library: RecipeLibrary
+    @State private var areCategoriesExpanded = false
 
     var body: some View {
         @Bindable var library = library
@@ -10,7 +11,7 @@ struct CapabilitySidebar: View {
         VStack(spacing: 0) {
             LibrarySummary(enabled: library.enabledCount, total: library.builtinCount)
             Divider()
-            scopePicker
+            filterBar
             Divider()
             capabilityList
         }
@@ -19,27 +20,40 @@ struct CapabilitySidebar: View {
         .navigationSplitViewColumnWidth(min: 200, ideal: 250, max: 340)
     }
 
-    private var scopePicker: some View {
-        ScrollView(.horizontal) {
-            HStack(spacing: 6) {
+    private var filterBar: some View {
+        HStack(spacing: 8) {
+            Picker("Collection", selection: scopeBinding) {
                 ForEach(RecipeLibrary.Scope.allCases) { scope in
-                    Button(scope.rawValue) {
-                        library.scope = scope
-                        library.category = nil
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                    .tint(library.category == nil && library.scope == scope ? .accentColor : .secondary)
+                    Text(scope.rawValue).tag(scope)
                 }
             }
-            .padding(10)
+            .labelsHidden()
+            .pickerStyle(.menu)
+
+            Spacer()
+
+            Text("\(library.visibleRecipes.count)")
+                .font(.caption.monospacedDigit())
+                .foregroundStyle(.secondary)
+                .contentTransition(.numericText())
         }
-        .scrollIndicators(.hidden)
+        .padding(.horizontal, 10)
+        .frame(height: 36)
+    }
+
+    private var scopeBinding: Binding<RecipeLibrary.Scope> {
+        Binding(
+            get: { library.scope },
+            set: { scope in
+                library.scope = scope
+                library.category = nil
+            }
+        )
     }
 
     private var capabilityList: some View {
         List(selection: selectionBinding) {
-            Section("Categories") {
+            DisclosureGroup("Categories", isExpanded: $areCategoriesExpanded) {
                 ForEach(CapabilityCategory.allCases) { category in
                     Button {
                         library.category = category
@@ -47,7 +61,14 @@ struct CapabilitySidebar: View {
                         HStack {
                             Label(category.rawValue, systemImage: icon(category))
                             Spacer()
-                            Text("\(count(category))").foregroundStyle(.secondary)
+                            Text("\(count(category))")
+                                .font(.caption.monospacedDigit())
+                                .foregroundStyle(.secondary)
+                            if library.category == category {
+                                Image(systemName: "checkmark")
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(.tint)
+                            }
                         }
                     }
                     .buttonStyle(.plain)
@@ -118,6 +139,7 @@ private struct CapabilityRow: View {
     let recipe: Recipe
     let onToggleEnabled: () -> Void
     let onToggleFavorite: () -> Void
+    @State private var isHovering = false
 
     var body: some View {
         HStack(spacing: 8) {
@@ -135,12 +157,22 @@ private struct CapabilityRow: View {
                 .labelStyle(.iconOnly)
                 .buttonStyle(.plain)
                 .foregroundStyle(recipe.isFavorite ? .yellow : .secondary)
+                .opacity(recipe.isFavorite || isHovering ? 1 : 0)
+                .help(recipe.isFavorite ? "Remove from favorites" : "Add to favorites")
             Button(recipe.isEnabled ? "Disable in Xcode" : "Enable in Xcode", systemImage: recipe.isEnabled ? "checkmark.circle.fill" : "circle", action: onToggleEnabled)
                 .labelStyle(.iconOnly)
                 .buttonStyle(.plain)
                 .foregroundStyle(recipe.isEnabled ? .green : .secondary)
+                .opacity(recipe.isEnabled || isHovering ? 1 : 0)
+                .help(recipe.isEnabled ? "Disable in Xcode" : "Enable in Xcode")
         }
         .padding(.vertical, 3)
+        .contentShape(.rect)
+        .onHover { isHovering = $0 }
+        .contextMenu {
+            Button(recipe.isFavorite ? "Remove from Favorites" : "Add to Favorites", systemImage: recipe.isFavorite ? "star.slash" : "star", action: onToggleFavorite)
+            Button(recipe.isEnabled ? "Disable in Xcode" : "Enable in Xcode", systemImage: recipe.isEnabled ? "pause.circle" : "checkmark.circle", action: onToggleEnabled)
+        }
         .accessibilityElement(children: .contain)
     }
 }
