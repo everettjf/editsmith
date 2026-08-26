@@ -23,6 +23,7 @@ targets:
     sources: [EditSmithSwift]
     resources:
       - EditSmith/Assets.xcassets
+      - EditSmith/Localizable.xcstrings
     dependencies:
       - package: EditSmithCore
       - package: CodeEditor
