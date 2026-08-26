@@ -41,7 +41,7 @@ The built-in model gallery contains ten editable examples for explaining code, i
 
 - **Apple On-Device** uses the Foundation Models framework on supported Macs.
 - **Apple Private Cloud Compute** is available on supported OS versions and eligible developer accounts. Text selected for that action is processed according to Apple's PCC service behavior.
-- **Ollama / Local LLaMA** targets a user-configured Ollama endpoint such as `http://127.0.0.1:11434`. The sandboxed app and extension also require the outgoing-network entitlement; builds without that entitlement show the configuration but cannot connect.
+- **Ollama / Local LLaMA** targets a user-configured Ollama endpoint such as `http://127.0.0.1:11434`. The app and extension include outgoing-client permission so both the workbench and Xcode bridge can reach the endpoint; they do not accept inbound connections.
 
 The Source Editor Extension is the bridge: XcodeKit supplies the current buffer and selection ranges, EditSmith runs the chosen JavaScript or model engine, then the extension writes back the transformed text and updated selections.
 
@@ -70,7 +70,7 @@ the current [release notes](RELEASE_NOTES.md).
 
 ## Privacy
 
-Recipe source, configuration, and fixtures stay on the Mac. JavaScript and Apple On-Device actions process text locally. A user-invoked PCC or Ollama action may send only the selected text—or the full buffer when there is no selection—to its configured provider. Builds without the outgoing-network entitlement cannot connect to Ollama. See the [privacy policy](https://xnu.app/editsmith/privacy.html).
+Recipe source, configuration, and fixtures stay on the Mac. JavaScript and Apple On-Device actions process text locally. A user-invoked PCC or Ollama action may send only the selected text—or the full buffer when there is no selection—to its configured provider. Outgoing network access exists for those explicit providers; EditSmith does not accept inbound connections. See the [privacy policy](https://xnu.app/editsmith/privacy.html).
 
 ## License
 

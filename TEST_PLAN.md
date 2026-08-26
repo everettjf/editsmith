@@ -94,14 +94,14 @@ same expected output.
 
 ### Ollama / Local LLaMA
 
-- [ ] Use a signed build whose App and Source Editor Extension targets have outgoing
-      network permission. Start Ollama and ensure the configured model is installed.
+- [ ] Use a signed build and confirm both App and Source Editor Extension targets have
+      outgoing-client permission. Start Ollama and ensure the configured model is installed.
 - [ ] Test `http://127.0.0.1:11434` with a short fixture, a missing model, a stopped
       server, a malformed URL, and a non-2xx response.
 - [ ] Verify EditSmith sends a non-streaming `/api/generate` request and displays only
       the returned response text.
-- [ ] Repeat once from Xcode. A build without outgoing-network permission must fail
-      safely and must not claim Ollama is connected.
+- [ ] Repeat once from Xcode. Confirm neither target has server/listener permission and
+      that EditSmith never contacts Ollama until the user invokes an Ollama action.
 
 ## 6. Xcode Source Editor Extension
 

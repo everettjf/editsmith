@@ -13,13 +13,15 @@ git diff --check
 
 test "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.app-sandbox' EditSmith/EditSmith.entitlements)" = "true"
 test "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.app-sandbox' EditSmithExtension/EditSmithExtension.entitlements)" = "true"
+test "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.network.client' EditSmith/EditSmith.entitlements)" = "true"
+test "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.network.client' EditSmithExtension/EditSmithExtension.entitlements)" = "true"
 test "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.application-groups:0' EditSmith/EditSmith.entitlements)" = "$expected_group"
 test "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.application-groups:0' EditSmithExtension/EditSmithExtension.entitlements)" = "$expected_group"
 
 rg -q "PRODUCT_BUNDLE_IDENTIFIER: $expected_app_id$" project.yml
 rg -q "PRODUCT_BUNDLE_IDENTIFIER: $expected_extension_id$" project.yml
-if rg -q 'com.apple.security.network|com.apple.security.files|com.apple.security.temporary-exception' EditSmith/*.entitlements EditSmithExtension/*.entitlements; then
-    echo "Unexpected network, file, or temporary-exception entitlement" >&2
+if rg -q 'com.apple.security.network.server|com.apple.security.files|com.apple.security.temporary-exception' EditSmith/*.entitlements EditSmithExtension/*.entitlements; then
+    echo "Unexpected server, file, or temporary-exception entitlement" >&2
     exit 1
 fi
 
