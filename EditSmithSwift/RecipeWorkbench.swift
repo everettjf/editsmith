@@ -19,15 +19,16 @@ struct RecipeWorkbench: View {
             .toolbar {
                 Menu("Add Recipe", systemImage: "plus") {
                     Button("Blank JavaScript Recipe", action: library.addRecipe)
-                    Section("Templates") { ForEach(RecipeTemplates.javascript) { template in Button(template.name) { library.addTemplate(template) } } }
+                    Section("JavaScript Templates") { ForEach(RecipeTemplates.javascript) { template in Button(template.name) { library.addTemplate(template) } } }
+                    Section("Model Actions") { ForEach(RecipeTemplates.model) { template in Button(template.name) { library.addTemplate(template) } } }
                 }
                 Button("Delete Recipe", systemImage: "trash", role: .destructive, action: library.deleteSelection)
-                    .disabled(library.selectedIndex.map { library.recipes[$0].kind == .builtin } ?? true)
+                    .disabled(library.selectedIndex.map { ![.javascript, .model].contains(library.recipes[$0].kind) } ?? true)
                 Menu("Library", systemImage: "ellipsis.circle") {
                     Button("Duplicate Action", systemImage: "plus.square.on.square", action: library.duplicateSelection)
                         .disabled(library.selectedIndex == nil)
                     Button("Copy Built-in as Script", systemImage: "doc.on.doc", action: library.copyBuiltinToScript)
-                        .disabled(library.selectedIndex.map { library.recipes[$0].kind == .javascript } ?? true)
+                        .disabled(library.selectedIndex.map { [.javascript, .model].contains(library.recipes[$0].kind) } ?? true)
                     Divider()
                     Button("Import Actions…", systemImage: "square.and.arrow.down") { isImporting = true }
                     Button("Export User Actions…", systemImage: "square.and.arrow.up") {

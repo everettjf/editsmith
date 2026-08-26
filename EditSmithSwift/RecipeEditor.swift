@@ -47,7 +47,8 @@ struct RecipeEditor: View {
                         source: recipe.source,
                         execution: library.execution,
                         results: library.testResults,
-                        mode: $library.resultMode
+                        mode: $library.resultMode,
+                        isRunning: library.isRunning
                     )
                     .frame(minHeight: 140, idealHeight: 170)
                 }
@@ -78,19 +79,19 @@ struct RecipeEditor: View {
             ControlGroup {
                 Button("Run Test", systemImage: "play.fill", action: library.runCurrent)
                     .keyboardShortcut("r", modifiers: [.command])
-                    .disabled(library.selectedTestIndex == nil)
+                    .disabled(library.selectedTestIndex == nil || library.isRunning)
                     .help("Run the selected test (⌘R)")
                 Button("Run All", systemImage: "checkmark.circle", action: library.runAll)
                     .keyboardShortcut("r", modifiers: [.command, .shift])
-                    .disabled(recipe.testCases.isEmpty)
+                    .disabled(recipe.testCases.isEmpty || library.isRunning)
                     .help("Run every test (⇧⌘R)")
             }
 
-            if recipe.kind == .javascript {
+            if recipe.kind == .javascript || recipe.kind == .model {
                 Button("Test and Enable in Xcode", systemImage: "checkmark.seal") {
                     library.testAndEnableCurrent()
                 }
-                .disabled(recipe.testCases.isEmpty || issues.contains { $0.severity == .error })
+                .disabled(recipe.testCases.isEmpty || library.isRunning || (recipe.kind == .javascript && issues.contains { $0.severity == .error }))
                 .help("Run all tests and enable this action when they pass")
             }
 
@@ -124,6 +125,10 @@ struct RecipeEditor: View {
                 ScriptIssuesBar(issues: issues)
             }
             .frame(minHeight: 210, idealHeight: 280)
+        } else if recipe.kind == .model {
+            ModelPromptEditor(prompt: $recipe.source)
+                .padding(10)
+                .frame(minHeight: 210, idealHeight: 280)
         } else {
             BuiltinActionSummary(recipe: recipe)
                 .frame(minHeight: 108, idealHeight: 130, maxHeight: 160)
@@ -135,7 +140,7 @@ private struct RecipeHeader: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: recipe.kind == .builtin ? "wand.and.stars" : "curlybraces")
+            Image(systemName: recipe.kind == .model ? "brain.head.profile" : (recipe.kind == .builtin ? "wand.and.stars" : "curlybraces"))
                 .font(.title2)
                 .foregroundStyle(.tint)
                 .frame(width: 34, height: 34)
@@ -160,6 +165,29 @@ private struct RecipeHeader: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 11)
+    }
+}
+
+private struct ModelPromptEditor: View {
+    @Binding var prompt: String
+
+    var body: some View {
+        VStack(spacing: 0) {
+            PaneHeader(title: "Model Prompt", systemImage: "brain.head.profile") {
+                Text("{{input}} = Xcode selection")
+                    .font(.caption.monospaced())
+                    .foregroundStyle(.secondary)
+            }
+            TextEditor(text: $prompt)
+                .font(.system(.body, design: .monospaced))
+                .scrollContentBackground(.hidden)
+                .padding(10)
+                .background(.background)
+                .accessibilityLabel("Model prompt template")
+        }
+        .background(.background)
+        .clipShape(.rect(cornerRadius: 8))
+        .overlay { RoundedRectangle(cornerRadius: 8).stroke(.separator) }
     }
 }
 

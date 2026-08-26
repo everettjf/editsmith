@@ -7,6 +7,7 @@ struct ResultInspector: View {
     let execution: ExecutionResult?
     let results: [RecipeTestResult]
     @Binding var mode: RecipeLibrary.ResultMode
+    let isRunning: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -20,6 +21,13 @@ struct ResultInspector: View {
                 .labelsHidden()
                 .frame(maxWidth: 360)
                 Spacer()
+                if isRunning {
+                    ProgressView()
+                        .controlSize(.small)
+                    Text("Running…")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
                 if let execution {
                     Label(execution.succeeded ? "Succeeded" : "Failed", systemImage: execution.succeeded ? "checkmark.circle.fill" : "xmark.octagon.fill")
                         .foregroundStyle(execution.succeeded ? .green : .red)

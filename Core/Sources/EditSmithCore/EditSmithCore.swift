@@ -613,6 +613,27 @@ public enum RecipeTemplates {
         .init(id: "template.localize-literal", name: "Localize String Literal", summary: "Convert a selected Swift string literal to String(localized:).", kind: .javascript, source: "function transform(input) { return 'String(localized: ' + input.trim() + ')'; }", isEnabled: false, testCases: [.init(input: "\"Save\"", expectedOutput: "String(localized: \"Save\")")]),
         .init(id: "template.markdown-table", name: "CSV to Markdown Table", summary: "Turn comma-separated lines into a Markdown table.", kind: .javascript, source: "function transform(input) { const rows = input.trim().split(/\\r?\\n/).map(r => r.split(',').map(c => c.trim())); if (!rows.length) return input; return '| ' + rows[0].join(' | ') + ' |\\n| ' + rows[0].map(() => '---').join(' | ') + ' |\\n' + rows.slice(1).map(r => '| ' + r.join(' | ') + ' |').join('\\n'); }", isEnabled: false)
     ]
+
+    public static let model: [Recipe] = [
+        modelTemplate("explain-code", "Explain Selected Code", "Explain code clearly for a teammate.", "Explain the following code clearly and concisely. Preserve important technical details:\n\n{{input}}"),
+        modelTemplate("add-comments", "Add Helpful Comments", "Add concise comments without changing code behavior.", "Add only genuinely useful comments to this code. Return the complete code and nothing else:\n\n{{input}}"),
+        modelTemplate("refactor-swift", "Refactor Swift", "Improve Swift clarity while preserving behavior.", "Refactor this Swift code for clarity, safety, and modern Swift conventions. Preserve behavior and return only code:\n\n{{input}}"),
+        modelTemplate("write-tests", "Generate Swift Tests", "Generate focused tests for selected Swift code.", "Write focused Swift Testing tests for this code. Return only compilable test code:\n\n{{input}}"),
+        modelTemplate("review-code", "Review for Bugs", "Find correctness, safety, and concurrency problems.", "Review this code for real correctness, safety, and concurrency problems. Return a concise Markdown review:\n\n{{input}}"),
+        modelTemplate("commit-message", "Draft Commit Message", "Turn a diff into a conventional commit message.", "Create a concise conventional commit subject and optional body for this diff. Return only the message:\n\n{{input}}"),
+        modelTemplate("release-notes", "Draft Release Notes", "Turn changes into user-facing release notes.", "Rewrite these changes as concise user-facing release notes. Avoid implementation jargon:\n\n{{input}}"),
+        modelTemplate("translate", "Translate to English", "Translate selected text while preserving formatting.", "Translate this text to natural English. Preserve code, Markdown, and line structure. Return only the translation:\n\n{{input}}"),
+        modelTemplate("simplify", "Simplify Writing", "Make prose direct, clear, and concise.", "Rewrite this text to be direct, clear, and concise while preserving meaning. Return only the rewrite:\n\n{{input}}"),
+        modelTemplate("regex", "Generate Regex", "Describe a pattern and receive a tested regex explanation.", "Create a regular expression for this requirement. Return the regex first, then a short explanation and examples:\n\n{{input}}"),
+    ]
+
+    private static func modelTemplate(_ id: String, _ name: String, _ summary: String, _ prompt: String) -> Recipe {
+        Recipe(
+            id: "template.model.\(id)", name: name, summary: summary, kind: .model, source: prompt,
+            isEnabled: false, testCases: [.init(name: "Review model output", input: "Paste sample text here", expectedOutput: "")],
+            category: "Model Actions", modelConfiguration: .init()
+        )
+    }
 }
 
 public struct ExtensionChangeSnapshot: Codable, Equatable, Sendable {

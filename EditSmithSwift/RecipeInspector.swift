@@ -58,6 +58,32 @@ struct RecipeInspector: View {
                 Stepper("Version \(recipe.version)", value: $recipe.version, in: 1...999)
             }
 
+            if recipe.kind == .model {
+                SwiftUI.Section("Model Provider") {
+                    Picker("Provider", selection: modelProviderBinding) {
+                        ForEach(ModelRecipeConfiguration.Provider.allCases) { provider in
+                            Text(provider.displayName).tag(provider)
+                        }
+                    }
+
+                    if modelProviderBinding.wrappedValue == .ollama {
+                        TextField("Model", text: modelNameBinding, prompt: Text("llama3.2"))
+                        TextField("Endpoint", text: modelEndpointBinding, prompt: Text("http://127.0.0.1:11434"))
+                    } else if modelProviderBinding.wrappedValue == .applePrivateCloud {
+                        Label("Requires macOS 27, an eligible developer account, and Apple's PCC entitlement.", systemImage: "cloud")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Label("Runs privately on this Mac with Apple Intelligence and works offline.", systemImage: "apple.intelligence")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    TextField("Instructions", text: modelInstructionsBinding, axis: .vertical)
+                        .lineLimit(3...6)
+                }
+            }
+
             SwiftUI.Section("Availability") {
                 Toggle("Requires a selection", isOn: $recipe.applicability.requiresSelection)
                 TextField("File type UTIs", text: fileTypesBinding, axis: .vertical)
@@ -113,5 +139,31 @@ struct RecipeInspector: View {
             get: { recipe.parameters[key] ?? "" },
             set: { recipe.parameters[key] = $0 }
         )
+    }
+
+    private var modelProviderBinding: Binding<ModelRecipeConfiguration.Provider> {
+        Binding(
+            get: { recipe.modelConfiguration?.provider ?? .appleOnDevice },
+            set: { provider in
+                ensureModelConfiguration()
+                recipe.modelConfiguration?.provider = provider
+            }
+        )
+    }
+
+    private var modelNameBinding: Binding<String> {
+        Binding(get: { recipe.modelConfiguration?.modelName ?? "llama3.2" }, set: { ensureModelConfiguration(); recipe.modelConfiguration?.modelName = $0 })
+    }
+
+    private var modelEndpointBinding: Binding<String> {
+        Binding(get: { recipe.modelConfiguration?.endpoint ?? "http://127.0.0.1:11434" }, set: { ensureModelConfiguration(); recipe.modelConfiguration?.endpoint = $0 })
+    }
+
+    private var modelInstructionsBinding: Binding<String> {
+        Binding(get: { recipe.modelConfiguration?.instructions ?? "" }, set: { ensureModelConfiguration(); recipe.modelConfiguration?.instructions = $0 })
+    }
+
+    private func ensureModelConfiguration() {
+        if recipe.modelConfiguration == nil { recipe.modelConfiguration = .init() }
     }
 }

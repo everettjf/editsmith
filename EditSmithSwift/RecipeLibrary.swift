@@ -9,7 +9,7 @@ final class RecipeLibrary {
         case enabled = "Enabled"
         case favorites = "Favorites"
         case all = "All Capabilities"
-        case custom = "Custom Scripts"
+        case custom = "My Actions"
         var id: Self { self }
     }
     enum ResultMode: String, CaseIterable, Identifiable {
@@ -24,6 +24,7 @@ final class RecipeLibrary {
     var testSelection: RecipeTestCase.ID?
     var execution: ExecutionResult?
     var testResults: [RecipeTestResult] = []
+    var isRunning = false
     var resultMode = ResultMode.output
     var errorMessage: String?
     var searchText = ""
@@ -52,7 +53,7 @@ final class RecipeLibrary {
                 case .enabled: recipe.isEnabled
                 case .favorites: recipe.isFavorite
                 case .all: true
-                case .custom: recipe.kind == .javascript
+                case .custom: recipe.kind == .javascript || recipe.kind == .model
                 }
             }
             return inScope && (query.isEmpty || recipe.name.localizedCaseInsensitiveContains(query) || recipe.summary.localizedCaseInsensitiveContains(query) || recipe.category.localizedCaseInsensitiveContains(query))
@@ -97,7 +98,8 @@ final class RecipeLibrary {
     }
 
     func addTemplate(_ template: Recipe) {
-        let recipe = Recipe(name: template.name, summary: template.summary, kind: template.kind, source: template.source, isEnabled: false, version: template.version, applicability: template.applicability, parameters: template.parameters, testCases: template.testCases, category: "Custom Scripts")
+        let category = template.kind == .model ? "Model Actions" : "Custom Scripts"
+        let recipe = Recipe(name: template.name, summary: template.summary, kind: template.kind, source: template.source, isEnabled: false, version: template.version, applicability: template.applicability, parameters: template.parameters, testCases: template.testCases, category: category, modelConfiguration: template.modelConfiguration)
         recipes.append(recipe); selection = recipe.id; testSelection = recipe.testCases.first?.id; save()
     }
 
@@ -138,7 +140,8 @@ final class RecipeLibrary {
                     expectedError: $0.expectedError
                 )
             },
-            category: "Custom Scripts"
+            category: original.kind == .model ? "Model Actions" : "Custom Scripts",
+            modelConfiguration: original.modelConfiguration
         )
         recipes.append(copy)
         selection = copy.id
@@ -210,7 +213,9 @@ final class RecipeLibrary {
                     version: recipe.version,
                     applicability: recipe.applicability,
                     parameters: recipe.parameters,
-                    testCases: recipe.testCases
+                    testCases: recipe.testCases,
+                    category: recipe.kind == .model ? "Model Actions" : "Custom Scripts",
+                    modelConfiguration: recipe.modelConfiguration
                 )
             }
             recipes.append(contentsOf: imported)
@@ -224,7 +229,7 @@ final class RecipeLibrary {
 
     func exportDocument() -> RecipeArchiveDocument? {
         do {
-            let exportable = recipes.filter { $0.kind == .javascript }
+            let exportable = recipes.filter { $0.kind == .javascript || $0.kind == .model }
             return RecipeArchiveDocument(data: try RecipeArchive(recipes: exportable).encoded())
         } catch {
             errorMessage = error.localizedDescription
@@ -233,7 +238,7 @@ final class RecipeLibrary {
     }
 
     func deleteSelection() {
-        guard let selectedIndex, recipes[selectedIndex].kind == .javascript else { return }
+        guard let selectedIndex, recipes[selectedIndex].kind == .javascript || recipes[selectedIndex].kind == .model else { return }
         recipes.remove(at: selectedIndex)
         selection = recipes.first?.id
         synchronizeTestSelection()
@@ -284,6 +289,18 @@ final class RecipeLibrary {
         guard let selectedIndex, let selectedTestIndex else { return }
         let recipe = recipes[selectedIndex]
         let test = recipe.testCases[selectedTestIndex]
+        if recipe.kind == .model {
+            isRunning = true
+            Task {
+                execution = await AsyncRecipeRunner().execute(
+                    ExecutionRequest(text: test.input, selections: test.selections),
+                    recipe: recipe
+                )
+                resultMode = execution?.diagnostic == nil ? .output : .console
+                isRunning = false
+            }
+            return
+        }
         execution = RecipeRunner().execute(
             ExecutionRequest(text: test.input, selections: test.selections),
             recipe: recipe
@@ -293,6 +310,25 @@ final class RecipeLibrary {
 
     func runAll() {
         guard let selectedIndex else { return }
+        let recipe = recipes[selectedIndex]
+        if recipe.kind == .model {
+            isRunning = true
+            Task {
+                var collected: [RecipeTestResult] = []
+                for testCase in recipe.testCases {
+                    let execution = await AsyncRecipeRunner().execute(
+                        ExecutionRequest(text: testCase.input, selections: testCase.selections),
+                        recipe: recipe
+                    )
+                    collected.append(RecipeTestResult(testCase: testCase, execution: execution))
+                }
+                testResults = collected
+                if let selectedTestIndex { execution = collected.first { $0.id == recipe.testCases[selectedTestIndex].id }?.execution }
+                resultMode = .console
+                isRunning = false
+            }
+            return
+        }
         testResults = RecipeTestRunner().runAll(recipe: recipes[selectedIndex])
         if let selectedTestIndex {
             execution = testResults.first { $0.id == recipes[selectedIndex].testCases[selectedTestIndex].id }?.execution
@@ -310,10 +346,33 @@ final class RecipeLibrary {
 
     @discardableResult
     func testAndEnableCurrent() -> Bool {
-        guard let selectedIndex, recipes[selectedIndex].kind == .javascript else { return false }
+        guard let selectedIndex, recipes[selectedIndex].kind == .javascript || recipes[selectedIndex].kind == .model else { return false }
         guard !recipes[selectedIndex].testCases.isEmpty else {
             errorMessage = "Add at least one test case before enabling this action in Xcode."
             return false
+        }
+        if recipes[selectedIndex].kind == .model {
+            let recipe = recipes[selectedIndex]
+            isRunning = true
+            Task {
+                var collected: [RecipeTestResult] = []
+                for testCase in recipe.testCases {
+                    let result = await AsyncRecipeRunner().execute(
+                        ExecutionRequest(text: testCase.input, selections: testCase.selections),
+                        recipe: recipe
+                    )
+                    collected.append(RecipeTestResult(testCase: testCase, execution: result))
+                }
+                testResults = collected
+                if collected.allSatisfy(\.passed), let currentIndex = recipes.firstIndex(where: { $0.id == recipe.id }) {
+                    recipes[currentIndex].isEnabled = true
+                    save()
+                } else {
+                    errorMessage = "Review the model output and update every expected snapshot before enabling this action in Xcode."
+                }
+                isRunning = false
+            }
+            return true
         }
         runAll()
         guard !testResults.isEmpty, testResults.allSatisfy(\.passed) else {
