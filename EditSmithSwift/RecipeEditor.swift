@@ -63,6 +63,7 @@ struct RecipeEditor: View {
         }
         .frame(minWidth: 360, maxWidth: .infinity)
         .navigationTitle(recipe.name)
+        .focusedSceneValue(\.recipeLibrary, library)
         .inspector(isPresented: $isShowingInspector) {
             RecipeInspector(recipe: $recipe, selection: $inspectorSection, library: library)
                 .inspectorColumnWidth(min: 280, ideal: 320, max: 400)
@@ -74,28 +75,43 @@ struct RecipeEditor: View {
             issues = await Task.detached(priority: .utility) { ScriptLinter.inspect(source) }.value
         }
         .toolbar {
-            Button("Run Test", systemImage: "play.fill", action: library.runCurrent)
-                .keyboardShortcut("r", modifiers: [.command])
-                .disabled(library.selectedTestIndex == nil)
-            Button("Run All", systemImage: "checkmark.circle", action: library.runAll)
-                .disabled(recipe.testCases.isEmpty)
-            Button("Update Snapshot", systemImage: "arrow.triangle.2.circlepath", action: library.updateSnapshot)
-                .disabled(library.execution == nil)
+            ControlGroup {
+                Button("Run Test", systemImage: "play.fill", action: library.runCurrent)
+                    .keyboardShortcut("r", modifiers: [.command])
+                    .disabled(library.selectedTestIndex == nil)
+                    .help("Run the selected test (⌘R)")
+                Button("Run All", systemImage: "checkmark.circle", action: library.runAll)
+                    .keyboardShortcut("r", modifiers: [.command, .shift])
+                    .disabled(recipe.testCases.isEmpty)
+                    .help("Run every test (⇧⌘R)")
+            }
+
             if recipe.kind == .javascript {
                 Button("Test and Enable in Xcode", systemImage: "checkmark.seal") {
                     library.testAndEnableCurrent()
                 }
                 .disabled(recipe.testCases.isEmpty || issues.contains { $0.severity == .error })
+                .help("Run all tests and enable this action when they pass")
             }
+
             Button("Save", systemImage: "square.and.arrow.down", action: library.save)
                 .keyboardShortcut("s", modifiers: [.command])
-            if recipe.kind != .javascript {
-                Button("Copy as Script", systemImage: "doc.on.doc", action: library.copyBuiltinToScript)
+                .help("Save library changes (⌘S)")
+
+            Menu("More", systemImage: "ellipsis.circle") {
+                Button("Update Snapshot", systemImage: "arrow.triangle.2.circlepath", action: library.updateSnapshot)
+                    .keyboardShortcut("u", modifiers: [.command, .option])
+                    .disabled(library.execution == nil)
+                if recipe.kind != .javascript {
+                    Button("Copy as Script", systemImage: "doc.on.doc", action: library.copyBuiltinToScript)
+                }
             }
+
             Button("Inspector", systemImage: "sidebar.trailing") {
                 isShowingInspector.toggle()
             }
             .keyboardShortcut("i", modifiers: [.command, .option])
+            .help("Show or hide the inspector (⌥⌘I)")
         }
     }
 

@@ -10,8 +10,43 @@ struct EditSmithApp: App {
                 .background(WindowSizeGuard())
         }
             .defaultSize(width: 1_180, height: 720)
-            .commands { TextFormattingCommands() }
+            .commands {
+                TextFormattingCommands()
+                WorkbenchCommands()
+            }
         Settings { ExtensionHelpView() }
+    }
+}
+
+extension FocusedValues {
+    @Entry var recipeLibrary: RecipeLibrary?
+}
+
+private struct WorkbenchCommands: Commands {
+    @FocusedValue(\.recipeLibrary) private var library
+
+    var body: some Commands {
+        CommandMenu("Action") {
+            Button("Run Current Test", systemImage: "play.fill") {
+                library?.runCurrent()
+            }
+            .keyboardShortcut("r", modifiers: .command)
+            .disabled(library?.selectedTestIndex == nil)
+
+            Button("Run All Tests", systemImage: "checkmark.circle") {
+                library?.runAll()
+            }
+            .keyboardShortcut("r", modifiers: [.command, .shift])
+            .disabled(library?.selectedIndex.map { library?.recipes[$0].testCases.isEmpty ?? true } ?? true)
+
+            Divider()
+
+            Button("Update Snapshot", systemImage: "arrow.triangle.2.circlepath") {
+                library?.updateSnapshot()
+            }
+            .keyboardShortcut("u", modifiers: [.command, .option])
+            .disabled(library?.execution == nil)
+        }
     }
 }
 
