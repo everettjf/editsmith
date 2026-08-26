@@ -48,10 +48,11 @@ xcodebuild test -project EditSmith.xcodeproj -scheme EditSmith \
 ## Security and privacy
 
 - [ ] App and extension remain sandboxed with only the shared App Group.
-- [ ] Neither target has a network entitlement.
+- [ ] Network entitlements match the shipped provider set; if enabled, verify Ollama access is opt-in and the privacy copy is current.
 - [ ] Imported actions are disabled by default.
-- [ ] AI-created actions are disabled by default and execute without AI after
-      they are saved.
+- [ ] Generated drafts, imported actions, and new model actions start disabled.
+- [ ] Each enabled model action shows its provider and sends only the intended
+      selection or full-buffer input.
 - [ ] Oversized input, script, and output fixtures fail without modifying text.
 - [ ] Test source, fixtures, logs, settings, and snapshots remain in the shared
       local container.
