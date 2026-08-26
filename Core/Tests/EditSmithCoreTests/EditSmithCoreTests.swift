@@ -191,6 +191,18 @@ struct RecipeEngineTests {
         #expect(RecipeTemplates.model.allSatisfy { $0.modelConfiguration?.provider == .appleOnDevice })
     }
 
+    @Test @MainActor func modelRunnerReplacesOnlyXcodeSelections() async {
+        let recipe = Recipe(name: "Upper Model", summary: "", kind: .model, source: "{{input}}", modelConfiguration: .init())
+        let ranges = [
+            TextRange(start: .init(line: 0, column: 4), end: .init(line: 0, column: 9)),
+            TextRange(start: .init(line: 1, column: 4), end: .init(line: 1, column: 8)),
+        ]
+        let runner = AsyncRecipeRunner { _, input in input.uppercased() }
+        let result = await runner.execute(ExecutionRequest(text: "let alpha\nlet beta", selections: ranges), recipe: recipe)
+        #expect(result.outputText == "let ALPHA\nlet BETA")
+        #expect(result.outputSelections.count == 2)
+    }
+
     @Test @MainActor func builtinsSupportCommentsAndParameterizedWrapping() throws {
         let recipes = Dictionary(uniqueKeysWithValues: BuiltinRecipes.all.map { ($0.source, $0) })
         let selection = TextRange(start: .init(line: 0, column: 0), end: .init(line: 0, column: 5))

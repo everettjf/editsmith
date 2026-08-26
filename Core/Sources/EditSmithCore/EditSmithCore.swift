@@ -474,7 +474,11 @@ public struct RecipeRunner {
 }
 
 public struct AsyncRecipeRunner: Sendable {
-    public init() {}
+    private let modelTransform: (@Sendable (Recipe, String) async throws -> String)?
+
+    public init(modelTransform: (@Sendable (Recipe, String) async throws -> String)? = nil) {
+        self.modelTransform = modelTransform
+    }
 
     @MainActor
     public func execute(_ request: ExecutionRequest, recipe: Recipe) async -> ExecutionResult {
@@ -483,9 +487,9 @@ public struct AsyncRecipeRunner: Sendable {
         do {
             guard request.text.utf8.count <= 5 * 1_024 * 1_024 else { throw RecipeError.inputTooLarge }
             guard recipe.applicability.accepts(request) else { throw RecipeError.notApplicable }
-            let output = try await transformModel(recipe: recipe, input: request.text)
-            guard output.utf8.count <= 5 * 1_024 * 1_024 else { throw RecipeError.outputTooLarge }
-            return ExecutionResult(outputText: output, duration: elapsedSeconds(since: startedAt))
+            let transformed = try await transform(request: request, recipe: recipe)
+            guard transformed.text.utf8.count <= 5 * 1_024 * 1_024 else { throw RecipeError.outputTooLarge }
+            return ExecutionResult(outputText: transformed.text, outputSelections: transformed.selections, duration: elapsedSeconds(since: startedAt))
         } catch {
             return ExecutionResult(
                 outputText: request.text,
@@ -493,6 +497,44 @@ public struct AsyncRecipeRunner: Sendable {
                 diagnostic: ExecutionDiagnostic(message: error.localizedDescription)
             )
         }
+    }
+
+    @MainActor
+    private func transform(request: ExecutionRequest, recipe: Recipe) async throws -> (text: String, selections: [TextRange]) {
+        guard !request.selections.isEmpty else {
+            return (try await applyModel(recipe: recipe, input: request.text), [])
+        }
+        let lines = splitLines(request.text)
+        let ranges = try request.selections.map { selection -> NSRange in
+            guard let range = offsetRange(selection, lines: lines) else {
+                throw RecipeError.invalidSelection("\(selection.start.line + 1):\(selection.start.column)–\(selection.end.line + 1):\(selection.end.column)")
+            }
+            return range
+        }.sorted { $0.location < $1.location }
+        for pair in zip(ranges, ranges.dropFirst()) where NSIntersectionRange(pair.0, pair.1).length > 0 {
+            throw RecipeError.invalidSelection("Selections must not overlap.")
+        }
+
+        let mutable = NSMutableString(string: request.text)
+        var delta = 0
+        var outputOffsets: [NSRange] = []
+        for originalRange in ranges {
+            let adjusted = NSRange(location: originalRange.location + delta, length: originalRange.length)
+            let input = mutable.substring(with: adjusted)
+            let output = try await applyModel(recipe: recipe, input: input)
+            mutable.replaceCharacters(in: adjusted, with: output)
+            let outputLength = (output as NSString).length
+            outputOffsets.append(NSRange(location: adjusted.location, length: outputLength))
+            delta += outputLength - adjusted.length
+        }
+        let output = mutable as String
+        return (output, outputOffsets.compactMap { textRange(from: $0, text: output) })
+    }
+
+    @MainActor
+    private func applyModel(recipe: Recipe, input: String) async throws -> String {
+        if let modelTransform { return try await modelTransform(recipe, input) }
+        return try await transformModel(recipe: recipe, input: input)
     }
 
     @MainActor
@@ -554,6 +596,38 @@ public struct AsyncRecipeRunner: Sendable {
     private func elapsedSeconds(since start: ContinuousClock.Instant) -> TimeInterval {
         let duration = start.duration(to: .now)
         return TimeInterval(duration.components.seconds) + TimeInterval(duration.components.attoseconds) / 1e18
+    }
+
+    private func offsetRange(_ range: TextRange, lines: [String]) -> NSRange? {
+        guard lines.indices.contains(range.start.line), lines.indices.contains(range.end.line) else { return nil }
+        let starts = lines.indices.map { index in lines[..<index].reduce(0) { $0 + ($1 as NSString).length } }
+        guard range.start.column <= (lines[range.start.line] as NSString).length,
+              range.end.column <= (lines[range.end.line] as NSString).length else { return nil }
+        let start = starts[range.start.line] + range.start.column
+        let end = starts[range.end.line] + range.end.column
+        return end >= start ? NSRange(location: start, length: end - start) : nil
+    }
+
+    private func textRange(from offset: NSRange, text: String) -> TextRange? {
+        let lines = splitLines(text)
+        func position(at location: Int) -> TextPosition? {
+            var cursor = 0
+            for (index, line) in lines.enumerated() {
+                let length = (line as NSString).length
+                if location <= cursor + length { return TextPosition(line: index, column: location - cursor) }
+                cursor += length
+            }
+            return nil
+        }
+        guard let start = position(at: offset.location), let end = position(at: offset.location + offset.length) else { return nil }
+        return TextRange(start: start, end: end)
+    }
+
+    private func splitLines(_ text: String) -> [String] {
+        guard !text.isEmpty else { return [""] }
+        let expression = try! NSRegularExpression(pattern: ".*(?:\\r\\n|\\n|\\r)|.+$", options: [])
+        let nsText = text as NSString
+        return expression.matches(in: text, range: NSRange(location: 0, length: nsText.length)).map { nsText.substring(with: $0.range) }
     }
 }
 
