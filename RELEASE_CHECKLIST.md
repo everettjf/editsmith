@@ -23,8 +23,8 @@ xcodebuild test -project EditSmith.xcodeproj -scheme EditSmith \
 ```
 
 - [ ] Core and App tests pass, including fixtures, selections, archives, safety
-      limits, diagnostics, built-ins, legacy decoding, library actions, and
-      disabled import/AI drafts.
+      limits, diagnostics, built-ins, model/Ollama contracts, legacy decoding,
+      library actions, and disabled imports/model drafts.
 - [ ] The application and embedded Source Editor Extension build together.
 - [ ] `git diff --check` passes and the working tree contains no generated files.
 
@@ -42,12 +42,20 @@ xcodebuild test -project EditSmith.xcodeproj -scheme EditSmith \
 - [ ] Confirm the rollback command restores the most recent saved buffer.
 - [ ] On macOS 26 or later, generate an Apple Intelligence draft, verify it is
       disabled, test it, preview its diff, and enable it manually.
+- [ ] Run one Apple On-Device model action and verify whole-buffer and
+      multi-selection replacement.
+- [ ] With Ollama running, verify the configured model from both the Workbench
+      and Xcode Source Editor Extension.
+- [ ] On an eligible macOS 27 signed build, verify PCC; otherwise confirm its
+      unavailable-state guidance.
 - [ ] On macOS 15, launch and use the deterministic workflow without
       loading Foundation Models.
 
 ## Security and privacy
 
-- [ ] App and extension remain sandboxed with only the shared App Group.
+- [ ] App and extension remain sandboxed with the shared App Group and outgoing
+      client permission only; neither target has server, file, or temporary
+      exception entitlements.
 - [ ] Network entitlements match the shipped provider set; if enabled, verify Ollama access is opt-in and the privacy copy is current.
 - [ ] Imported actions are disabled by default.
 - [ ] Generated drafts, imported actions, and new model actions start disabled.
