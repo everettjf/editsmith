@@ -20,10 +20,14 @@ targets:
   EditSmith:
     type: application
     platform: macOS
-    sources: [EditSmithSwift]
-    resources:
-      - EditSmith/Assets.xcassets
-      - EditSmith/Localizable.xcstrings
+    sources:
+      - path: EditSmithSwift
+      - path: EditSmith/Assets.xcassets
+        buildPhase: resources
+      - path: EditSmith/Localizable.xcstrings
+        buildPhase: resources
+      - path: PrivacyInfo.xcprivacy
+        buildPhase: resources
     dependencies:
       - package: EditSmithCore
       - package: CodeEditor
@@ -34,11 +38,19 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.xnu.editsmith
         INFOPLIST_FILE: EditSmith/Info.plist
         CODE_SIGN_ENTITLEMENTS: EditSmith/EditSmith.entitlements
+        CODE_SIGN_IDENTITY: Apple Development
+        CODE_SIGN_STYLE: Automatic
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.developer-tools
+        PROVISIONING_PROFILE_SPECIFIER: ""
+        REGISTER_APP_GROUPS: true
         ENABLE_HARDENED_RUNTIME: true
   EditSmithExtension:
     type: app-extension
     platform: macOS
-    sources: [EditSmithExtensionSwift]
+    sources:
+      - path: EditSmithExtensionSwift
+      - path: PrivacyInfo.xcprivacy
+        buildPhase: resources
     dependencies:
       - package: EditSmithCore
       - framework: "$(DEVELOPER_DIR)/Library/Frameworks/XcodeKit.framework"
@@ -49,6 +61,10 @@ targets:
         PRODUCT_MODULE_NAME: EditSmithExtension
         INFOPLIST_FILE: EditSmithExtension/Info.plist
         CODE_SIGN_ENTITLEMENTS: EditSmithExtension/EditSmithExtension.entitlements
+        CODE_SIGN_IDENTITY: Apple Development
+        CODE_SIGN_STYLE: Automatic
+        PROVISIONING_PROFILE_SPECIFIER: ""
+        REGISTER_APP_GROUPS: true
         APPLICATION_EXTENSION_API_ONLY: true
   EditSmithCoreTests:
     type: bundle.unit-test

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,7 @@
 		5499C91C178E86119A66FBDB /* CodeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783A8F9403FD17609008BCF4 /* CodeEditor.swift */; };
 		5A2C419EBD536B5C3412FF5A /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = 015C2048CA940419273C74C0 /* EditSmithCore */; };
 		6597F982DA272399F11F76F8 /* SourceEditorCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB811A30C96A6EB3B644E802 /* SourceEditorCommand.swift */; };
+		784C907CC59701F5E5D88AA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4ADE6302432E8D69263A610E /* Assets.xcassets */; };
 		794F4E73D5FBDDB55F7829FB /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = 487CBEDDDFA28F1115FA490A /* EditSmithCore */; };
 		8022EA1A5DD018D0210B79AA /* RecipeLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4DE8B824D7CFE73F086884 /* RecipeLibrary.swift */; };
 		88C4540AF727C599B2ADC94F /* RecipeLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE1142DDE452CF922E640C8 /* RecipeLibraryTests.swift */; };
@@ -24,12 +25,11 @@
 		939E960D7B033633924A3BF5 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4998059E598CBD141CCE6077 /* XcodeKit.framework */; };
 		9E9AB5BF49E43FF70FBD57E9 /* RecipeWorkbench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FC25212C48AF82655986696 /* RecipeWorkbench.swift */; };
 		A43024A8ECDF1541B1394964 /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = B724C3A0B092FCB8924EBC00 /* EditSmithCore */; };
-		B18A65D1F7E34C99A4E36D21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B18A65D2F7E34C99A4E36D21 /* Assets.xcassets */; };
-		B18A65D4F7E34C99A4E36D21 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B18A65D6F7E34C99A4E36D21 /* PrivacyInfo.xcprivacy */; };
-		B18A65D5F7E34C99A4E36D21 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B18A65D6F7E34C99A4E36D21 /* PrivacyInfo.xcprivacy */; };
-		A11CE001A11CE001A11CE001 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A11CE002A11CE002A11CE002 /* Localizable.xcstrings */; };
+		C2612F9ED7198D2CD9A664FD /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 637F4E6CE2529F923BD7C76D /* PrivacyInfo.xcprivacy */; };
 		CF8F455B7B1FEF17E402499B /* EditSmithExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D4551EAEEB1D8A3F80D20B2A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 637F4E6CE2529F923BD7C76D /* PrivacyInfo.xcprivacy */; };
 		E795A76A437DCBBD58959DA9 /* ResultViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A0F4464F725F6BAB2E51EC /* ResultViews.swift */; };
+		F186C22A4ED3DF8B1BECC494 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 71C6B536ACF2F83FC872E0DC /* Localizable.xcstrings */; };
 		F195B84A463B2BEDE76CD440 /* SourceEditorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FFB520978B6028BF74CC64 /* SourceEditorExtension.swift */; };
 		FD8C5497552D0FFE38A4D04D /* RecipeInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6130AE06235699F0ACEE332C /* RecipeInspector.swift */; };
 /* End PBXBuildFile section */
@@ -68,20 +68,20 @@
 /* Begin PBXFileReference section */
 		21A0F4464F725F6BAB2E51EC /* ResultViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViews.swift; sourceTree = "<group>"; };
 		4998059E598CBD141CCE6077 /* XcodeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XcodeKit.framework; path = "$(DEVELOPER_DIR)/Library/Frameworks/XcodeKit.framework"; sourceTree = "<group>"; };
+		4ADE6302432E8D69263A610E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4B00B6896DA6C4DFB341693B /* RecipeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeEditor.swift; sourceTree = "<group>"; };
 		4F03104E4250326EA6210DC9 /* EditSmithCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EditSmithCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A2B402562043B397F653D9E /* EditSmithAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EditSmithAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6130AE06235699F0ACEE332C /* RecipeInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeInspector.swift; sourceTree = "<group>"; };
+		637F4E6CE2529F923BD7C76D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		6FC25212C48AF82655986696 /* RecipeWorkbench.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeWorkbench.swift; sourceTree = "<group>"; };
-		75112C6E3428FFE1D6CE9A1F /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Core; sourceTree = SOURCE_ROOT; };
+		71C6B536ACF2F83FC872E0DC /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		75112C6E3428FFE1D6CE9A1F /* Core */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Core; path = Core; sourceTree = SOURCE_ROOT; };
 		783A8F9403FD17609008BCF4 /* CodeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditor.swift; sourceTree = "<group>"; };
 		7A5B72E55C7F92DF0462D6D4 /* ScriptAuthoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptAuthoring.swift; sourceTree = "<group>"; };
 		7BBD32A7BE89BBE98431F05A /* ExtensionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionHelpView.swift; sourceTree = "<group>"; };
-		94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; name = EditSmithExtension.appex; path = EditSmith.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EditSmithExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B6575519C024E45624506FD /* CapabilitySidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapabilitySidebar.swift; sourceTree = "<group>"; };
-		B18A65D2F7E34C99A4E36D21 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = EditSmith/Assets.xcassets; sourceTree = SOURCE_ROOT; };
-		B18A65D6F7E34C99A4E36D21 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = SOURCE_ROOT; };
-		A11CE002A11CE002A11CE002 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; name = Localizable.xcstrings; path = EditSmith/Localizable.xcstrings; sourceTree = SOURCE_ROOT; };
 		C98AC9916ADB41F3520C77A6 /* EditSmithCoreSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSmithCoreSmokeTests.swift; sourceTree = "<group>"; };
 		CC4DE8B824D7CFE73F086884 /* RecipeLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeLibrary.swift; sourceTree = "<group>"; };
 		CDE1142DDE452CF922E640C8 /* RecipeLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeLibraryTests.swift; sourceTree = "<group>"; };
@@ -132,9 +132,8 @@
 		2EB28A4827F2A51BD694F7A7 = {
 			isa = PBXGroup;
 			children = (
-				B18A65D2F7E34C99A4E36D21 /* Assets.xcassets */,
-				B18A65D6F7E34C99A4E36D21 /* PrivacyInfo.xcprivacy */,
-				A11CE002A11CE002A11CE002 /* Localizable.xcstrings */,
+				637F4E6CE2529F923BD7C76D /* PrivacyInfo.xcprivacy */,
+				A4AFE8C99215A511814C6F22 /* EditSmith */,
 				E66D31ED8FB1FEF0AB62601E /* EditSmithAppTests */,
 				BF49714D964F005AC73DEBD3 /* EditSmithCoreTests */,
 				CD35F33A38DD5DA4556E3BAF /* EditSmithExtensionSwift */,
@@ -179,6 +178,15 @@
 				75112C6E3428FFE1D6CE9A1F /* Core */,
 			);
 			name = Packages;
+			sourceTree = "<group>";
+		};
+		A4AFE8C99215A511814C6F22 /* EditSmith */ = {
+			isa = PBXGroup;
+			children = (
+				4ADE6302432E8D69263A610E /* Assets.xcassets */,
+				71C6B536ACF2F83FC872E0DC /* Localizable.xcstrings */,
+			);
+			path = EditSmith;
 			sourceTree = "<group>";
 		};
 		BF49714D964F005AC73DEBD3 /* EditSmithCoreTests */ = {
@@ -242,8 +250,8 @@
 			buildConfigurationList = C79A783E1BDF176EC45B4F7A /* Build configuration list for PBXNativeTarget "EditSmithExtension" */;
 			buildPhases = (
 				ADA42EE809563D49295E607D /* Sources */,
+				72C08D31E37C747913572A53 /* Resources */,
 				EA6BA734BE93F8A7FAEF7FF3 /* Frameworks */,
-				B18A65D7F7E34C99A4E36D21 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -281,8 +289,8 @@
 			buildConfigurationList = 34F5CA7CA90E703B3F6B1057 /* Build configuration list for PBXNativeTarget "EditSmith" */;
 			buildPhases = (
 				3A828588021D9866EA0B5ACE /* Sources */,
+				AF99DE08E4DD5AB9183F23F6 /* Resources */,
 				CA4D4B9BBEDE8576BB8A9D15 /* Frameworks */,
-				B18A65D3F7E34C99A4E36D21 /* Resources */,
 				AB890E0EA81A4B40C662EDB8 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
@@ -313,9 +321,14 @@
 					};
 					78D91B9D655442AD62DD49FA = {
 						DevelopmentTeam = YPV49M8592;
+						ProvisioningStyle = Automatic;
 					};
 					C7392AD42581DEEA5F46CABA = {
 						DevelopmentTeam = YPV49M8592;
+					};
+					E4394D2590E20B4145B0F4E6 = {
+						DevelopmentTeam = YPV49M8592;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -333,6 +346,7 @@
 				BEE853BD4E15D00EB29CFB3F /* XCRemoteSwiftPackageReference "CodeEditor" */,
 				AA176C43D52161AA9ED6F6D5 /* XCLocalSwiftPackageReference "Core" */,
 			);
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -345,21 +359,21 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		B18A65D3F7E34C99A4E36D21 /* Resources */ = {
+		72C08D31E37C747913572A53 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B18A65D1F7E34C99A4E36D21 /* Assets.xcassets in Resources */,
-				B18A65D4F7E34C99A4E36D21 /* PrivacyInfo.xcprivacy in Resources */,
-				A11CE001A11CE001A11CE001 /* Localizable.xcstrings in Resources */,
+				D4551EAEEB1D8A3F80D20B2A /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B18A65D7F7E34C99A4E36D21 /* Resources */ = {
+		AF99DE08E4DD5AB9183F23F6 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B18A65D5F7E34C99A4E36D21 /* PrivacyInfo.xcprivacy in Resources */,
+				784C907CC59701F5E5D88AA6 /* Assets.xcassets in Resources */,
+				F186C22A4ED3DF8B1BECC494 /* Localizable.xcstrings in Resources */,
+				C2612F9ED7198D2CD9A664FD /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,7 +586,6 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = YPV49M8592;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = EditSmith/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
@@ -607,6 +620,8 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = EditSmithExtension/EditSmithExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -621,6 +636,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.xnu.editsmith.extension;
 				PRODUCT_MODULE_NAME = EditSmithExtension;
 				PRODUCT_NAME = EditSmith;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -649,7 +666,6 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = YPV49M8592;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = EditSmith/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
@@ -685,6 +701,8 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = EditSmithExtension/EditSmithExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -699,6 +717,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.xnu.editsmith.extension;
 				PRODUCT_MODULE_NAME = EditSmithExtension;
 				PRODUCT_NAME = EditSmith;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = macosx;
 			};
 			name = Release;
