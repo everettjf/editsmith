@@ -122,7 +122,10 @@ struct RecipeEditor: View {
             VStack(spacing: 0) {
                 SourceEditorPane(title: "JavaScript", text: $recipe.source, isEditable: true)
                     .padding(10)
-                ScriptIssuesBar(issues: issues)
+                if !issues.isEmpty {
+                    ScriptIssuesBar(issues: issues)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                }
             }
             .frame(minHeight: 210, idealHeight: 280)
         } else if recipe.kind == .model {
@@ -235,6 +238,7 @@ private struct BuiltinActionSummary: View {
 private struct TestFixtureEditor: View {
     @Binding var test: RecipeTestCase
     let library: RecipeLibrary
+    @State private var isShowingConditions = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -242,7 +246,11 @@ private struct TestFixtureEditor: View {
                 Menu("Test Cases", systemImage: "checklist") {
                     if let recipeIndex = library.selectedIndex {
                         ForEach(library.recipes[recipeIndex].testCases) { item in
-                            Button(item.name) { library.selectTest(item.id) }
+                            Button {
+                                library.selectTest(item.id)
+                            } label: {
+                                Label(item.name, systemImage: testStatusImage(item.id))
+                            }
                         }
                     }
                     Divider()
@@ -261,30 +269,43 @@ private struct TestFixtureEditor: View {
 
             Divider()
 
-            HStack(spacing: 8) {
-                TextField("Expected error (optional)", text: expectedErrorBinding)
-                    .textFieldStyle(.plain)
-
-                Divider().frame(height: 16)
-
-                Label(test.selections.isEmpty ? "Whole buffer" : "\(test.selections.count) selections", systemImage: "selection.pin.in.out")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                Button("Add Selection", systemImage: "plus", action: library.addSelectionRange)
-                    .labelStyle(.iconOnly)
+            Button {
+                withAnimation(.snappy) { isShowingConditions.toggle() }
+            } label: {
+                HStack(spacing: 8) {
+                    Label("Test Conditions", systemImage: "slider.horizontal.3")
+                    Spacer()
+                    Text(conditionSummary)
+                        .foregroundStyle(.secondary)
+                    Image(systemName: "chevron.right")
+                        .rotationEffect(.degrees(isShowingConditions ? 90 : 0))
+                }
+                .font(.caption)
+                .contentShape(.rect)
             }
+            .buttonStyle(.plain)
             .padding(.horizontal, 10)
             .frame(height: 34)
 
-            if !test.selections.isEmpty {
-                List {
-                    ForEach($test.selections) { $selection in
-                        SelectionEditor(selection: $selection)
+            if isShowingConditions {
+                VStack(spacing: 8) {
+                    HStack {
+                        TextField("Expected error (optional)", text: expectedErrorBinding)
+                        Button("Add Selection", systemImage: "plus", action: library.addSelectionRange)
                     }
-                    .onDelete(perform: library.removeSelectionRange)
+                    if !test.selections.isEmpty {
+                        List {
+                            ForEach($test.selections) { $selection in
+                                SelectionEditor(selection: $selection)
+                            }
+                            .onDelete(perform: library.removeSelectionRange)
+                        }
+                        .frame(height: 72)
+                    }
                 }
-                .frame(height: 72)
+                .padding(.horizontal, 10)
+                .padding(.bottom, 8)
+                .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
         .frame(minWidth: 180)
@@ -297,6 +318,16 @@ private struct TestFixtureEditor: View {
             get: { test.expectedError ?? "" },
             set: { test.expectedError = $0.isEmpty ? nil : $0 }
         )
+    }
+
+    private var conditionSummary: String {
+        let selection = test.selections.isEmpty ? "Whole buffer" : "\(test.selections.count) selections"
+        return test.expectedError == nil ? selection : selection + " · Expects error"
+    }
+
+    private func testStatusImage(_ id: RecipeTestCase.ID) -> String {
+        guard let result = library.testResults.first(where: { $0.id == id }) else { return "circle" }
+        return result.passed ? "checkmark.circle.fill" : "xmark.circle.fill"
     }
 }
 
