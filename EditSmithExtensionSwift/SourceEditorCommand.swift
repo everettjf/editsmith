@@ -31,7 +31,7 @@ final class SourceEditorCommand: NSObject, XCSourceEditorCommand {
                     fileType: invocation.buffer.contentUTI,
                     indentationWidth: invocation.buffer.tabWidth
                 )
-                let result = RecipeRunner().execute(request, recipe: recipe)
+                let result = await AsyncRecipeRunner().execute(request, recipe: recipe)
                 if let diagnostic = result.diagnostic {
                     var message = diagnostic.message
                     if let line = diagnostic.line { message += " (line \(line)" }
