@@ -203,6 +203,60 @@ struct RecipeEngineTests {
         #expect(result.outputSelections.count == 2)
     }
 
+    @Test @MainActor func ollamaRunnerUsesGenerateContract() async throws {
+        let captured = LockedRequestBox()
+        OllamaURLProtocol.handler = { request in
+            captured.value = request
+            captured.body = try requestBodyData(request)
+            let response = HTTPURLResponse(
+                url: request.url!, statusCode: 200, httpVersion: "HTTP/1.1",
+                headerFields: ["Content-Type": "application/json"]
+            )!
+            return (response, Data(#"{"response":"  improved output  "}"#.utf8))
+        }
+        defer { OllamaURLProtocol.handler = nil }
+
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.protocolClasses = [OllamaURLProtocol.self]
+        let session = URLSession(configuration: configuration)
+        let runner = AsyncRecipeRunner(urlSession: session)
+        let recipe = Recipe(
+            name: "Ollama",
+            summary: "",
+            kind: .model,
+            source: "Rewrite this:\n{{input}}",
+            modelConfiguration: .init(
+                provider: .ollama,
+                modelName: "llama3.2",
+                endpoint: "http://127.0.0.1:11434/",
+                instructions: "Be concise."
+            )
+        )
+
+        let result = await runner.execute(ExecutionRequest(text: "draft"), recipe: recipe)
+        let request = try #require(captured.value)
+        let body = try #require(captured.body)
+        let payload = try #require(JSONSerialization.jsonObject(with: body) as? [String: Any])
+        #expect(request.url?.absoluteString == "http://127.0.0.1:11434/api/generate")
+        #expect(request.httpMethod == "POST")
+        #expect(request.value(forHTTPHeaderField: "Content-Type") == "application/json")
+        #expect(payload["model"] as? String == "llama3.2")
+        #expect(payload["stream"] as? Bool == false)
+        #expect(payload["prompt"] as? String == "Be concise.\n\nRewrite this:\ndraft")
+        #expect(result.outputText == "improved output")
+        #expect(result.diagnostic == nil)
+    }
+
+    @Test @MainActor func ollamaRunnerRejectsNonHTTPProviderURLs() async {
+        let recipe = Recipe(
+            name: "Unsafe endpoint", summary: "", kind: .model, source: "{{input}}",
+            modelConfiguration: .init(provider: .ollama, endpoint: "file:///tmp/model")
+        )
+        let result = await AsyncRecipeRunner().execute(ExecutionRequest(text: "private source"), recipe: recipe)
+        #expect(result.outputText == "private source")
+        #expect(result.diagnostic?.message == "The Ollama endpoint is not a valid URL.")
+    }
+
     @Test @MainActor func builtinsSupportCommentsAndParameterizedWrapping() throws {
         let recipes = Dictionary(uniqueKeysWithValues: BuiltinRecipes.all.map { ($0.source, $0) })
         let selection = TextRange(start: .init(line: 0, column: 0), end: .init(line: 0, column: 5))
@@ -349,4 +403,56 @@ struct RecipeEngineTests {
         let recipe = try JSONDecoder().decode(Recipe.self, from: data)
         #expect(recipe.testCases.isEmpty)
     }
+}
+
+private final class LockedRequestBox: @unchecked Sendable {
+    private let lock = NSLock()
+    private var storedValue: URLRequest?
+    private var storedBody: Data?
+
+    var value: URLRequest? {
+        get { lock.withLock { storedValue } }
+        set { lock.withLock { storedValue = newValue } }
+    }
+
+    var body: Data? {
+        get { lock.withLock { storedBody } }
+        set { lock.withLock { storedBody = newValue } }
+    }
+}
+
+private func requestBodyData(_ request: URLRequest) throws -> Data? {
+    if let body = request.httpBody { return body }
+    guard let stream = request.httpBodyStream else { return nil }
+    stream.open()
+    defer { stream.close() }
+    var data = Data()
+    var buffer = [UInt8](repeating: 0, count: 1_024)
+    while true {
+        let count = stream.read(&buffer, maxLength: buffer.count)
+        if count < 0 { throw stream.streamError ?? URLError(.cannotDecodeRawData) }
+        if count == 0 { return data }
+        data.append(buffer, count: count)
+    }
+}
+
+private final class OllamaURLProtocol: URLProtocol, @unchecked Sendable {
+    nonisolated(unsafe) static var handler: (@Sendable (URLRequest) throws -> (HTTPURLResponse, Data))?
+
+    override class func canInit(with request: URLRequest) -> Bool { true }
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest { request }
+
+    override func startLoading() {
+        do {
+            guard let handler = Self.handler else { throw URLError(.badServerResponse) }
+            let (response, data) = try handler(request)
+            client?.urlProtocol(self, didReceive: response, cacheStoragePolicy: .notAllowed)
+            client?.urlProtocol(self, didLoad: data)
+            client?.urlProtocolDidFinishLoading(self)
+        } catch {
+            client?.urlProtocol(self, didFailWithError: error)
+        }
+    }
+
+    override func stopLoading() {}
 }

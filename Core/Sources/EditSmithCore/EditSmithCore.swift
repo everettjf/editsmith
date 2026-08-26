@@ -475,9 +475,14 @@ public struct RecipeRunner {
 
 public struct AsyncRecipeRunner: Sendable {
     private let modelTransform: (@Sendable (Recipe, String) async throws -> String)?
+    private let urlSession: URLSession
 
-    public init(modelTransform: (@Sendable (Recipe, String) async throws -> String)? = nil) {
+    public init(
+        modelTransform: (@Sendable (Recipe, String) async throws -> String)? = nil,
+        urlSession: URLSession = .shared
+    ) {
         self.modelTransform = modelTransform
+        self.urlSession = urlSession
     }
 
     @MainActor
@@ -568,7 +573,10 @@ public struct AsyncRecipeRunner: Sendable {
     }
 
     private func runOllama(configuration: ModelRecipeConfiguration, prompt: String) async throws -> String {
-        guard var components = URLComponents(string: configuration.endpoint) else {
+        guard var components = URLComponents(string: configuration.endpoint),
+              let scheme = components.scheme?.lowercased(),
+              ["http", "https"].contains(scheme),
+              components.host != nil else {
             throw RecipeError.modelUnavailable("The Ollama endpoint is not a valid URL.")
         }
         components.path = components.path.trimmingCharacters(in: CharacterSet(charactersIn: "/")) + "/api/generate"
@@ -582,7 +590,7 @@ public struct AsyncRecipeRunner: Sendable {
             "prompt": configuration.instructions + "\n\n" + prompt,
             "stream": false,
         ])
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await urlSession.data(for: request)
         guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
             throw RecipeError.modelUnavailable("Ollama returned an unsuccessful response.")
         }
