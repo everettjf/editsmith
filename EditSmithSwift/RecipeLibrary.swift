@@ -61,7 +61,7 @@ final class RecipeLibrary {
     }
 
     var enabledCount: Int { recipes.count(where: \.isEnabled) }
-    var builtinCount: Int { recipes.count { $0.kind != .javascript } }
+    var builtinCount: Int { recipes.count { $0.kind == .builtin || $0.kind == .composed } }
 
     var selectedTestIndex: Int? {
         guard let selectedIndex, let testSelection else { return nil }

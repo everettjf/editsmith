@@ -60,6 +60,9 @@ struct RecipeLibraryTests {
         try withLibrary { library in
             #expect(library.builtinCount >= 80)
             #expect(library.enabledCount == 10)
+            let originalBuiltinCount = library.builtinCount
+            library.addTemplate(RecipeTemplates.model[0])
+            #expect(library.builtinCount == originalBuiltinCount)
             library.scope = .featured
             #expect(!library.visibleRecipes.isEmpty)
             #expect(library.visibleRecipes.allSatisfy { $0.isFeatured })
