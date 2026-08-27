@@ -20,7 +20,8 @@ struct ResultInspector: View {
                 }
                 .pickerStyle(.segmented)
                 .labelsHidden()
-                .frame(maxWidth: 360)
+                .frame(minWidth: 210, idealWidth: 260, maxWidth: 320)
+                .layoutPriority(1)
                 Spacer()
                 if isRunning {
                     ProgressView()

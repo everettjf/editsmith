@@ -17,8 +17,11 @@ struct RecipeEditor: View {
             Divider()
 
             if let testIndex = library.selectedTestIndex {
-                VSplitView {
+                VStack(spacing: 0) {
                     primaryWorkspace
+                        .layoutPriority(1)
+
+                    Divider()
 
                     HSplitView {
                         TestFixtureEditor(test: $recipe.testCases[testIndex], library: library)
@@ -28,7 +31,9 @@ struct RecipeEditor: View {
                             text: $recipe.testCases[testIndex].expectedOutput
                         )
                     }
-                    .frame(minHeight: 150, idealHeight: 190)
+                    .frame(minHeight: 150, idealHeight: 190, maxHeight: 260)
+
+                    Divider()
 
                     ResultInspector(
                         input: recipe.testCases[testIndex].input,
@@ -38,7 +43,7 @@ struct RecipeEditor: View {
                         mode: $library.resultMode,
                         isRunning: library.isRunning
                     )
-                    .frame(minHeight: 140, idealHeight: 170)
+                    .frame(minHeight: 140, idealHeight: 170, maxHeight: 240)
                 }
             } else {
                 ContentUnavailableView {
@@ -123,6 +128,7 @@ struct RecipeEditor: View {
         } else {
             BuiltinActionSummary(recipe: recipe)
                 .frame(minHeight: 108, idealHeight: 130, maxHeight: 160)
+                .frame(minWidth: 0, maxWidth: .infinity)
         }
     }
 }
@@ -195,21 +201,29 @@ private struct BuiltinActionSummary: View {
 
             VStack(alignment: .leading, spacing: 5) {
                 HStack {
-                    Text(recipe.kind == .composed ? "Composed transformation" : "Built-in transformation").font(.headline)
+                    Text(recipe.kind == .composed ? "Composed transformation" : "Built-in transformation")
+                        .font(.headline)
+                        .lineLimit(1)
                     if recipe.isFeatured {
                         Label("Featured", systemImage: "sparkles").font(.caption).foregroundStyle(.orange)
                     }
                 }
-                Text(recipe.summary).foregroundStyle(.secondary)
+                Text(recipe.summary)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
                 Text(recipe.kind == .composed ? "Runs a local pipeline of built-in capabilities" : "Implemented natively by EditSmith · No script editing required")
                     .font(.caption)
                     .foregroundStyle(.tertiary)
+                    .lineLimit(2)
                 if !recipe.componentIDs.isEmpty {
                     Text(componentNames)
                         .font(.caption.monospaced())
                         .foregroundStyle(.secondary)
+                        .lineLimit(2)
                 }
             }
+            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+            .layoutPriority(1)
             Spacer()
         }
         .padding(18)
