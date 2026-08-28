@@ -1,8 +1,100 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EditSmith — Programmable text actions for Xcode</title><meta name="description" content="Create, test, and run JavaScript or model-powered text actions from Xcode's Editor menu."><link rel="canonical" href="https://xnu.app/editsmith/"><meta property="og:title" content="EditSmith"><meta property="og:description" content="Programmable text actions for Xcode."><meta property="og:type" content="website"><meta property="og:url" content="https://xnu.app/editsmith/"><link rel="stylesheet" href="styles.css"></head>
-<body><header class="wrap nav"><a class="brand" href="./">EditSmith</a><nav aria-label="Main navigation"><a href="#actions">Actions</a><a href="https://github.com/everettjf/editsmith">GitHub</a><a href="https://discord.gg/eGzEaP6TzR">Discord</a></nav></header>
-<main><section class="wrap hero"><div><div class="eyebrow">Open source · Xcode Source Editor Extension</div><h1>Forge repeatable text actions for Xcode.</h1><p class="lede">Build a deterministic JavaScript transform or a prompt-driven model action, test it, and run it against selected source text without leaving Xcode.</p><div class="actions"><a class="button primary" href="https://github.com/everettjf/editsmith">View on GitHub ↗</a><a class="button" href="https://github.com/everettjf/editsmith#quick-start">Quick start ↗</a></div></div><div class="demo"><img src="assets/workbench.png" alt="EditSmith Workbench showing a successful Sort Lines fixture and its diff"></div></section>
-<section class="promise"><div class="wrap"><strong>You choose how every action runs.</strong><span>Use local JavaScript, Apple On-Device models, or an explicitly configured provider. Remote model actions never run implicitly.</span></div></section>
-<section class="section" id="actions"><div class="wrap"><div class="label">A programmable Xcode toolbelt</div><h2>Turn editor chores into tested actions.</h2><div class="grid"><article class="card"><b>Two execution engines</b><p>Use JavaScript for deterministic transforms or a prompt template for an explicitly selected model.</p></article><article class="card"><b>In-app testing</b><p>Verify output, selections, expected errors, diffs, and console logs before enabling an action.</p></article><article class="card"><b>Editor menu access</b><p>Run enabled actions from Xcode's Editor menu without switching tools.</p></article><article class="card"><b>Creative Lab</b><p>Learn and share with 15 built-in styles including leetspeak, Unicode variants, Morse, binary, and ASCII art.</p></article><article class="card"><b>Private choices</b><p>Choose local JavaScript, Apple On-Device models, PCC, or a configured Ollama endpoint per action.</p></article><article class="card"><b>Native Swift app</b><p>A focused SwiftUI workbench backed by JavaScriptCore, Foundation Models, and XcodeKit.</p></article></div></div></section>
-<section class="cta"><div class="wrap box"><h2>Keep the transformation next to the code.</h2><div class="actions"><a class="button primary" href="https://github.com/everettjf/editsmith">View source ↗</a><a class="button" href="https://github.com/everettjf/editsmith/issues">Suggest an action ↗</a></div></div></section></main>
-<footer class="footer"><div class="wrap"><span>EditSmith is open source.</span><span><a href="privacy.html">Privacy</a><a href="https://xnu.app/">All projects</a><a href="mailto:xnuapp@gmail.com">Support</a><a href="https://discord.gg/eGzEaP6TzR">Discord</a></span></div></footer></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EditSmith — Programmable text actions for Xcode</title>
+  <meta name="description" content="Create, test, and run JavaScript or model-powered text actions from Xcode's Editor menu.">
+  <meta name="theme-color" content="#050817">
+  <link rel="canonical" href="https://xnu.app/editsmith/">
+  <link rel="icon" type="image/png" href="assets/app-icon.png">
+  <link rel="apple-touch-icon" href="assets/app-icon.png">
+  <meta property="og:title" content="EditSmith">
+  <meta property="og:description" content="Programmable text actions for Xcode.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://xnu.app/editsmith/">
+  <meta property="og:image" content="https://xnu.app/editsmith/assets/app-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="wrap nav">
+    <a class="brand" href="./" aria-label="EditSmith home">
+      <img src="assets/app-icon.png" alt="" width="38" height="38">
+      <span>EditSmith</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#actions">Actions</a>
+      <a href="https://github.com/everettjf/editsmith">GitHub</a>
+      <a href="https://discord.gg/eGzEaP6TzR">Discord</a>
+    </nav>
+  </header>
+  <main>
+    <section class="wrap hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="status-dot"></span> Open source · Native for macOS</div>
+        <h1>Forge text.<br><span>Ship code.</span></h1>
+        <p class="lede">Build deterministic JavaScript transforms or prompt-driven model actions, test them against real Xcode selections, and run them without leaving the editor.</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/everettjf/editsmith">View on GitHub <span aria-hidden="true">↗</span></a>
+          <a class="button secondary" href="https://github.com/everettjf/editsmith#quick-start">Quick start <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="hero-meta" aria-label="Product details">
+          <span><b>97</b> built-in actions</span>
+          <span><b>15</b> creative transforms</span>
+          <span><b>3</b> model providers</span>
+        </div>
+      </div>
+      <div class="visual">
+        <div class="pixel-field" aria-hidden="true"></div>
+        <img class="hero-icon" src="assets/app-icon.png" alt="EditSmith app icon">
+        <div class="code-chip chip-one"><span>⌘</span> Xcode Editor</div>
+        <div class="code-chip chip-two"><span>✓</span> Tests passed</div>
+      </div>
+    </section>
+    <section class="product-shot" aria-label="EditSmith Workbench preview">
+      <div class="wrap">
+        <div class="window-frame">
+          <div class="window-bar"><i></i><i></i><i></i><span>EditSmith Workbench</span></div>
+          <img src="assets/workbench.png" alt="EditSmith Workbench showing a successful Sort Lines fixture and its diff">
+        </div>
+      </div>
+    </section>
+    <section class="promise">
+      <div class="wrap">
+        <div class="promise-mark" aria-hidden="true">{ }</div>
+        <strong>You choose how every action runs.</strong>
+        <span>Use local JavaScript, Apple On-Device models, Private Cloud Compute, or an explicitly configured Ollama endpoint. Remote actions never run implicitly.</span>
+      </div>
+    </section>
+    <section class="section" id="actions">
+      <div class="wrap">
+        <div class="label">A programmable Xcode toolbelt</div>
+        <h2>Small actions.<br><span>Serious leverage.</span></h2>
+        <div class="grid">
+          <article class="card"><div class="card-icon">JS</div><b>Deterministic JavaScript</b><p>Write repeatable transforms with local JavaScriptCore execution and strict safety limits.</p></article>
+          <article class="card"><div class="card-icon">AI</div><b>Model-powered actions</b><p>Turn prompts into editable actions with Apple Foundation Models, PCC, or local LLaMA.</p></article>
+          <article class="card"><div class="card-icon">✓</div><b>Test before enabling</b><p>Inspect output, selections, expected errors, line diffs, and console logs first.</p></article>
+          <article class="card"><div class="card-icon">⌘</div><b>Inside Xcode</b><p>Run enabled actions from Xcode's Editor menu and preserve the resulting selections.</p></article>
+          <article class="card"><div class="card-icon">Aa</div><b>Creative Lab</b><p>Explore leetspeak, Unicode styles, Zalgo, Morse, binary, ASCII boxes, and banners.</p></article>
+          <article class="card"><div class="card-icon">&lt;&gt;</div><b>Native and private</b><p>A sandboxed SwiftUI workbench backed by XcodeKit, with provider choice per action.</p></article>
+        </div>
+      </div>
+    </section>
+    <section class="cta">
+      <div class="wrap box">
+        <div><div class="label">Open source for macOS</div><h2>Make the editor<br>work your way.</h2></div>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/everettjf/editsmith">Get EditSmith <span aria-hidden="true">↗</span></a>
+          <a class="button secondary" href="https://github.com/everettjf/editsmith/issues">Suggest an action</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="wrap">
+      <a class="brand footer-brand" href="./"><img src="assets/app-icon.png" alt="" width="28" height="28"><span>EditSmith</span></a>
+      <span><a href="privacy.html">Privacy</a><a href="https://xnu.app/">All projects</a><a href="mailto:xnuapp@gmail.com">Support</a><a href="https://discord.gg/eGzEaP6TzR">Discord</a></span>
+    </div>
+  </footer>
+</body>
+</html>
