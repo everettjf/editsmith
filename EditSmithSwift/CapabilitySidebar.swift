@@ -145,26 +145,34 @@ private struct CapabilityRow: View {
         HStack(spacing: 8) {
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 5) {
-                    Text(recipe.name).font(.body.weight(.medium)).lineLimit(1)
+                    Text(recipe.name)
+                        .font(.body.weight(.medium))
+                        .lineLimit(1)
+                        .layoutPriority(1)
                     if recipe.isFeatured {
-                        Image(systemName: "sparkles").foregroundStyle(.orange).accessibilityLabel("Featured")
+                        Image(systemName: "sparkles")
+                            .foregroundStyle(.orange)
+                            .fixedSize()
+                            .accessibilityLabel("Featured")
                     }
                 }
                 Text(recipe.summary).font(.caption).foregroundStyle(.secondary).lineLimit(2)
             }
             Spacer(minLength: 4)
-            Button("Favorite", systemImage: recipe.isFavorite ? "star.fill" : "star", action: onToggleFavorite)
-                .labelStyle(.iconOnly)
-                .buttonStyle(.plain)
-                .foregroundStyle(recipe.isFavorite ? .yellow : .secondary)
-                .opacity(recipe.isFavorite || isHovering ? 1 : 0)
-                .help(recipe.isFavorite ? "Remove from favorites" : "Add to favorites")
-            Button(recipe.isEnabled ? "Disable in Xcode" : "Enable in Xcode", systemImage: recipe.isEnabled ? "checkmark.circle.fill" : "circle", action: onToggleEnabled)
-                .labelStyle(.iconOnly)
-                .buttonStyle(.plain)
-                .foregroundStyle(recipe.isEnabled ? .green : .secondary)
-                .opacity(recipe.isEnabled || isHovering ? 1 : 0)
-                .help(recipe.isEnabled ? "Disable in Xcode" : "Enable in Xcode")
+            if recipe.isFavorite || isHovering {
+                Button("Favorite", systemImage: recipe.isFavorite ? "star.fill" : "star", action: onToggleFavorite)
+                    .labelStyle(.iconOnly)
+                    .buttonStyle(.plain)
+                    .foregroundStyle(recipe.isFavorite ? .yellow : .secondary)
+                    .help(recipe.isFavorite ? "Remove from favorites" : "Add to favorites")
+            }
+            if recipe.isEnabled || isHovering {
+                Button(recipe.isEnabled ? "Disable in Xcode" : "Enable in Xcode", systemImage: recipe.isEnabled ? "checkmark.circle.fill" : "circle", action: onToggleEnabled)
+                    .labelStyle(.iconOnly)
+                    .buttonStyle(.plain)
+                    .foregroundStyle(recipe.isEnabled ? .green : .secondary)
+                    .help(recipe.isEnabled ? "Disable in Xcode" : "Enable in Xcode")
+            }
         }
         .padding(.vertical, 3)
         .contentShape(.rect)
