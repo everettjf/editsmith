@@ -13,8 +13,26 @@ struct EditSmithApp: App {
             .commands {
                 TextFormattingCommands()
                 WorkbenchCommands()
+                SupportCommands()
             }
         Settings { ExtensionHelpView() }
+    }
+}
+
+private struct SupportCommands: Commands {
+    private let issuesURL = URL(string: "https://github.com/everettjf/editsmith/issues")!
+    private let discordURL = URL(string: "https://discord.gg/eGzEaP6TzR")!
+
+    var body: some Commands {
+        CommandGroup(after: .help) {
+            Divider()
+            Link(destination: issuesURL) {
+                Label("Submit an Issue", systemImage: "exclamationmark.bubble")
+            }
+            Link(destination: discordURL) {
+                Label("Join Discord", systemImage: "message")
+            }
+        }
     }
 }
 
