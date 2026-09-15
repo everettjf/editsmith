@@ -16,6 +16,7 @@
 		3EBDFCFDCBA102F4ED6D2026 /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = F433AC195492EE54EB36CA87 /* EditSmithCore */; };
 		5499C91C178E86119A66FBDB /* CodeEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 783A8F9403FD17609008BCF4 /* CodeEditor.swift */; };
 		5A2C419EBD536B5C3412FF5A /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = 015C2048CA940419273C74C0 /* EditSmithCore */; };
+		5FECA9F4E2B037C973EE6EBA /* THIRD_PARTY_NOTICES.md in Resources */ = {isa = PBXBuildFile; fileRef = A8B907FD9FCFFE30FC878C46 /* THIRD_PARTY_NOTICES.md */; };
 		6597F982DA272399F11F76F8 /* SourceEditorCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB811A30C96A6EB3B644E802 /* SourceEditorCommand.swift */; };
 		784C907CC59701F5E5D88AA6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4ADE6302432E8D69263A610E /* Assets.xcassets */; };
 		794F4E73D5FBDDB55F7829FB /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = 487CBEDDDFA28F1115FA490A /* EditSmithCore */; };
@@ -82,6 +83,7 @@
 		7BBD32A7BE89BBE98431F05A /* ExtensionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionHelpView.swift; sourceTree = "<group>"; };
 		94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EditSmithExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B6575519C024E45624506FD /* CapabilitySidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapabilitySidebar.swift; sourceTree = "<group>"; };
+		A8B907FD9FCFFE30FC878C46 /* THIRD_PARTY_NOTICES.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = THIRD_PARTY_NOTICES.md; sourceTree = "<group>"; };
 		C98AC9916ADB41F3520C77A6 /* EditSmithCoreSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditSmithCoreSmokeTests.swift; sourceTree = "<group>"; };
 		CC4DE8B824D7CFE73F086884 /* RecipeLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeLibrary.swift; sourceTree = "<group>"; };
 		CDE1142DDE452CF922E640C8 /* RecipeLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeLibraryTests.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				637F4E6CE2529F923BD7C76D /* PrivacyInfo.xcprivacy */,
+				A8B907FD9FCFFE30FC878C46 /* THIRD_PARTY_NOTICES.md */,
 				A4AFE8C99215A511814C6F22 /* EditSmith */,
 				E66D31ED8FB1FEF0AB62601E /* EditSmithAppTests */,
 				BF49714D964F005AC73DEBD3 /* EditSmithCoreTests */,
@@ -374,6 +377,7 @@
 				784C907CC59701F5E5D88AA6 /* Assets.xcassets in Resources */,
 				F186C22A4ED3DF8B1BECC494 /* Localizable.xcstrings in Resources */,
 				C2612F9ED7198D2CD9A664FD /* PrivacyInfo.xcprivacy in Resources */,
+				5FECA9F4E2B037C973EE6EBA /* THIRD_PARTY_NOTICES.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -573,7 +577,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.EditSmithCoreTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xnu.EditSmithCoreTests;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -583,7 +587,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = EditSmith/EditSmith.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -610,7 +613,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.EditSmithCoreTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xnu.EditSmithCoreTests;
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -620,7 +623,6 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = EditSmithExtension/EditSmithExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -652,7 +654,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.EditSmithAppTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xnu.EditSmithAppTests;
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EditSmith.app/Contents/MacOS/EditSmith";
 			};
@@ -663,7 +665,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = EditSmith/EditSmith.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -690,7 +691,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.everettjf.EditSmithAppTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xnu.EditSmithAppTests;
 				SDKROOT = macosx;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EditSmith.app/Contents/MacOS/EditSmith";
 			};
@@ -701,7 +702,6 @@
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
 				CODE_SIGN_ENTITLEMENTS = EditSmithExtension/EditSmithExtension.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (

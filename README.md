@@ -5,7 +5,7 @@
 [![Platform](https://img.shields.io/badge/platform-macOS%20%C2%B7%20Xcode-blue)](#requirements)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-![EditSmith Workbench showing a successful Sort Lines fixture and its diff](site/assets/workbench.png)
+![EditSmith Workbench showing a successful Sort Lines fixture and its diff](site/assets/workbench-current.png)
 
 [Website](https://xnu.app/editsmith/) · [GitHub](https://github.com/everettjf/editsmith) · [Discord](https://discord.gg/eGzEaP6TzR)
 
