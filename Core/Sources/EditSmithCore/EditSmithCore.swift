@@ -371,6 +371,14 @@ public struct RecipeRunner {
         }
     }
 
+    /// Runs the recipe's JavaScript on a dedicated thread so the wall-clock
+    /// budget can be enforced with public API only.
+    ///
+    /// A script that ignores the budget is abandoned rather than terminated:
+    /// the caller returns immediately, and the stray thread runs at utility
+    /// priority so it cannot starve the UI. JavaScriptCore exposes no public way
+    /// to interrupt an evaluation in flight, and the private execution-time-limit
+    /// SPI that used to do it is not usable in a Mac App Store build.
     private func runJavaScript(
         _ source: String,
         input: String,
@@ -378,50 +386,83 @@ public struct RecipeRunner {
         logs: inout [ExecutionLog]
     ) throws -> String {
         guard source.utf8.count <= 256 * 1_024 else { throw RecipeError.scriptTooLarge }
-        guard let context = JSContext() else { throw RecipeError.javaScript("Could not create JavaScript context.") }
-        var didTimeOut = false
-        return try withUnsafeMutablePointer(to: &didTimeOut) { timeoutFlag in
-            let group = JSContextGetGroup(context.jsGlobalContextRef)
-            JSContextGroupSetExecutionTimeLimit(group, 1, editSmithShouldTerminate, timeoutFlag)
-            defer { JSContextGroupClearExecutionTimeLimit(group) }
 
-            var exception: JSValue?
-            context.exceptionHandler = { _, value in exception = value }
-
-            var capturedLogs: [ExecutionLog] = []
-            let logBlock: @convention(block) (String, String) -> Void = { level, message in
-                capturedLogs.append(ExecutionLog(level: ExecutionLog.Level(rawValue: level) ?? .log, message: message))
-            }
-            let builtinBlock: @convention(block) (String, String, JSValue) -> String = { source, value, parametersValue in
-                let parameters = parametersValue.toDictionary() as? [String: String] ?? [:]
-                let builtin = Recipe(name: source, summary: "Script API", kind: .builtin, source: source, parameters: parameters)
-                return (try? BuiltinTransformer.transform(value, recipe: builtin)) ?? value
-            }
-            context.setObject(logBlock, forKeyedSubscript: "__editSmithLog" as NSString)
-            context.setObject(builtinBlock, forKeyedSubscript: "__editSmithRunBuiltin" as NSString)
-            context.setObject([
-                "fileName": request.fileName,
-                "fileType": request.fileType,
-                "indentationWidth": request.indentationWidth,
-            ], forKeyedSubscript: "environment" as NSString)
-            context.evaluateScript(Self.apiPrelude)
-            context.evaluateScript(source, withSourceURL: URL(string: "editsmith://recipe.js"))
-            if timeoutFlag.pointee { throw RecipeError.executionTimedOut }
-            if let exception {
-                logs.append(contentsOf: capturedLogs)
-                throw JavaScriptFailure(value: exception)
-            }
-
-            guard let function = context.objectForKeyedSubscript("transform"), !function.isUndefined else {
-                throw RecipeError.javaScript("Missing transform(input) function.")
-            }
-            let value = function.call(withArguments: [input])
-            logs.append(contentsOf: capturedLogs)
-            if timeoutFlag.pointee { throw RecipeError.executionTimedOut }
-            if let exception { throw JavaScriptFailure(value: exception) }
-            guard let value, value.isString, let result = value.toString() else { throw RecipeError.invalidResult }
-            return result
+        let outcome = JavaScriptOutcome()
+        let finished = DispatchSemaphore(value: 0)
+        let thread = Thread {
+            outcome.store(Self.evaluateJavaScript(source, input: input, request: request, outcome: outcome))
+            finished.signal()
         }
+        thread.name = "EditSmith JavaScript"
+        thread.qualityOfService = .utility
+        thread.stackSize = 8 * 1_024 * 1_024
+        thread.start()
+
+        guard finished.wait(timeout: .now() + Self.javaScriptTimeLimit) == .success else {
+            logs.append(contentsOf: outcome.logs)
+            throw RecipeError.executionTimedOut
+        }
+
+        logs.append(contentsOf: outcome.logs)
+        guard let result = outcome.result else { throw RecipeError.executionTimedOut }
+        switch result {
+        case .success(let value):
+            return value
+        case .failure(let error):
+            throw error
+        }
+    }
+
+    private static let javaScriptTimeLimit: TimeInterval = 1
+
+    /// Evaluates the recipe on the calling thread and reports the outcome
+    /// through `outcome`, which is safe to read from another thread.
+    private static func evaluateJavaScript(
+        _ source: String,
+        input: String,
+        request: ExecutionRequest,
+        outcome: JavaScriptOutcome
+    ) -> Result<String, Error> {
+        guard let context = JSContext() else {
+            return .failure(RecipeError.javaScript("Could not create JavaScript context."))
+        }
+
+        var exception: JSValue?
+        context.exceptionHandler = { _, value in exception = value }
+
+        var capturedLogs: [ExecutionLog] = []
+        defer { outcome.append(capturedLogs) }
+
+        let logBlock: @convention(block) (String, String) -> Void = { level, message in
+            capturedLogs.append(ExecutionLog(level: ExecutionLog.Level(rawValue: level) ?? .log, message: message))
+        }
+        let builtinBlock: @convention(block) (String, String, JSValue) -> String = { source, value, parametersValue in
+            let parameters = parametersValue.toDictionary() as? [String: String] ?? [:]
+            let builtin = Recipe(name: source, summary: "Script API", kind: .builtin, source: source, parameters: parameters)
+            return (try? BuiltinTransformer.transform(value, recipe: builtin)) ?? value
+        }
+        context.setObject(logBlock, forKeyedSubscript: "__editSmithLog" as NSString)
+        context.setObject(builtinBlock, forKeyedSubscript: "__editSmithRunBuiltin" as NSString)
+        context.setObject([
+            "fileName": request.fileName,
+            "fileType": request.fileType,
+            "indentationWidth": request.indentationWidth,
+        ], forKeyedSubscript: "environment" as NSString)
+        context.evaluateScript(Self.apiPrelude)
+        context.evaluateScript(source, withSourceURL: URL(string: "editsmith://recipe.js"))
+        if let exception {
+            return .failure(JavaScriptFailure(value: exception))
+        }
+
+        guard let function = context.objectForKeyedSubscript("transform"), !function.isUndefined else {
+            return .failure(RecipeError.javaScript("Missing transform(input) function."))
+        }
+        let value = function.call(withArguments: [input])
+        if let exception { return .failure(JavaScriptFailure(value: exception)) }
+        guard let value, value.isString, let result = value.toString() else {
+            return .failure(RecipeError.invalidResult)
+        }
+        return .success(result)
     }
 
     private static let apiPrelude = """
@@ -639,22 +680,37 @@ public struct AsyncRecipeRunner: Sendable {
     }
 }
 
-private typealias JSShouldTerminateCallback = @convention(c) (JSContextRef?, UnsafeMutableRawPointer?) -> Bool
+/// Carries a JavaScript evaluation result and its console output from the
+/// evaluation thread back to the caller.
+private final class JavaScriptOutcome: @unchecked Sendable {
+    private let lock = NSLock()
+    private var captured: [ExecutionLog] = []
+    private var stored: Result<String, Error>?
 
-@_silgen_name("JSContextGroupSetExecutionTimeLimit")
-private func JSContextGroupSetExecutionTimeLimit(
-    _ group: JSContextGroupRef?,
-    _ limit: Double,
-    _ callback: JSShouldTerminateCallback?,
-    _ context: UnsafeMutableRawPointer?
-)
+    var logs: [ExecutionLog] {
+        lock.lock()
+        defer { lock.unlock() }
+        return captured
+    }
 
-@_silgen_name("JSContextGroupClearExecutionTimeLimit")
-private func JSContextGroupClearExecutionTimeLimit(_ group: JSContextGroupRef?)
+    var result: Result<String, Error>? {
+        lock.lock()
+        defer { lock.unlock() }
+        return stored
+    }
 
-private func editSmithShouldTerminate(_: JSContextRef?, context: UnsafeMutableRawPointer?) -> Bool {
-    context?.assumingMemoryBound(to: Bool.self).pointee = true
-    return true
+    func append(_ entries: [ExecutionLog]) {
+        guard !entries.isEmpty else { return }
+        lock.lock()
+        defer { lock.unlock() }
+        captured.append(contentsOf: entries)
+    }
+
+    func store(_ value: Result<String, Error>) {
+        lock.lock()
+        defer { lock.unlock() }
+        stored = value
+    }
 }
 
 private struct JavaScriptFailure: Error {
