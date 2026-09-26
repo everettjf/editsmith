@@ -54,8 +54,9 @@ xcodebuild test -project EditSmith.xcodeproj -scheme EditSmith \
 ## Security and privacy
 
 - [ ] App and extension remain sandboxed with the shared App Group and outgoing
-      client permission only; neither target has server, file, or temporary
-      exception entitlements.
+      client permission. The app's user-selected read/write entitlement supports
+      explicit import/export; the extension has no file entitlement. Neither
+      target has server or temporary exception entitlements.
 - [ ] Network entitlements match the shipped provider set; if enabled, verify Ollama access is opt-in and the privacy copy is current.
 - [ ] Imported actions are disabled by default.
 - [ ] Generated drafts, imported actions, and new model actions start disabled.

@@ -20,8 +20,10 @@ test "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.application-groups
 
 rg -q "PRODUCT_BUNDLE_IDENTIFIER: $expected_app_id$" project.yml
 rg -q "PRODUCT_BUNDLE_IDENTIFIER: $expected_extension_id$" project.yml
-if rg -q 'com.apple.security.network.server|com.apple.security.files|com.apple.security.temporary-exception' EditSmith/*.entitlements EditSmithExtension/*.entitlements; then
-    echo "Unexpected server, file, or temporary-exception entitlement" >&2
+test "$(/usr/libexec/PlistBuddy -c 'Print :com.apple.security.files.user-selected.read-write' EditSmith/EditSmith.entitlements)" = "true"
+if rg -q 'com.apple.security.network.server|com.apple.security.temporary-exception' EditSmith/*.entitlements EditSmithExtension/*.entitlements \
+    || rg -q 'com.apple.security.files' EditSmithExtension/*.entitlements; then
+    echo "Unexpected server, temporary-exception, or extension file entitlement" >&2
     exit 1
 fi
 
