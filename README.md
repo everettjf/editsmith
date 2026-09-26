@@ -70,7 +70,7 @@ the current [release notes](RELEASE_NOTES.md).
 
 ## Privacy
 
-Recipe source, configuration, and fixtures stay on the Mac. JavaScript and Apple On-Device actions process text locally. A user-invoked PCC or Ollama action may send only the selected text—or the full buffer when there is no selection—to its configured provider. Outgoing network access exists for those explicit providers; EditSmith does not accept inbound connections. See the [privacy policy](https://xnu.app/editsmith/privacy.html).
+Recipe source, configuration, and fixtures stay on the Mac. JavaScript and Apple On-Device actions process text locally. A user-invoked PCC or Ollama action may send only the selected text—or the full buffer when there is no selection—to its configured provider. Outgoing network access exists for those explicit providers; EditSmith does not accept inbound connections. See the [privacy policy](https://xnu.app/editsmith/privacy).
 
 ## License
 
