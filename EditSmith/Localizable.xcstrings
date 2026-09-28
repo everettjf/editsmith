@@ -1,7 +1,104 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    ":" : {
 
+    },
+    "{{input}} = Xcode selection" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ enabled · %@ built in" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ enabled · %2$@ built in"
+          }
+        }
+      }
+    },
+    "%@ lines · %@ bytes" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ lines · %2$@ bytes"
+          }
+        }
+      }
+    },
+    "%@ ms" : {
+
+    },
+    "→" : {
+
+    },
+    "+%@ more" : {
+
+    },
+    "Add a fixture to test this action before enabling it in Xcode." : {
+
+    },
+    "Apple Intelligence creates JavaScript locally. The draft stays disabled until you test and enable it." : {
+
+    },
+    "Connect Xcode, protect edits, and choose how intelligent actions run." : {
+
+    },
+    "Draft an Action" : {
+
+    },
+    "e.g. j" : {
+
+    },
+    "EditSmith Library" : {
+
+    },
+    "EditSmith Settings" : {
+
+    },
+    "Enable the Xcode Extension" : {
+
+    },
+    "http://127.0.0.1:11434" : {
+
+    },
+    "JavaScript" : {
+
+    },
+    "JavaScript actions are sandboxed. Model actions receive only the selected text and the prompt template you configure." : {
+
+    },
+    "L" : {
+
+    },
+    "llama3.2" : {
+
+    },
+    "Local only · 256 KB script · 5 MB input/output · 1 second per run" : {
+
+    },
+    "Privacy & Security → Extensions → Xcode Source Editor" : {
+
+    },
+    "Quick check · Run tests for authoritative results" : {
+
+    },
+    "Run actions and save a before/after preview without modifying the Xcode buffer." : {
+
+    },
+    "Run the selected test to inspect its transformed output." : {
+
+    },
+    "Running…" : {
+
+    },
+    "Separate multiple UTIs with commas. Leave empty to allow any file type." : {
+
+    }
   },
   "version" : "1.0"
 }

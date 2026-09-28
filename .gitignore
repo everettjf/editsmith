@@ -2,3 +2,4 @@ EditSmith.xcodeproj/project.xcworkspace/xcuserdata/
 EditSmith.xcodeproj/xcuserdata/
 Core/.build/
 Core/.swiftpm/
+.DS_Store
