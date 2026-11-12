@@ -26,6 +26,7 @@ private struct SupportCommands: Commands {
     var body: some Commands {
         CommandGroup(after: .help) {
             Divider()
+            AtomSproutFeedbackEmailButton(appName: "EditSmith")
             Link(destination: issuesURL) {
                 Label("Submit an Issue", systemImage: "exclamationmark.bubble")
             }

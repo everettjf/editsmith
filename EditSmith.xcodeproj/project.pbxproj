@@ -26,10 +26,12 @@
 		939E960D7B033633924A3BF5 /* XcodeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4998059E598CBD141CCE6077 /* XcodeKit.framework */; };
 		9E9AB5BF49E43FF70FBD57E9 /* RecipeWorkbench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FC25212C48AF82655986696 /* RecipeWorkbench.swift */; };
 		A43024A8ECDF1541B1394964 /* EditSmithCore in Frameworks */ = {isa = PBXBuildFile; productRef = B724C3A0B092FCB8924EBC00 /* EditSmithCore */; };
+		A5222087361AD428F08CDEA6 /* FeedbackEmailButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94D866B9510BB8F3016C0B5B /* FeedbackEmailButton.swift */; };
 		C2612F9ED7198D2CD9A664FD /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 637F4E6CE2529F923BD7C76D /* PrivacyInfo.xcprivacy */; };
 		CF8F455B7B1FEF17E402499B /* EditSmithExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D4551EAEEB1D8A3F80D20B2A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 637F4E6CE2529F923BD7C76D /* PrivacyInfo.xcprivacy */; };
 		E795A76A437DCBBD58959DA9 /* ResultViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A0F4464F725F6BAB2E51EC /* ResultViews.swift */; };
+		EDECD81B1BAD1BCE254F19DE /* FeedbackEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63132C1ACEE2A99D48EA4B8B /* FeedbackEmail.swift */; };
 		F186C22A4ED3DF8B1BECC494 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 71C6B536ACF2F83FC872E0DC /* Localizable.xcstrings */; };
 		F195B84A463B2BEDE76CD440 /* SourceEditorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FFB520978B6028BF74CC64 /* SourceEditorExtension.swift */; };
 		FD8C5497552D0FFE38A4D04D /* RecipeInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6130AE06235699F0ACEE332C /* RecipeInspector.swift */; };
@@ -74,6 +76,7 @@
 		4F03104E4250326EA6210DC9 /* EditSmithCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EditSmithCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A2B402562043B397F653D9E /* EditSmithAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EditSmithAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6130AE06235699F0ACEE332C /* RecipeInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeInspector.swift; sourceTree = "<group>"; };
+		63132C1ACEE2A99D48EA4B8B /* FeedbackEmail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackEmail.swift; sourceTree = "<group>"; };
 		637F4E6CE2529F923BD7C76D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		6FC25212C48AF82655986696 /* RecipeWorkbench.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeWorkbench.swift; sourceTree = "<group>"; };
 		71C6B536ACF2F83FC872E0DC /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -81,6 +84,7 @@
 		783A8F9403FD17609008BCF4 /* CodeEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeEditor.swift; sourceTree = "<group>"; };
 		7A5B72E55C7F92DF0462D6D4 /* ScriptAuthoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptAuthoring.swift; sourceTree = "<group>"; };
 		7BBD32A7BE89BBE98431F05A /* ExtensionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionHelpView.swift; sourceTree = "<group>"; };
+		94D866B9510BB8F3016C0B5B /* FeedbackEmailButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackEmailButton.swift; sourceTree = "<group>"; };
 		94DC23FF4C7C512927B42708 /* EditSmithExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = EditSmithExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B6575519C024E45624506FD /* CapabilitySidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapabilitySidebar.swift; sourceTree = "<group>"; };
 		A8B907FD9FCFFE30FC878C46 /* THIRD_PARTY_NOTICES.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = THIRD_PARTY_NOTICES.md; sourceTree = "<group>"; };
@@ -160,8 +164,18 @@
 				6FC25212C48AF82655986696 /* RecipeWorkbench.swift */,
 				21A0F4464F725F6BAB2E51EC /* ResultViews.swift */,
 				7A5B72E55C7F92DF0462D6D4 /* ScriptAuthoring.swift */,
+				4B2230575205F62550C7F80A /* Support */,
 			);
 			path = EditSmithSwift;
+			sourceTree = "<group>";
+		};
+		4B2230575205F62550C7F80A /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				63132C1ACEE2A99D48EA4B8B /* FeedbackEmail.swift */,
+				94D866B9510BB8F3016C0B5B /* FeedbackEmailButton.swift */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 		678B62CBCEEE4874DDF778E1 /* Products */ = {
@@ -336,7 +350,6 @@
 				};
 			};
 			buildConfigurationList = 4CFCA0AB1483FD865F828D83 /* Build configuration list for PBXProject "EditSmith" */;
-			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -350,13 +363,14 @@
 				AA176C43D52161AA9ED6F6D5 /* XCLocalSwiftPackageReference "Core" */,
 			);
 			preferredProjectObjectVersion = 77;
+			productRefGroup = 678B62CBCEEE4874DDF778E1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				E4394D2590E20B4145B0F4E6 /* EditSmith */,
-				75EA20FBB00907D83CD5CD0E /* EditSmithAppTests */,
-				C7392AD42581DEEA5F46CABA /* EditSmithCoreTests */,
 				78D91B9D655442AD62DD49FA /* EditSmithExtension */,
+				C7392AD42581DEEA5F46CABA /* EditSmithCoreTests */,
+				75EA20FBB00907D83CD5CD0E /* EditSmithAppTests */,
 			);
 		};
 /* End PBXProject section */
@@ -400,6 +414,8 @@
 				5499C91C178E86119A66FBDB /* CodeEditor.swift in Sources */,
 				368C41AA508294A041CDC28E /* EditSmithApp.swift in Sources */,
 				1C124678B3AED73BAA2128A8 /* ExtensionHelpView.swift in Sources */,
+				EDECD81B1BAD1BCE254F19DE /* FeedbackEmail.swift in Sources */,
+				A5222087361AD428F08CDEA6 /* FeedbackEmailButton.swift in Sources */,
 				8BAEC21A2DFAF4CFBB472C1F /* RecipeEditor.swift in Sources */,
 				FD8C5497552D0FFE38A4D04D /* RecipeInspector.swift in Sources */,
 				8022EA1A5DD018D0210B79AA /* RecipeLibrary.swift in Sources */,
@@ -476,7 +492,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = YPV49M8592;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -542,7 +558,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = YPV49M8592;
 				ENABLE_NS_ASSERTIONS = NO;
