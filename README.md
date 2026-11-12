@@ -7,7 +7,7 @@
 
 ![EditSmith Workbench showing a successful Sort Lines fixture and its diff](site/assets/workbench-current.png)
 
-[Website](https://xnu.app/editsmith/) · [GitHub](https://github.com/everettjf/editsmith) · [Discord](https://discord.gg/eGzEaP6TzR)
+[Website](https://atomsprout.com/editsmith/) · [GitHub](https://github.com/everettjf/editsmith) · [Discord](https://discord.gg/eGzEaP6TzR)
 
 **Programmable text actions for Xcode.** EditSmith is a native SwiftUI workbench for creating deterministic JavaScript actions or prompt-driven model actions, testing them against realistic Xcode selections, and running enabled actions from Xcode's Editor menu.
 
@@ -70,7 +70,7 @@ the current [release notes](RELEASE_NOTES.md).
 
 ## Privacy
 
-Recipe source, configuration, and fixtures stay on the Mac. JavaScript and Apple On-Device actions process text locally. A user-invoked PCC or Ollama action may send only the selected text—or the full buffer when there is no selection—to its configured provider. Outgoing network access exists for those explicit providers; EditSmith does not accept inbound connections. See the [privacy policy](https://xnu.app/editsmith/privacy).
+Recipe source, configuration, and fixtures stay on the Mac. JavaScript and Apple On-Device actions process text locally. A user-invoked PCC or Ollama action may send only the selected text—or the full buffer when there is no selection—to its configured provider. Outgoing network access exists for those explicit providers; EditSmith does not accept inbound connections. See the [privacy policy](https://atomsprout.com/editsmith/privacy).
 
 ## License
 

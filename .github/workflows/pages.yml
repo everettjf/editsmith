@@ -22,6 +22,8 @@ jobs:
       - uses: actions/configure-pages@v5
         with:
           enablement: true
+      - name: Redirect legacy website to AtomSprout
+        run: python3 scripts/redirect-legacy-site.py site editsmith
       - uses: actions/upload-pages-artifact@v3
         with: { path: site }
       - id: deployment
