@@ -24,7 +24,7 @@ to the editor buffer.
 - Remove stale names from current product surfaces without rewriting historical
   articles that are intentionally archival.
 
-Success means that a new user entering from GitHub, xnu.app, or search sees one
+Success means that a new user entering from GitHub, atomsprout.com, or search sees one
 coherent EditSmith identity.
 
 ## 2. Define a reliable action model
